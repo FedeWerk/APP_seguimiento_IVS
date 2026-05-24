@@ -419,8 +419,8 @@
    ▸ Reemplazá estas dos líneas con tus credenciales reales.
    ▸ Las encontrás en: Supabase Dashboard → Settings → API
 ════════════════════════════════════════════════════════════ */
-const SUPABASE_URL = 'https://yxeagaoxosveblpfxwwq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6...'; // la anon public, click en Copy
+const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SUPABASE_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
