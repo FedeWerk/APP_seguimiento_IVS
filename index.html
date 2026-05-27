@@ -448,13 +448,21 @@ let period         = 'all';
    INIT
 ═══════════════════════════════════════════════════════════ */
 (async () => {
-  // Escuchar cambios de sesión
+  // Verificar sesión existente al cargar
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) {
+    currentUser = session.user;
+    await loadAppData();
+    showApp();
+  }
+
+  // Escuchar cambios posteriores
   sb.auth.onAuthStateChange(async (event, session) => {
-    if (session) {
+    if (event === 'SIGNED_IN' && session) {
       currentUser = session.user;
       await loadAppData();
       showApp();
-    } else {
+    } else if (event === 'SIGNED_OUT') {
       currentUser = null;
       showScreen('login');
     }
