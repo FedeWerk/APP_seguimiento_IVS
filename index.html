@@ -228,7 +228,7 @@
     <div class="tab active" onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
     <div class="tab" onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
     <!-- CAMBIO: ícono ti-plus agregado al botón Cargar -->
-    <div class="tab" id="tab-btn-cargar" onclick="switchTab('cargar',this)" style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
+    <div class="tab" id="tab-btn-cargar" onclick="switchTab('cargar',this)" style="display:none;"><i class="ti ti-circle-plus"></i>+ Cargar</div>
     <div class="tab" id="tab-btn-admin"  onclick="switchTab('admin',this)"  style="display:none;"><i class="ti ti-settings"></i>Admin</div>
   </div>
 
@@ -463,17 +463,19 @@ function getPoints(uid) {
 // CAMBIO: lógica de filtros corregida
 function filteredLogs() {
   const now = new Date();
+  const hoy = now.toISOString().slice(0,10);
   return allLogs.filter(l => {
     if (period === 'all') return true;
-    const d = new Date(l.fecha + 'T00:00:00'); // evitar desfase de zona horaria
+    const fecha = l.fecha; // string 'YYYY-MM-DD', sin conversión de zona horaria
     if (period === 'month') {
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+      return fecha.slice(0,7) === hoy.slice(0,7);
     }
     if (period === 'week') {
       const startOfWeek = new Date(now);
-      startOfWeek.setHours(0, 0, 0, 0);
-      startOfWeek.setDate(now.getDate() - now.getDay()); // domingo como inicio
-      return d >= startOfWeek;
+      startOfWeek.setHours(0,0,0,0);
+      startOfWeek.setDate(now.getDate() - now.getDay());
+      const startStr = startOfWeek.toISOString().slice(0,10);
+      return fecha >= startStr;
     }
     return true;
   });
