@@ -108,13 +108,21 @@
     .bar-bg { height: 3px; background: var(--bg3); border-radius: 2px; margin-top: 3px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 2px; transition: width .4s; }
     .me-chip { font-size: 10px; padding: 1px 6px; border-radius: 20px; background: var(--success-bg); color: var(--success); margin-left: 6px; }
-    .period-row { display: flex; gap: 8px; padding: 0 16px; margin-bottom: 6px; }
+    .period-row { display: flex; gap: 8px; padding: 0 16px; margin-bottom: 6px; flex-wrap: wrap; }
     .period-chip {
       padding: 4px 12px; border-radius: 20px; font-size: 12px;
       border: 1px solid var(--border2); background: transparent; color: var(--text2);
       cursor: pointer; font-family: var(--font);
     }
     .period-chip.active { background: var(--accent-bg); color: var(--accent-dark); border-color: #AFA9EC; }
+    .range-picker {
+      display: none; padding: 8px 16px 4px;
+      gap: 10px; align-items: flex-end;
+    }
+    .range-picker.visible { display: flex; }
+    .range-picker .rfield { display: flex; flex-direction: column; gap: 3px; flex: 1; }
+    .range-picker .rfield label { font-size: 11px; margin: 0; }
+    .range-picker input { margin: 0; font-size: 13px; padding: 7px 10px; }
     .progress-bg { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; margin: 6px 0; }
     .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width .4s; }
     .product-row {
@@ -227,8 +235,7 @@
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
     <div class="tab" onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
-    <!-- CAMBIO: ícono ti-plus agregado al botón Cargar -->
-    <div class="tab" id="tab-btn-cargar" onclick="switchTab('cargar',this)" style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
+    <div class="tab" id="tab-btn-cargar" onclick="switchTab('cargar',this)" style="display:none;"><i class="ti ti-circle-plus"></i>+ Cargar</div>
     <div class="tab" id="tab-btn-admin"  onclick="switchTab('admin',this)"  style="display:none;"><i class="ti ti-settings"></i>Admin</div>
   </div>
 
@@ -239,11 +246,22 @@
       <div class="metric-card"><div class="metric-label">Pts del equipo</div><div class="metric-value" id="m-pts">—</div></div>
     </div>
     <div class="section-title">Período</div>
-    <!-- CAMBIO: orden Esta semana / Este mes / Acumulado, semana activa por defecto -->
     <div class="period-row">
       <button class="period-chip active" onclick="setPeriod('week',this)">Esta semana</button>
       <button class="period-chip"        onclick="setPeriod('month',this)">Este mes</button>
+      <button class="period-chip"        onclick="setPeriod('range',this)">Rango</button>
       <button class="period-chip"        onclick="setPeriod('all',this)">Acumulado</button>
+    </div>
+    <!-- Selector de rango — se muestra solo al elegir "Rango" -->
+    <div class="range-picker" id="range-picker">
+      <div class="rfield">
+        <label>Desde</label>
+        <input type="date" id="range-from" onchange="renderRanking()" />
+      </div>
+      <div class="rfield">
+        <label>Hasta</label>
+        <input type="date" id="range-to" onchange="renderRanking()" />
+      </div>
     </div>
     <div class="section-title">Clasificación</div>
     <div class="rank-list" id="ranking-list"><div class="loader">Cargando…</div></div>
@@ -293,7 +311,6 @@
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Registrar venta sugestiva</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Ingresá las unidades vendidas por turno</div>
       <label>Vendedor (IVS)</label>
-      <!-- CAMBIO: opción vacía al inicio, obligatoria -->
       <select id="sel-ivs" style="margin-bottom:14px;" required>
         <option value="">— Seleccioná un vendedor —</option>
       </select>
@@ -370,8 +387,7 @@ let currentProfile = null;
 let allProfiles    = [];
 let allLogs        = [];
 let monthlyGoal    = 100;
-// CAMBIO: período por defecto = semana
-let period = 'week';
+let period         = 'week';
 
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
@@ -437,6 +453,8 @@ function showApp() {
     document.getElementById('inp-goal').value  = monthlyGoal;
     document.getElementById('inp-fecha').value = today();
   }
+  // Inicializar rango con la semana actual
+  initRangePicker();
   switchTab('ranking', document.querySelector('.tab'));
   renderRanking();
   renderProfile();
@@ -449,10 +467,28 @@ function switchTab(tab, el) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
+function initRangePicker() {
+  // Por defecto el rango muestra la semana actual (lunes a hoy)
+  const now = new Date();
+  const day = now.getDay();
+  const diff = day === 0 ? 6 : day - 1;
+  const lunes = new Date(now);
+  lunes.setDate(now.getDate() - diff);
+  document.getElementById('range-from').value = lunes.toISOString().slice(0,10);
+  document.getElementById('range-to').value   = now.toISOString().slice(0,10);
+}
+
 function setPeriod(p, el) {
   period = p;
   document.querySelectorAll('.period-chip').forEach(c => c.classList.remove('active'));
   if (el) el.classList.add('active');
+  // Mostrar/ocultar el range picker
+  const picker = document.getElementById('range-picker');
+  if (p === 'range') {
+    picker.classList.add('visible');
+  } else {
+    picker.classList.remove('visible');
+  }
   renderRanking();
 }
 
@@ -460,22 +496,37 @@ function getPoints(uid) {
   return filteredLogs().filter(l => l.user_id === uid).reduce((s,l) => s + l.pts, 0);
 }
 
-// CAMBIO: lógica de filtros corregida
 function filteredLogs() {
   const now = new Date();
-  const hoy = now.toISOString().slice(0,10);
+  const hoy = today();
   return allLogs.filter(l => {
     if (period === 'all') return true;
-    const fecha = l.fecha; // string 'YYYY-MM-DD', sin conversión de zona horaria
+    const fecha = l.fecha; // string YYYY-MM-DD, comparación directa sin zona horaria
+
     if (period === 'month') {
       return fecha.slice(0,7) === hoy.slice(0,7);
     }
     if (period === 'week') {
-      const startOfWeek = new Date(now);
-      startOfWeek.setHours(0,0,0,0);
-      startOfWeek.setDate(now.getDate() - now.getDay());
-      const startStr = startOfWeek.toISOString().slice(0,10);
-      return fecha >= startStr;
+      // Semana calendario: lunes a domingo
+      const now2 = new Date();
+      const day = now2.getDay();
+      const diff = day === 0 ? 6 : day - 1; // lunes = inicio
+      const lunes = new Date(now2);
+      lunes.setHours(0,0,0,0);
+      lunes.setDate(now2.getDate() - diff);
+      const domingo = new Date(lunes);
+      domingo.setDate(lunes.getDate() + 6);
+      const lunesStr   = lunes.toISOString().slice(0,10);
+      const domingoStr = domingo.toISOString().slice(0,10);
+      return fecha >= lunesStr && fecha <= domingoStr;
+    }
+    if (period === 'range') {
+      const from = document.getElementById('range-from').value;
+      const to   = document.getElementById('range-to').value;
+      if (!from && !to) return true;
+      if (from && !to) return fecha >= from;
+      if (!from && to) return fecha <= to;
+      return fecha >= from && fecha <= to;
     }
     return true;
   });
@@ -510,9 +561,8 @@ function renderProfile() {
   const p    = currentProfile;
   const logs = allLogs.filter(l => l.user_id === p.id);
   const all  = logs.reduce((s,l) => s+l.pts, 0);
-  const now  = new Date();
-  const mes  = logs.filter(l => { const d=new Date(l.fecha+'T00:00:00'); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); })
-                   .reduce((s,l)=>s+l.pts,0);
+  const hoy  = today();
+  const mes  = logs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
   const pct  = Math.min(100, Math.round(mes/monthlyGoal*100));
   applyAvatar(document.getElementById('prof-av'), p, 64);
   document.getElementById('prof-name').textContent     = p.full_name;
@@ -537,7 +587,7 @@ function renderProfile() {
         <div style="font-size:11px;color:var(--text3);">${pr.pts} pts/u</div></div>
     </div>`;
   }).join('');
-  const sorted = [...logs].sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
+  const sorted = [...logs].sort((a,b)=> b.fecha.localeCompare(a.fecha));
   const histEl = document.getElementById('prof-history');
   if (!sorted.length) { histEl.innerHTML='<div class="empty-state"><i class="ti ti-history"></i>Sin registros aún</div>'; return; }
   histEl.innerHTML = sorted.map(l => {
@@ -595,7 +645,6 @@ async function submitLog() {
   const fecha = document.getElementById('inp-fecha').value;
   const nota  = document.getElementById('inp-nota').value.trim();
   const pts   = PRODUCTS.reduce((s,p)=>s+(qtys[p.id]||0)*p.pts,0);
-  // CAMBIO: validación de vendedor vacío mejorada
   if (!uid)   { showToast('Seleccioná un vendedor'); return; }
   if (!fecha) { showToast('Ingresá la fecha del turno'); return; }
   if (pts===0){ showToast('Ingresá al menos un producto'); return; }
@@ -634,7 +683,6 @@ function renderRecentLogs() {
   }).join('');
 }
 
-// CAMBIO: selector inicia con opción vacía
 function fillEmployeeSelect() {
   const employees = allProfiles.filter(p=>p.role==='employee');
   const sel = document.getElementById('sel-ivs');
