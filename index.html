@@ -5,12 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SalesRank IVS</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.33.0/dist/tabler-icons.min.css" />
-
-  <!-- ▸ SUPABASE JS SDK -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
   <style>
-    /* ── Reset + variables ─────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --font: system-ui, -apple-system, sans-serif;
@@ -32,8 +28,6 @@
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     .screen { display: none; }
     .screen.active { display: block; }
-
-    /* ── Header ──────────────────────────────────────── */
     .app-header {
       background: var(--bg); border-bottom: 1px solid var(--border);
       padding: 12px 16px; display: flex; align-items: center;
@@ -41,8 +35,6 @@
     }
     .app-header h1 { font-size: 15px; font-weight: 600; }
     .header-sub { font-size: 12px; color: var(--text2); }
-
-    /* ── Tabs ────────────────────────────────────────── */
     .tab-bar {
       display: flex; border-bottom: 1px solid var(--border);
       background: var(--bg); position: sticky; top: 53px; z-index: 9;
@@ -57,8 +49,6 @@
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
     .tab-content { display: none; padding-bottom: 80px; }
     .tab-content.active { display: block; }
-
-    /* ── Cards / métricas ────────────────────────────── */
     .card {
       background: var(--bg); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px;
@@ -67,15 +57,11 @@
     .metric-card { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
     .metric-label { font-size: 12px; color: var(--text2); margin-bottom: 2px; }
     .metric-value { font-size: 22px; font-weight: 600; }
-
-    /* ── Sección títulos ─────────────────────────────── */
     .section-title {
       font-size: 11px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .07em;
       padding: 0 16px; margin: 20px 0 10px;
     }
-
-    /* ── Botones ─────────────────────────────────────── */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       padding: 9px 16px; border: 1px solid var(--border2); border-radius: var(--radius-sm);
@@ -88,8 +74,6 @@
     .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .btn-primary:hover { background: var(--accent-dark); }
     .btn-sm { width: auto; padding: 5px 12px; font-size: 13px; margin-top: 0; }
-
-    /* ── Inputs ──────────────────────────────────────── */
     input, select {
       width: 100%; padding: 9px 12px; border: 1px solid var(--border2);
       border-radius: var(--radius-sm); background: var(--bg); color: var(--text);
@@ -97,8 +81,6 @@
     }
     input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,74,183,.15); }
     label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 4px; }
-
-    /* ── Avatar ──────────────────────────────────────── */
     .avatar {
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-weight: 600; flex-shrink: 0; overflow: hidden;
@@ -110,8 +92,6 @@
     .av-blue   { background-color: #E6F1FB; color: #0C447C; }
     .av-amber  { background-color: #FAEEDA; color: #633806; }
     .av-pink   { background-color: #FBEAF0; color: #72243E; }
-
-    /* ── Ranking ─────────────────────────────────────── */
     .rank-list { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); }
     .rank-row {
       display: flex; align-items: center; gap: 12px;
@@ -128,8 +108,6 @@
     .bar-bg { height: 3px; background: var(--bg3); border-radius: 2px; margin-top: 3px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 2px; transition: width .4s; }
     .me-chip { font-size: 10px; padding: 1px 6px; border-radius: 20px; background: var(--success-bg); color: var(--success); margin-left: 6px; }
-
-    /* ── Period chips ────────────────────────────────── */
     .period-row { display: flex; gap: 8px; padding: 0 16px; margin-bottom: 6px; }
     .period-chip {
       padding: 4px 12px; border-radius: 20px; font-size: 12px;
@@ -137,12 +115,8 @@
       cursor: pointer; font-family: var(--font);
     }
     .period-chip.active { background: var(--accent-bg); color: var(--accent-dark); border-color: #AFA9EC; }
-
-    /* ── Barra progreso ──────────────────────────────── */
     .progress-bg { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; margin: 6px 0; }
     .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width .4s; }
-
-    /* ── Productos ───────────────────────────────────── */
     .product-row {
       display: flex; align-items: center; gap: 12px;
       padding: 12px 16px; border-bottom: 1px solid var(--border);
@@ -167,8 +141,6 @@
     .qty-input::-webkit-outer-spin-button,
     .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
     .qty-input:focus { outline: none; border-color: var(--accent); }
-
-    /* ── Resumen puntos ──────────────────────────────── */
     .pts-summary {
       background: var(--accent-bg); border-radius: var(--radius-sm);
       padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
@@ -177,8 +149,6 @@
     .pts-summary-val { font-size: 26px; font-weight: 700; color: var(--accent-dark); }
     .pts-summary-label { font-size: 13px; font-weight: 600; color: var(--accent); }
     .pts-summary-sub { font-size: 11px; color: var(--accent); margin-top: 2px; }
-
-    /* ── Historial chips ─────────────────────────────── */
     .history-row {
       display: flex; align-items: flex-start; justify-content: space-between;
       padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 13px;
@@ -187,8 +157,6 @@
     .h-pts { font-weight: 600; color: var(--success); white-space: nowrap; }
     .log-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
     .log-chip { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: var(--bg2); color: var(--text2); }
-
-    /* ── Foto perfil ─────────────────────────────────── */
     .photo-ring { position: relative; display: inline-block; cursor: pointer; }
     .photo-ring .cam-overlay {
       position: absolute; inset: 0; border-radius: 50%;
@@ -197,8 +165,6 @@
     }
     .photo-ring:hover .cam-overlay { opacity: 1; }
     .photo-ring .cam-overlay i { color: #fff; font-size: 20px; }
-
-    /* ── Login ───────────────────────────────────────── */
     .login-wrap {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: center; padding: 2rem 1.5rem; max-width: 420px; margin: 0 auto;
@@ -208,8 +174,6 @@
     .logo-icon i { font-size: 30px; color: var(--accent); }
     .login-logo h2 { font-size: 22px; font-weight: 700; }
     .login-logo p { font-size: 13px; color: var(--text2); margin-top: 4px; }
-
-    /* ── Toast ───────────────────────────────────────── */
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
       background: #1c1917; color: #fff; padding: 10px 20px; border-radius: var(--radius-sm);
@@ -217,13 +181,9 @@
       z-index: 999; white-space: nowrap;
     }
     .toast.show { opacity: 1; }
-
-    /* ── Loader ──────────────────────────────────────── */
     .loader { text-align: center; padding: 3rem 1rem; color: var(--text3); font-size: 14px; }
     .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text3); font-size: 14px; }
     .empty-state i { font-size: 36px; display: block; margin-bottom: 8px; }
-
-    /* ── Badge rol ───────────────────────────────────── */
     .badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
     .badge-mgr { background: var(--accent-bg); color: var(--accent-dark); }
     .badge-emp { background: var(--success-bg); color: var(--success); }
@@ -231,9 +191,6 @@
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════════
-     LOGIN
-══════════════════════════════════════════════════ -->
 <div id="screen-login" class="screen active">
   <div class="login-wrap">
     <div class="login-logo">
@@ -241,27 +198,17 @@
       <h2>SalesRank IVS</h2>
       <p>Ranking de venta sugestiva</p>
     </div>
-
     <label for="inp-email">Email</label>
     <input type="email" id="inp-email" placeholder="tu@email.com" autocomplete="email" />
-
     <label for="inp-pass">Contraseña</label>
     <input type="password" id="inp-pass" placeholder="••••••" autocomplete="current-password" />
-
     <button class="btn btn-primary" onclick="doLogin()">
       <i class="ti ti-login"></i> Ingresar
     </button>
-
-    <div id="login-error"
-         style="color:var(--danger);font-size:13px;text-align:center;margin-top:10px;display:none;">
-    </div>
+    <div id="login-error" style="color:var(--danger);font-size:13px;text-align:center;margin-top:10px;display:none;"></div>
   </div>
 </div>
 
-
-<!-- ══════════════════════════════════════════════════
-     APP
-══════════════════════════════════════════════════ -->
 <div id="screen-app" class="screen">
 
   <div class="app-header">
@@ -271,9 +218,7 @@
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
       <span class="badge" id="hdr-badge"></span>
-      <button onclick="doLogout()"
-              style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;padding:0;"
-              aria-label="Cerrar sesión">
+      <button onclick="doLogout()" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;padding:0;" aria-label="Cerrar sesión">
         <i class="ti ti-logout"></i>
       </button>
     </div>
@@ -282,30 +227,31 @@
   <div class="tab-bar">
     <div class="tab active" onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
     <div class="tab" onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
-    <div class="tab" id="tab-btn-cargar" onclick="switchTab('cargar',this)" style="display:none;"><i class="ti ti-plus-circle"></i>Cargar</div>
+    <!-- CAMBIO: ícono ti-plus agregado al botón Cargar -->
+    <div class="tab" id="tab-btn-cargar" onclick="switchTab('cargar',this)" style="display:none;"><i class="ti ti-circle-plus"></i>+ Cargar</div>
     <div class="tab" id="tab-btn-admin"  onclick="switchTab('admin',this)"  style="display:none;"><i class="ti ti-settings"></i>Admin</div>
   </div>
 
-  <!-- ── RANKING ── -->
+  <!-- RANKING -->
   <div id="tab-ranking" class="tab-content active">
     <div class="metric-grid">
       <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value" id="m-total">—</div></div>
       <div class="metric-card"><div class="metric-label">Pts del equipo</div><div class="metric-value" id="m-pts">—</div></div>
     </div>
     <div class="section-title">Período</div>
+    <!-- CAMBIO: orden Esta semana / Este mes / Acumulado, semana activa por defecto -->
     <div class="period-row">
-      <button class="period-chip active" onclick="setPeriod('all',this)">Todo</button>
+      <button class="period-chip active" onclick="setPeriod('week',this)">Esta semana</button>
       <button class="period-chip"        onclick="setPeriod('month',this)">Este mes</button>
-      <button class="period-chip"        onclick="setPeriod('week',this)">Esta semana</button>
+      <button class="period-chip"        onclick="setPeriod('all',this)">Acumulado</button>
     </div>
     <div class="section-title">Clasificación</div>
     <div class="rank-list" id="ranking-list"><div class="loader">Cargando…</div></div>
   </div>
 
-  <!-- ── PERFIL ── -->
+  <!-- PERFIL -->
   <div id="tab-perfil" class="tab-content">
     <div style="padding:16px;">
-
       <div class="card" style="display:flex;align-items:center;gap:16px;">
         <div class="photo-ring" onclick="triggerPhoto()" title="Cambiar foto">
           <div class="avatar av-teal" id="prof-av" style="width:64px;height:64px;font-size:22px;"></div>
@@ -320,12 +266,10 @@
         </div>
       </div>
       <input type="file" id="photo-input" accept="image/*" style="display:none;" onchange="uploadPhoto(event)" />
-
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
         <div class="metric-card"><div class="metric-label">Puntos totales</div><div class="metric-value" id="prof-pts">—</div></div>
         <div class="metric-card"><div class="metric-label">Posición</div><div class="metric-value" id="prof-rank">—</div></div>
       </div>
-
       <div class="card">
         <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
           <div style="font-size:13px;font-weight:600;">Objetivo mensual</div>
@@ -336,30 +280,27 @@
           <span id="prof-mes-pts"></span><span id="prof-goal-label"></span>
         </div>
       </div>
-
       <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Ventas por producto</div>
       <div id="prof-products"></div>
     </div>
-
     <div class="section-title">Historial</div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="prof-history"></div>
   </div>
 
-  <!-- ── CARGAR (solo managers) ── -->
+  <!-- CARGAR -->
   <div id="tab-cargar" class="tab-content">
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Registrar venta sugestiva</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Ingresá las unidades vendidas por turno</div>
-
       <label>Vendedor (IVS)</label>
-      <select id="sel-ivs" style="margin-bottom:14px;"></select>
-
+      <!-- CAMBIO: opción vacía al inicio, obligatoria -->
+      <select id="sel-ivs" style="margin-bottom:14px;" required>
+        <option value="">— Seleccioná un vendedor —</option>
+      </select>
       <label>Fecha del turno</label>
       <input type="date" id="inp-fecha" style="margin-bottom:14px;" />
     </div>
-
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);margin-bottom:12px;" id="product-rows"></div>
-
     <div class="pts-summary">
       <div>
         <div class="pts-summary-label">Puntos a acreditar</div>
@@ -367,7 +308,6 @@
       </div>
       <div class="pts-summary-val" id="pts-total">0</div>
     </div>
-
     <div style="padding:0 16px;">
       <label>Nota opcional</label>
       <input type="text" id="inp-nota" placeholder="Ej: turno tarde, promoción…" />
@@ -375,17 +315,15 @@
         <i class="ti ti-check"></i> Guardar registro
       </button>
     </div>
-
     <div class="section-title">Últimos registros</div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="recent-logs"></div>
   </div>
 
-  <!-- ── ADMIN (solo managers) ── -->
+  <!-- ADMIN -->
   <div id="tab-admin" class="tab-content">
     <div style="padding:16px;">
       <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Administración</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Usuarios y configuración</div>
-
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-user-plus" style="margin-right:6px;"></i>Crear vendedor</div>
         <label>Nombre completo</label>
@@ -396,35 +334,26 @@
         <input type="password" id="new-pass" placeholder="••••••" />
         <button class="btn" onclick="createEmployee()"><i class="ti ti-plus"></i> Crear vendedor</button>
       </div>
-
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-target" style="margin-right:6px;"></i>Objetivo mensual</div>
         <input type="number" id="inp-goal" placeholder="100" min="1" />
         <button class="btn" onclick="saveGoal()"><i class="ti ti-check"></i> Actualizar meta</button>
       </div>
-
       <div style="font-size:14px;font-weight:600;margin:1rem 0 .75rem;">Usuarios del sistema</div>
       <div id="user-list"></div>
     </div>
   </div>
 
-</div><!-- /screen-app -->
+</div>
 
 <div class="toast" id="toast"></div>
 
-
 <script>
-/* ════════════════════════════════════════════════════════════
-   CONFIGURACIÓN SUPABASE
-   ▸ Reemplazá estas dos líneas con tus credenciales reales.
-   ▸ Las encontrás en: Supabase Dashboard → Settings → API
-════════════════════════════════════════════════════════════ */
 const SUPABASE_URL = 'https://yxeagaoxosveblpfxvwq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWFnYW94b3N2ZWJscGZ4dndxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzExNTIsImV4cCI6MjA5NTE0NzE1Mn0.5DEPtur08XeZIRhIkEHlGG4D8oV4c4KdfpM_7ww8IDg';
-  
+
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-/* ── Productos y constantes ─────────────────────────────── */
 const PRODUCTS = [
   { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3,   unit:'pileta' },
   { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2,   unit:'combo'  },
@@ -436,27 +365,21 @@ const COLORS = ['av-teal','av-coral','av-amber','av-pink','av-blue','av-purple']
 const qtys = {};
 PRODUCTS.forEach(p => qtys[p.id] = 0);
 
-/* ── Estado global ──────────────────────────────────────── */
-let currentUser    = null;   // objeto de Supabase Auth
-let currentProfile = null;   // fila de public.profiles
-let allProfiles    = [];     // caché de perfiles
-let allLogs        = [];     // caché de logs
+let currentUser    = null;
+let currentProfile = null;
+let allProfiles    = [];
+let allLogs        = [];
 let monthlyGoal    = 100;
-let period         = 'all';
+// CAMBIO: período por defecto = semana
+let period = 'week';
 
-/* ═══════════════════════════════════════════════════════════
-   INIT
-═══════════════════════════════════════════════════════════ */
 (async () => {
-  // Verificar sesión existente al cargar
   const { data: { session } } = await sb.auth.getSession();
   if (session) {
     currentUser = session.user;
     await loadAppData();
     showApp();
   }
-
-  // Escuchar cambios posteriores
   sb.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       currentUser = session.user;
@@ -469,51 +392,28 @@ let period         = 'all';
   });
 })();
 
-/* ═══════════════════════════════════════════════════════════
-   AUTH
-═══════════════════════════════════════════════════════════ */
 async function doLogin() {
   const email = document.getElementById('inp-email').value.trim();
   const pass  = document.getElementById('inp-pass').value;
   const errEl = document.getElementById('login-error');
   errEl.style.display = 'none';
-
   const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) {
-    errEl.textContent = 'Email o contraseña incorrectos';
-    errEl.style.display = 'block';
-  }
-  // onAuthStateChange se encarga del resto
+  if (error) { errEl.textContent = 'Email o contraseña incorrectos'; errEl.style.display = 'block'; }
 }
 
-async function doLogout() {
-  await sb.auth.signOut();
-}
+async function doLogout() { await sb.auth.signOut(); }
 
-/* ═══════════════════════════════════════════════════════════
-   CARGA DE DATOS
-═══════════════════════════════════════════════════════════ */
 async function loadAppData() {
-  // Perfil propio
   const { data: prof } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   currentProfile = prof;
-
-  // Todos los perfiles (para ranking y selector)
   const { data: profs } = await sb.from('profiles').select('*').order('full_name');
   allProfiles = profs || [];
-
-  // Todos los logs
   const { data: logs } = await sb.from('sales_logs').select('*').order('fecha', { ascending: false });
   allLogs = logs || [];
-
-  // Configuración
   const { data: setting } = await sb.from('settings').select('value').eq('key','monthly_goal').single();
   if (setting) monthlyGoal = parseInt(setting.value) || 100;
 }
 
-/* ═══════════════════════════════════════════════════════════
-   NAVEGACIÓN
-═══════════════════════════════════════════════════════════ */
 function showScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
@@ -522,16 +422,13 @@ function showScreen(s) {
 function showApp() {
   showScreen('app');
   const isM = currentProfile.role === 'manager';
-
   document.getElementById('hdr-greeting').textContent = greeting();
   document.getElementById('hdr-name').textContent     = currentProfile.full_name;
   const badge = document.getElementById('hdr-badge');
   badge.textContent = isM ? 'Gerente' : 'Vendedor';
   badge.className   = 'badge ' + (isM ? 'badge-mgr' : 'badge-emp');
-
   document.getElementById('tab-btn-cargar').style.display = isM ? 'flex' : 'none';
   document.getElementById('tab-btn-admin').style.display  = isM ? 'flex' : 'none';
-
   if (isM) {
     fillEmployeeSelect();
     renderProductRows();
@@ -540,7 +437,6 @@ function showApp() {
     document.getElementById('inp-goal').value  = monthlyGoal;
     document.getElementById('inp-fecha').value = today();
   }
-
   switchTab('ranking', document.querySelector('.tab'));
   renderRanking();
   renderProfile();
@@ -553,9 +449,6 @@ function switchTab(tab, el) {
   document.getElementById('tab-' + tab).classList.add('active');
 }
 
-/* ═══════════════════════════════════════════════════════════
-   RANKING
-═══════════════════════════════════════════════════════════ */
 function setPeriod(p, el) {
   period = p;
   document.querySelectorAll('.period-chip').forEach(c => c.classList.remove('active'));
@@ -567,13 +460,21 @@ function getPoints(uid) {
   return filteredLogs().filter(l => l.user_id === uid).reduce((s,l) => s + l.pts, 0);
 }
 
+// CAMBIO: lógica de filtros corregida
 function filteredLogs() {
   const now = new Date();
   return allLogs.filter(l => {
     if (period === 'all') return true;
-    const d = new Date(l.fecha);
-    if (period === 'month') return d.getMonth()===now.getMonth() && d.getFullYear()===now.getFullYear();
-    if (period === 'week')  return d >= new Date(now - 7*24*60*60*1000);
+    const d = new Date(l.fecha + 'T00:00:00'); // evitar desfase de zona horaria
+    if (period === 'month') {
+      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+    }
+    if (period === 'week') {
+      const startOfWeek = new Date(now);
+      startOfWeek.setHours(0, 0, 0, 0);
+      startOfWeek.setDate(now.getDate() - now.getDay()); // domingo como inicio
+      return d >= startOfWeek;
+    }
     return true;
   });
 }
@@ -582,10 +483,8 @@ function renderRanking() {
   const employees = allProfiles.filter(p => p.role === 'employee');
   const ranked = employees.map(e => ({ ...e, pts: getPoints(e.id) })).sort((a,b) => b.pts - a.pts);
   const total  = ranked.reduce((s,e) => s+e.pts, 0);
-
   document.getElementById('m-total').textContent = employees.length;
   document.getElementById('m-pts').textContent   = fmt(total);
-
   const max = ranked[0]?.pts || 1;
   document.getElementById('ranking-list').innerHTML = ranked.map((e,i) => {
     const medal  = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
@@ -605,18 +504,14 @@ function renderRanking() {
   }).join('') || '<div class="empty-state"><i class="ti ti-users"></i>Sin vendedores</div>';
 }
 
-/* ═══════════════════════════════════════════════════════════
-   PERFIL
-═══════════════════════════════════════════════════════════ */
 function renderProfile() {
   const p    = currentProfile;
   const logs = allLogs.filter(l => l.user_id === p.id);
   const all  = logs.reduce((s,l) => s+l.pts, 0);
   const now  = new Date();
-  const mes  = logs.filter(l => { const d=new Date(l.fecha); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); })
+  const mes  = logs.filter(l => { const d=new Date(l.fecha+'T00:00:00'); return d.getMonth()===now.getMonth()&&d.getFullYear()===now.getFullYear(); })
                    .reduce((s,l)=>s+l.pts,0);
   const pct  = Math.min(100, Math.round(mes/monthlyGoal*100));
-
   applyAvatar(document.getElementById('prof-av'), p, 64);
   document.getElementById('prof-name').textContent     = p.full_name;
   document.getElementById('prof-role').textContent     = p.role==='manager'?'Gerente':'Vendedor';
@@ -625,12 +520,10 @@ function renderProfile() {
   document.getElementById('prof-bar').style.width      = pct + '%';
   document.getElementById('prof-mes-pts').textContent  = fmt(mes) + ' pts este mes';
   document.getElementById('prof-goal-label').textContent = 'Meta: ' + monthlyGoal + ' pts';
-
   const employees = allProfiles.filter(pr=>pr.role==='employee');
   const ranked    = employees.map(e=>({id:e.id,pts:getPoints(e.id)})).sort((a,b)=>b.pts-a.pts);
   const pos       = ranked.findIndex(e=>e.id===p.id);
   document.getElementById('prof-rank').textContent = p.role==='manager'?'—':(pos>=0?'#'+(pos+1):'—');
-
   document.getElementById('prof-products').innerHTML = PRODUCTS.map(pr => {
     const qty = logs.reduce((s,l)=>s+(l[pr.id]||0),0);
     const ep  = logs.reduce((s,l)=>s+(l[pr.id]||0)*pr.pts,0);
@@ -642,13 +535,12 @@ function renderProfile() {
         <div style="font-size:11px;color:var(--text3);">${pr.pts} pts/u</div></div>
     </div>`;
   }).join('');
-
   const sorted = [...logs].sort((a,b)=>new Date(b.fecha)-new Date(a.fecha));
   const histEl = document.getElementById('prof-history');
   if (!sorted.length) { histEl.innerHTML='<div class="empty-state"><i class="ti ti-history"></i>Sin registros aún</div>'; return; }
   histEl.innerHTML = sorted.map(l => {
     const chips = PRODUCTS.filter(pr=>l[pr.id]>0).map(pr=>`<span class="log-chip">${pr.icon} ${l[pr.id]} ${pr.unit}${l[pr.id]!==1?'s':''}</span>`).join('');
-    const d = new Date(l.fecha).toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
+    const d = new Date(l.fecha+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
     return `<div class="history-row"><div style="flex:1;">
       <div style="font-weight:600;font-size:13px;">${d}${l.nota?' · <span style="font-weight:400;color:var(--text3);">'+l.nota+'</span>':''}</div>
       <div class="log-chips">${chips}</div></div>
@@ -656,9 +548,6 @@ function renderProfile() {
   }).join('');
 }
 
-/* ═══════════════════════════════════════════════════════════
-   CARGA DE VENTAS
-═══════════════════════════════════════════════════════════ */
 function renderProductRows() {
   document.getElementById('product-rows').innerHTML = PRODUCTS.map(p => `
     <div class="product-row">
@@ -704,11 +593,10 @@ async function submitLog() {
   const fecha = document.getElementById('inp-fecha').value;
   const nota  = document.getElementById('inp-nota').value.trim();
   const pts   = PRODUCTS.reduce((s,p)=>s+(qtys[p.id]||0)*p.pts,0);
-
-  if (!uid)  { showToast('Seleccioná un vendedor'); return; }
-  if (!fecha){ showToast('Ingresá la fecha del turno'); return; }
+  // CAMBIO: validación de vendedor vacío mejorada
+  if (!uid)   { showToast('Seleccioná un vendedor'); return; }
+  if (!fecha) { showToast('Ingresá la fecha del turno'); return; }
   if (pts===0){ showToast('Ingresá al menos un producto'); return; }
-
   const row = {
     user_id: uid, registered_by: currentProfile.id,
     fecha, pts, nota,
@@ -717,10 +605,8 @@ async function submitLog() {
     cafe_espresso:  qtys.cafe_espresso||0,
     cono_especial:  qtys.cono_especial||0,
   };
-
   const { data, error } = await sb.from('sales_logs').insert(row).select().single();
   if (error) { showToast('Error al guardar: '+error.message); return; }
-
   allLogs.unshift(data);
   PRODUCTS.forEach(p => { qtys[p.id]=0; document.getElementById('qty-'+p.id).value=0; });
   document.getElementById('inp-nota').value = '';
@@ -738,7 +624,7 @@ function renderRecentLogs() {
     const prof  = allProfiles.find(p=>p.id===l.user_id);
     const name  = prof?.full_name || '—';
     const chips = PRODUCTS.filter(p=>l[p.id]>0).map(p=>`<span class="log-chip">${p.icon}${l[p.id]}</span>`).join('');
-    const d     = new Date(l.fecha).toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
+    const d     = new Date(l.fecha+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
     return `<div class="history-row"><div style="flex:1;">
       <div style="font-weight:600;font-size:13px;">${name} <span style="font-weight:400;color:var(--text3);">· ${d}</span></div>
       <div class="log-chips" style="margin-top:3px;">${chips}</div></div>
@@ -746,39 +632,30 @@ function renderRecentLogs() {
   }).join('');
 }
 
+// CAMBIO: selector inicia con opción vacía
 function fillEmployeeSelect() {
   const employees = allProfiles.filter(p=>p.role==='employee');
-  document.getElementById('sel-ivs').innerHTML = employees.map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
+  const sel = document.getElementById('sel-ivs');
+  sel.innerHTML = '<option value="">— Seleccioná un vendedor —</option>' +
+    employees.map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
 }
 
-/* ═══════════════════════════════════════════════════════════
-   FOTOS
-═══════════════════════════════════════════════════════════ */
 function triggerPhoto() { document.getElementById('photo-input').click(); }
 
 async function uploadPhoto(event) {
   const file = event.target.files[0];
   if (!file) return;
   if (file.size > 5*1024*1024){ showToast('La foto debe pesar menos de 5 MB'); return; }
-
-  // Comprimir antes de subir
   const compressed = await compressImage(file, 400);
   const path = `${currentProfile.id}/avatar.jpg`;
-
   const { error: upErr } = await sb.storage.from('avatars').upload(path, compressed, { upsert: true, contentType: 'image/jpeg' });
   if (upErr){ showToast('Error al subir foto'); return; }
-
   const { data: { publicUrl } } = sb.storage.from('avatars').getPublicUrl(path);
-  // Agregar cache-buster para forzar recarga
   const urlWithTs = publicUrl + '?t=' + Date.now();
-
   await sb.from('profiles').update({ photo_url: urlWithTs }).eq('id', currentProfile.id);
   currentProfile.photo_url = urlWithTs;
-
-  // Actualizar caché local
   const idx = allProfiles.findIndex(p=>p.id===currentProfile.id);
   if (idx>=0) allProfiles[idx].photo_url = urlWithTs;
-
   applyAvatar(document.getElementById('prof-av'), currentProfile, 64);
   renderRanking();
   showToast('Foto actualizada');
@@ -804,33 +681,22 @@ function compressImage(file, maxPx) {
   });
 }
 
-/* ═══════════════════════════════════════════════════════════
-   ADMIN
-═══════════════════════════════════════════════════════════ */
 async function createEmployee() {
   const name  = document.getElementById('new-name').value.trim();
   const email = document.getElementById('new-email').value.trim();
   const pass  = document.getElementById('new-pass').value;
   if (!name||!email||!pass){ showToast('Completá todos los campos'); return; }
-
   const parts    = name.split(' ');
   const initials = (parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
   const color    = COLORS[allProfiles.length % COLORS.length];
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
-
-  // Supabase Admin API — requiere service_role key en un backend seguro.
-  // En demo, usar signUp() con email confirmation desactivado en el proyecto.
   const { error } = await sb.auth.signUp({
     email, password: pass,
     options: { data: { username, full_name: name, role: 'employee', initials, color } }
   });
-
   if (error){ showToast('Error: '+error.message); return; }
-
-  showToast('Vendedor creado — se enviará email de verificación');
+  showToast('Vendedor creado');
   ['new-name','new-email','new-pass'].forEach(id=>document.getElementById(id).value='');
-
-  // Recargar perfiles
   const { data } = await sb.from('profiles').select('*').order('full_name');
   allProfiles = data || [];
   renderUserList(); fillEmployeeSelect(); renderRanking();
@@ -855,9 +721,6 @@ function renderUserList() {
     </div>`).join('');
 }
 
-/* ═══════════════════════════════════════════════════════════
-   HELPERS
-═══════════════════════════════════════════════════════════ */
 function avatarHTML(profile, size) {
   if (profile.photo_url) {
     return `<div class="avatar" style="width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;"></div>`;
@@ -883,7 +746,6 @@ function greeting() {
   const h=new Date().getHours();
   return h<12?'Buenos días,':h<18?'Buenas tardes,':'Buenas noches,';
 }
-
 function showToast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg;
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
