@@ -16,6 +16,7 @@
       --accent: #534AB7; --accent-bg: #EEEDFE; --accent-dark: #3C3489;
       --success: #0F6E56; --success-bg: #E1F5EE;
       --danger: #b91c1c; --danger-bg: #fee2e2;
+      --gold: #BA7517; --gold-bg: #FEF3C7;
       --radius: 10px; --radius-sm: 6px;
     }
     @media (prefers-color-scheme: dark) {
@@ -23,11 +24,14 @@
         --bg: #1c1917; --bg2: #292524; --bg3: #3c3836;
         --text: #f5f5f4; --text2: #a8a29e; --text3: #78716c;
         --border: #292524; --border2: #3c3836;
+        --gold-bg: #292018;
       }
     }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     .screen { display: none; }
     .screen.active { display: block; }
+
+    /* ── Header ── */
     .app-header {
       background: var(--bg); border-bottom: 1px solid var(--border);
       padding: 12px 16px; display: flex; align-items: center;
@@ -35,33 +39,42 @@
     }
     .app-header h1 { font-size: 15px; font-weight: 600; }
     .header-sub { font-size: 12px; color: var(--text2); }
+
+    /* ── Tabs ── */
     .tab-bar {
       display: flex; border-bottom: 1px solid var(--border);
       background: var(--bg); position: sticky; top: 53px; z-index: 9;
+      overflow-x: auto; scrollbar-width: none;
     }
+    .tab-bar::-webkit-scrollbar { display: none; }
     .tab {
-      flex: 1; padding: 10px 6px; text-align: center; font-size: 11px;
+      flex: 1; min-width: 60px; padding: 10px 6px; text-align: center; font-size: 10px;
       color: var(--text2); cursor: pointer; border-bottom: 2px solid transparent;
       display: flex; flex-direction: column; align-items: center; gap: 2px;
-      transition: color .15s, border-color .15s;
+      transition: color .15s, border-color .15s; white-space: nowrap;
     }
-    .tab i { font-size: 19px; }
+    .tab i { font-size: 18px; }
     .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
     .tab-content { display: none; padding-bottom: 80px; }
     .tab-content.active { display: block; }
+
+    /* ── Cards ── */
     .card {
       background: var(--bg); border: 1px solid var(--border);
       border-radius: var(--radius); padding: 14px 16px; margin-bottom: 12px;
     }
     .metric-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 16px 16px 0; }
+    .metric-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; padding: 16px 16px 0; }
     .metric-card { background: var(--bg2); border-radius: var(--radius-sm); padding: 12px; text-align: center; }
-    .metric-label { font-size: 12px; color: var(--text2); margin-bottom: 2px; }
-    .metric-value { font-size: 22px; font-weight: 600; }
+    .metric-label { font-size: 11px; color: var(--text2); margin-bottom: 2px; }
+    .metric-value { font-size: 20px; font-weight: 600; }
     .section-title {
       font-size: 11px; font-weight: 600; color: var(--text2);
       text-transform: uppercase; letter-spacing: .07em;
       padding: 0 16px; margin: 20px 0 10px;
     }
+
+    /* ── Botones ── */
     .btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       padding: 9px 16px; border: 1px solid var(--border2); border-radius: var(--radius-sm);
@@ -73,7 +86,8 @@
     .btn:active { transform: scale(.98); }
     .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .btn-primary:hover { background: var(--accent-dark); }
-    .btn-sm { width: auto; padding: 5px 12px; font-size: 13px; margin-top: 0; }
+
+    /* ── Inputs ── */
     input, select {
       width: 100%; padding: 9px 12px; border: 1px solid var(--border2);
       border-radius: var(--radius-sm); background: var(--bg); color: var(--text);
@@ -81,6 +95,8 @@
     }
     input:focus, select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(83,74,183,.15); }
     label { font-size: 13px; color: var(--text2); display: block; margin-bottom: 4px; }
+
+    /* ── Avatares ── */
     .avatar {
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
       font-weight: 600; flex-shrink: 0; overflow: hidden;
@@ -92,11 +108,10 @@
     .av-blue   { background-color: #E6F1FB; color: #0C447C; }
     .av-amber  { background-color: #FAEEDA; color: #633806; }
     .av-pink   { background-color: #FBEAF0; color: #72243E; }
+
+    /* ── Ranking ── */
     .rank-list { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); }
-    .rank-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 16px; border-bottom: 1px solid var(--border);
-    }
+    .rank-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; border-bottom: 1px solid var(--border); }
     .rank-row:last-child { border-bottom: none; }
     .rank-num { min-width: 22px; text-align: center; font-size: 13px; color: var(--text3); font-weight: 600; }
     .rank-num.top1 { color: #BA7517; font-size: 16px; }
@@ -108,6 +123,8 @@
     .bar-bg { height: 3px; background: var(--bg3); border-radius: 2px; margin-top: 3px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 2px; transition: width .4s; }
     .me-chip { font-size: 10px; padding: 1px 6px; border-radius: 20px; background: var(--success-bg); color: var(--success); margin-left: 6px; }
+
+    /* ── Período ── */
     .period-row { display: flex; gap: 8px; padding: 0 16px; margin-bottom: 6px; flex-wrap: wrap; }
     .period-chip {
       padding: 4px 12px; border-radius: 20px; font-size: 12px;
@@ -115,20 +132,18 @@
       cursor: pointer; font-family: var(--font);
     }
     .period-chip.active { background: var(--accent-bg); color: var(--accent-dark); border-color: #AFA9EC; }
-    .range-picker {
-      display: none; padding: 8px 16px 4px;
-      gap: 10px; align-items: flex-end;
-    }
+    .range-picker { display: none; padding: 8px 16px 4px; gap: 10px; align-items: flex-end; }
     .range-picker.visible { display: flex; }
     .range-picker .rfield { display: flex; flex-direction: column; gap: 3px; flex: 1; }
     .range-picker .rfield label { font-size: 11px; margin: 0; }
     .range-picker input { margin: 0; font-size: 13px; padding: 7px 10px; }
+
+    /* ── Progreso ── */
     .progress-bg { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; margin: 6px 0; }
     .progress-fill { height: 100%; border-radius: 3px; background: var(--accent); transition: width .4s; }
-    .product-row {
-      display: flex; align-items: center; gap: 12px;
-      padding: 12px 16px; border-bottom: 1px solid var(--border);
-    }
+
+    /* ── Productos carga ── */
+    .product-row { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); }
     .product-row:last-child { border-bottom: none; }
     .product-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
     .qty-ctrl { display: flex; align-items: center; gap: 6px; }
@@ -146,9 +161,10 @@
       background: var(--bg); color: var(--text); font-family: var(--font);
       padding: 0; margin: 0; -moz-appearance: textfield;
     }
-    .qty-input::-webkit-outer-spin-button,
-    .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .qty-input::-webkit-outer-spin-button, .qty-input::-webkit-inner-spin-button { -webkit-appearance: none; }
     .qty-input:focus { outline: none; border-color: var(--accent); }
+
+    /* ── Resumen puntos ── */
     .pts-summary {
       background: var(--accent-bg); border-radius: var(--radius-sm);
       padding: 12px 16px; display: flex; justify-content: space-between; align-items: center;
@@ -157,6 +173,8 @@
     .pts-summary-val { font-size: 26px; font-weight: 700; color: var(--accent-dark); }
     .pts-summary-label { font-size: 13px; font-weight: 600; color: var(--accent); }
     .pts-summary-sub { font-size: 11px; color: var(--accent); margin-top: 2px; }
+
+    /* ── Historial ── */
     .history-row {
       display: flex; align-items: flex-start; justify-content: space-between;
       padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 13px;
@@ -165,6 +183,8 @@
     .h-pts { font-weight: 600; color: var(--success); white-space: nowrap; }
     .log-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
     .log-chip { font-size: 10px; padding: 2px 7px; border-radius: 10px; background: var(--bg2); color: var(--text2); }
+
+    /* ── Foto perfil ── */
     .photo-ring { position: relative; display: inline-block; cursor: pointer; }
     .photo-ring .cam-overlay {
       position: absolute; inset: 0; border-radius: 50%;
@@ -173,6 +193,8 @@
     }
     .photo-ring:hover .cam-overlay { opacity: 1; }
     .photo-ring .cam-overlay i { color: #fff; font-size: 20px; }
+
+    /* ── Login ── */
     .login-wrap {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: center; padding: 2rem 1.5rem; max-width: 420px; margin: 0 auto;
@@ -182,6 +204,8 @@
     .logo-icon i { font-size: 30px; color: var(--accent); }
     .login-logo h2 { font-size: 22px; font-weight: 700; }
     .login-logo p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+    /* ── Toast ── */
     .toast {
       position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
       background: #1c1917; color: #fff; padding: 10px 20px; border-radius: var(--radius-sm);
@@ -195,10 +219,70 @@
     .badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
     .badge-mgr { background: var(--accent-bg); color: var(--accent-dark); }
     .badge-emp { background: var(--success-bg); color: var(--success); }
+    .badge-super { background: var(--gold-bg); color: var(--gold); }
+
+    /* ── Tips / Consejos ── */
+    .tip-card {
+      background: var(--gold-bg); border: 1px solid rgba(186,117,23,0.2);
+      border-radius: var(--radius); padding: 16px; margin: 16px 16px 0;
+      position: relative;
+    }
+    .tip-category {
+      font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 6px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tip-text { font-size: 14px; line-height: 1.6; color: var(--text); }
+    .tip-nav { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
+    .tip-btn {
+      padding: 5px 12px; border-radius: 20px; font-size: 12px; font-family: var(--font);
+      border: 1px solid rgba(186,117,23,0.3); background: transparent; color: var(--gold);
+      cursor: pointer; transition: background .15s;
+    }
+    .tip-btn:hover { background: rgba(186,117,23,0.1); }
+    .tip-counter { font-size: 11px; color: var(--text3); margin-left: auto; }
+
+    .tip-list-item {
+      padding: 14px 16px; border-bottom: 1px solid var(--border);
+      cursor: pointer; transition: background .15s;
+    }
+    .tip-list-item:last-child { border-bottom: none; }
+    .tip-list-item:hover { background: var(--bg2); }
+    .tip-list-cat { font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 4px; }
+    .tip-list-text { font-size: 13px; line-height: 1.5; color: var(--text2); }
+
+    /* ── Análisis ── */
+    .stat-bar-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .stat-bar-row:last-child { border-bottom: none; }
+    .stat-bar-label { font-size: 13px; flex: 1; }
+    .stat-bar-wrap { flex: 2; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+    .stat-bar-fill { height: 100%; border-radius: 4px; transition: width .5s; }
+    .stat-bar-val { font-size: 13px; font-weight: 600; min-width: 36px; text-align: right; }
+
+    .week-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 0 16px; margin-top: 8px; }
+    .week-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+    .week-bar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; }
+    .week-bar { width: 100%; border-radius: 3px 3px 0 0; transition: height .4s; min-height: 2px; }
+    .week-label { font-size: 9px; color: var(--text3); }
+    .week-val { font-size: 9px; color: var(--text2); font-weight: 600; }
+
+    /* ── Push permission banner ── */
+    .push-banner {
+      background: var(--accent-bg); border-bottom: 1px solid rgba(83,74,183,0.2);
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px;
+      font-size: 13px;
+    }
+    .push-banner i { color: var(--accent); font-size: 18px; flex-shrink: 0; }
+    .push-banner-text { flex: 1; color: var(--text2); }
+    .push-banner-btn {
+      padding: 5px 12px; border-radius: 20px; font-size: 12px; font-family: var(--font);
+      border: none; background: var(--accent); color: white; cursor: pointer; white-space: nowrap;
+    }
   </style>
 </head>
 <body>
 
+<!-- LOGIN -->
 <div id="screen-login" class="screen active">
   <div class="login-wrap">
     <div class="login-logo">
@@ -210,14 +294,21 @@
     <input type="email" id="inp-email" placeholder="tu@email.com" autocomplete="email" />
     <label for="inp-pass">Contraseña</label>
     <input type="password" id="inp-pass" placeholder="••••••" autocomplete="current-password" />
-    <button class="btn btn-primary" onclick="doLogin()">
-      <i class="ti ti-login"></i> Ingresar
-    </button>
+    <button class="btn btn-primary" onclick="doLogin()"><i class="ti ti-login"></i> Ingresar</button>
     <div id="login-error" style="color:var(--danger);font-size:13px;text-align:center;margin-top:10px;display:none;"></div>
   </div>
 </div>
 
+<!-- APP -->
 <div id="screen-app" class="screen">
+
+  <!-- Banner permiso push -->
+  <div id="push-banner" class="push-banner" style="display:none;">
+    <i class="ti ti-bell"></i>
+    <div class="push-banner-text">Activá las notificaciones para recibir consejos de venta</div>
+    <button class="push-banner-btn" onclick="requestPushPermission()">Activar</button>
+    <button onclick="hidePushBanner()" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:0;"><i class="ti ti-x"></i></button>
+  </div>
 
   <div class="app-header">
     <div>
@@ -226,20 +317,20 @@
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
       <span class="badge" id="hdr-badge"></span>
-      <button onclick="doLogout()" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;padding:0;" aria-label="Cerrar sesión">
-        <i class="ti ti-logout"></i>
-      </button>
+      <button onclick="doLogout()" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;padding:0;" aria-label="Cerrar sesión"><i class="ti ti-logout"></i></button>
     </div>
   </div>
 
-  <div class="tab-bar">
+  <div class="tab-bar" id="tab-bar">
     <div class="tab active" onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
     <div class="tab" onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
-    <div class="tab" id="tab-btn-cargar" onclick="switchTab('cargar',this)" style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
-    <div class="tab" id="tab-btn-admin"  onclick="switchTab('admin',this)"  style="display:none;"><i class="ti ti-settings"></i>Admin</div>
+    <div class="tab" onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
+    <div class="tab" id="tab-btn-analisis" onclick="switchTab('analisis',this)" style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
+    <div class="tab" id="tab-btn-cargar"  onclick="switchTab('cargar',this)"  style="display:none;"><i class="ti ti-circle-plus"></i>+ Cargar</div>
+    <div class="tab" id="tab-btn-admin"   onclick="switchTab('admin',this)"   style="display:none;"><i class="ti ti-settings"></i>Admin</div>
   </div>
 
-  <!-- RANKING -->
+  <!-- ══ RANKING ══ -->
   <div id="tab-ranking" class="tab-content active">
     <div class="metric-grid">
       <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value" id="m-total">—</div></div>
@@ -248,26 +339,19 @@
     <div class="section-title">Período</div>
     <div class="period-row">
       <button class="period-chip active" onclick="setPeriod('week',this)">Esta semana</button>
-      <button class="period-chip"        onclick="setPeriod('month',this)">Este mes</button>
-      <button class="period-chip"        onclick="setPeriod('range',this)">Rango</button>
-      <button class="period-chip"        onclick="setPeriod('all',this)">Acumulado</button>
+      <button class="period-chip" onclick="setPeriod('month',this)">Este mes</button>
+      <button class="period-chip" onclick="setPeriod('range',this)">Rango</button>
+      <button class="period-chip" onclick="setPeriod('all',this)">Acumulado</button>
     </div>
-    <!-- Selector de rango — se muestra solo al elegir "Rango" -->
     <div class="range-picker" id="range-picker">
-      <div class="rfield">
-        <label>Desde</label>
-        <input type="date" id="range-from" onchange="renderRanking()" />
-      </div>
-      <div class="rfield">
-        <label>Hasta</label>
-        <input type="date" id="range-to" onchange="renderRanking()" />
-      </div>
+      <div class="rfield"><label>Desde</label><input type="date" id="range-from" onchange="renderRanking()" /></div>
+      <div class="rfield"><label>Hasta</label><input type="date" id="range-to" onchange="renderRanking()" /></div>
     </div>
     <div class="section-title">Clasificación</div>
     <div class="rank-list" id="ranking-list"><div class="loader">Cargando…</div></div>
   </div>
 
-  <!-- PERFIL -->
+  <!-- ══ PERFIL ══ -->
   <div id="tab-perfil" class="tab-content">
     <div style="padding:16px;">
       <div class="card" style="display:flex;align-items:center;gap:16px;">
@@ -298,14 +382,72 @@
           <span id="prof-mes-pts"></span><span id="prof-goal-label"></span>
         </div>
       </div>
-      <div style="font-size:13px;font-weight:600;margin-bottom:10px;">Ventas por producto</div>
+
+      <!-- Evolución semanal propia (solo employees) -->
+      <div id="prof-weekly-section">
+        <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Mi semana actual</div>
+        <div class="week-chart" id="prof-week-chart"></div>
+      </div>
+
+      <div style="font-size:13px;font-weight:600;margin:16px 0 10px;">Mis productos — ranking por cantidad</div>
       <div id="prof-products"></div>
     </div>
     <div class="section-title">Historial</div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="prof-history"></div>
   </div>
 
-  <!-- CARGAR -->
+  <!-- ══ CONSEJOS ══ -->
+  <div id="tab-tips" class="tab-content">
+    <!-- Tip aleatorio destacado -->
+    <div class="tip-card" id="featured-tip">
+      <div class="tip-category"><i class="ti ti-sparkles"></i> <span id="tip-cat">—</span></div>
+      <div class="tip-text" id="tip-text">Cargando consejo…</div>
+      <div class="tip-nav">
+        <button class="tip-btn" onclick="prevTip()">← Anterior</button>
+        <button class="tip-btn" onclick="nextTip()">Siguiente →</button>
+        <span class="tip-counter" id="tip-counter"></span>
+      </div>
+    </div>
+
+    <div class="section-title">Todos los consejos</div>
+    <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);" id="tips-list"></div>
+  </div>
+
+  <!-- ══ ANÁLISIS (supermanager) ══ -->
+  <div id="tab-analisis" class="tab-content">
+    <div style="padding:16px 16px 0;">
+      <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Panel de análisis</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Evolución y participación del equipo IVS</div>
+    </div>
+
+    <!-- Métricas globales -->
+    <div class="metric-grid-3">
+      <div class="metric-card"><div class="metric-label">Pts esta semana</div><div class="metric-value" id="an-week-pts">—</div></div>
+      <div class="metric-card"><div class="metric-label">Pts este mes</div><div class="metric-value" id="an-month-pts">—</div></div>
+      <div class="metric-card"><div class="metric-label">Registros totales</div><div class="metric-value" id="an-total-logs">—</div></div>
+    </div>
+
+    <!-- Evolución semanal del equipo -->
+    <div class="section-title">Evolución semanal del equipo</div>
+    <div style="padding:0 16px;">
+      <div class="week-chart" id="an-week-chart"></div>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center;">Últimas 6 semanas · puntos totales del equipo</div>
+    </div>
+
+    <!-- Participación por producto -->
+    <div class="section-title">Participación por producto</div>
+    <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-product-share"></div>
+
+    <!-- Ranking por producto -->
+    <div class="section-title">Mejores vendedores por producto</div>
+    <div style="padding:0 16px 16px;" id="an-product-ranking"></div>
+
+    <!-- Crecimiento por vendedor -->
+    <div class="section-title">Crecimiento semana a semana</div>
+    <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-growth"></div>
+  </div>
+
+  <!-- ══ CARGAR ══ -->
   <div id="tab-cargar" class="tab-content">
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Registrar venta sugestiva</div>
@@ -328,27 +470,22 @@
     <div style="padding:0 16px;">
       <label>Nota opcional</label>
       <input type="text" id="inp-nota" placeholder="Ej: turno tarde, promoción…" />
-      <button class="btn btn-primary" onclick="submitLog()">
-        <i class="ti ti-check"></i> Guardar registro
-      </button>
+      <button class="btn btn-primary" onclick="submitLog()"><i class="ti ti-check"></i> Guardar registro</button>
     </div>
     <div class="section-title">Últimos registros</div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="recent-logs"></div>
   </div>
 
-  <!-- ADMIN -->
+  <!-- ══ ADMIN ══ -->
   <div id="tab-admin" class="tab-content">
     <div style="padding:16px;">
       <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Administración</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Usuarios y configuración</div>
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-user-plus" style="margin-right:6px;"></i>Crear vendedor</div>
-        <label>Nombre completo</label>
-        <input type="text" id="new-name" placeholder="Juan Pérez" />
-        <label>Email</label>
-        <input type="email" id="new-email" placeholder="juan@empresa.com" />
-        <label>Contraseña temporal</label>
-        <input type="password" id="new-pass" placeholder="••••••" />
+        <label>Nombre completo</label><input type="text" id="new-name" placeholder="Juan Pérez" />
+        <label>Email</label><input type="email" id="new-email" placeholder="juan@empresa.com" />
+        <label>Contraseña temporal</label><input type="password" id="new-pass" placeholder="••••••" />
         <button class="btn" onclick="createEmployee()"><i class="ti ti-plus"></i> Crear vendedor</button>
       </div>
       <div class="card">
@@ -368,17 +505,61 @@
 <script>
 const SUPABASE_URL = 'https://yxeagaoxosveblpfxvwq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWFnYW94b3N2ZWJscGZ4dndxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzExNTIsImV4cCI6MjA5NTE0NzE1Mn0.5DEPtur08XeZIRhIkEHlGG4D8oV4c4KdfpM_7ww8IDg';
-
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 const PRODUCTS = [
-  { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3,   unit:'pileta' },
-  { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2,   unit:'combo'  },
-  { id:'cafe_espresso',  name:'Café espresso',     icon:'☕', pts:5,   unit:'café'   },
-  { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3,   unit:'cono'   },
+  { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3,   unit:'pileta', color:'#BA7517' },
+  { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2,   unit:'combo',  color:'#534AB7' },
+  { id:'cafe_espresso',  name:'Café espresso',     icon:'☕', pts:5,   unit:'café',   color:'#0F6E56' },
+  { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3,   unit:'cono',   color:'#993C1D' },
 ];
 const COLORS = ['av-teal','av-coral','av-amber','av-pink','av-blue','av-purple'];
 
+/* ── TIPS BANCO COMPLETO ── */
+const TIPS = [
+  // RECIPROCIDAD
+  { cat:'🤝 Reciprocidad', text:'Cuando el cliente siente que recibió algo genuino, tiende a devolver el favor comprando más. Ofrecé el café como si fuera una recomendación personal, no una venta.' },
+  { cat:'🤝 Reciprocidad', text:'Antes de sugerir, conectá. Un comentario amable o una sonrisa crea una deuda social invisible que hace al cliente más receptivo.' },
+  { cat:'🤝 Reciprocidad', text:'Si el cliente pide algo y vos se lo resolvés rápido y bien, ese momento es ideal para sugerir algo más. Ya te ganaste su confianza.' },
+  // COMPROMISO
+  { cat:'✅ Compromiso y coherencia', text:'Si el cliente ya dijo que sí a algo, es más fácil que diga que sí a lo siguiente. Empezá con algo pequeño antes de ofrecer el combo grande.' },
+  { cat:'✅ Compromiso y coherencia', text:'Usá preguntas que lleven al sí: "¿Lo querés con o sin helado?" en lugar de "¿Querés el cono?" Asumir la venta cambia el resultado.' },
+  { cat:'✅ Compromiso y coherencia', text:'Cuando el cliente eligió un combo, ya está en modo "sí". Ese es el mejor momento para sugerir la pileta de cheddar.' },
+  // PRUEBA SOCIAL
+  { cat:'👥 Prueba social', text:'"La mayoría de nuestros clientes piden el café espresso después del combo." Cuando la gente sabe que otros eligen algo, confía más.' },
+  { cat:'👥 Prueba social', text:'"El cono especial es lo más pedido los fines de semana." La referencia al grupo genera pertenencia y deseo.' },
+  { cat:'👥 Prueba social', text:'Mencionar que algo "se está terminando rápido hoy" activa la prueba social y la escasez al mismo tiempo.' },
+  // AUTORIDAD
+  { cat:'🎓 Autoridad', text:'Hablá con seguridad y conocimiento del producto. La confianza en tu voz vale más que cualquier descripción.' },
+  { cat:'🎓 Autoridad', text:'"El café espresso que tenemos es de grano seleccionado." Un dato específico genera más confianza que un elogio genérico.' },
+  { cat:'🎓 Autoridad', text:'Cuando recomendás algo con convicción y explicás por qué, el cliente percibe que estás de su lado, no vendiéndole.' },
+  // SIMPATÍA
+  { cat:'😊 Simpatía', text:'La gente le compra más a quien le cae bien. Un tono cálido antes de sugerir algo duplica las chances de que acepte.' },
+  { cat:'😊 Simpatía', text:'Usá el nombre del cliente si lo sabés. Personalizar la interacción hace que la sugerencia se sienta como un consejo de amigo.' },
+  { cat:'😊 Simpatía', text:'Reí, conectá, sé genuino. Nadie le dice que no a alguien que le generó una buena vibra en 10 segundos.' },
+  // ESCASEZ
+  { cat:'⏳ Escasez', text:'"Hoy es el último día que tenemos el cono especial a este precio." La urgencia activa el deseo de no perderse algo.' },
+  { cat:'⏳ Escasez', text:'"Quedan pocas unidades del café de hoy." La limitación real o percibida acelera la decisión.' },
+  { cat:'⏳ Escasez', text:'Combiná escasez con prueba social: "Se están yendo rápido hoy." Dos disparadores en una frase.' },
+  // ESTRATEGIA — CONOS
+  { cat:'🎮 Estrategia — Conos', text:'El cono es tu arma de volumen. Es accesible, el cliente casi nunca dice que no. Apuntá a vender 3 o más por turno como base.' },
+  { cat:'🎮 Estrategia — Conos', text:'La versión Oreo es la entrada más económica al cono. Si el cliente duda, ese es tu punto de entrada: bajo precio, alta aceptación.' },
+  { cat:'🎮 Estrategia — Conos', text:'Ofrecé el cono siempre al cierre del pedido, cuando el cliente ya decidió. Es el momento de menor resistencia.' },
+  // ESTRATEGIA — COMBOS
+  { cat:'🎮 Estrategia — Combos', text:'El combo grande es tu producto ancla. Una vez que el cliente lo elige, la pileta y el café se vuelven sugerencias naturales.' },
+  { cat:'🎮 Estrategia — Combos', text:'Si el cliente pide 2 combos o más, la pileta de cheddar es casi obligatoria de sugerir. Es lógico para ellos y son 3 puntos para vos.' },
+  { cat:'🎮 Estrategia — Combos', text:'No esperes que pidan más. Preguntá siempre: "¿Lo acompañamos con algo más?" después del combo.' },
+  // ESTRATEGIA — CAFÉ
+  { cat:'🎮 Estrategia — Café', text:'El café vale 5 puntos. Con vender 2 cafés por turno ya sumás 10 puntos. Es la jugada de mayor retorno por esfuerzo.' },
+  { cat:'🎮 Estrategia — Café', text:'El café se ofrece mejor después de la comida, no durante. Timing: cuando el cliente ya comió o está por terminar.' },
+  { cat:'🎮 Estrategia — Café', text:'No todos van a querer café, pero si no lo ofrecés, ninguno lo va a pedir. La tasa de conversión sube solo con preguntar.' },
+  // ESTRATEGIA — PILETA
+  { cat:'🎮 Estrategia — Pileta', text:'La pileta se vende sola cuando hay 2 o más combos en el pedido. Es una sugerencia que tiene sentido para el cliente.' },
+  { cat:'🎮 Estrategia — Pileta', text:'3 puntos por pileta. Si vendés 3 piletas en un turno ya tenés 9 puntos solo con ese producto.' },
+  { cat:'🎮 Estrategia — Pileta', text:'Presentá la pileta como una mejora, no como un extra: "¿Le agregamos el cheddar para compartir?"' },
+];
+
+let currentTipIndex = 0;
 const qtys = {};
 PRODUCTS.forEach(p => qtys[p.id] = 0);
 
@@ -389,25 +570,21 @@ let allLogs        = [];
 let monthlyGoal    = 100;
 let period         = 'week';
 
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
 (async () => {
   const { data: { session } } = await sb.auth.getSession();
-  if (session) {
-    currentUser = session.user;
-    await loadAppData();
-    showApp();
-  }
+  if (session) { currentUser = session.user; await loadAppData(); showApp(); }
   sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-      currentUser = session.user;
-      await loadAppData();
-      showApp();
-    } else if (event === 'SIGNED_OUT') {
-      currentUser = null;
-      showScreen('login');
-    }
+    if (event === 'SIGNED_IN' && session) { currentUser = session.user; await loadAppData(); showApp(); }
+    else if (event === 'SIGNED_OUT') { currentUser = null; showScreen('login'); }
   });
 })();
 
+/* ══════════════════════════════════
+   AUTH
+══════════════════════════════════ */
 async function doLogin() {
   const email = document.getElementById('inp-email').value.trim();
   const pass  = document.getElementById('inp-pass').value;
@@ -416,9 +593,11 @@ async function doLogin() {
   const { error } = await sb.auth.signInWithPassword({ email, password: pass });
   if (error) { errEl.textContent = 'Email o contraseña incorrectos'; errEl.style.display = 'block'; }
 }
-
 async function doLogout() { await sb.auth.signOut(); }
 
+/* ══════════════════════════════════
+   DATOS
+══════════════════════════════════ */
 async function loadAppData() {
   const { data: prof } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   currentProfile = prof;
@@ -430,6 +609,9 @@ async function loadAppData() {
   if (setting) monthlyGoal = parseInt(setting.value) || 100;
 }
 
+/* ══════════════════════════════════
+   NAVEGACIÓN
+══════════════════════════════════ */
 function showScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
@@ -437,27 +619,43 @@ function showScreen(s) {
 
 function showApp() {
   showScreen('app');
-  const isM = currentProfile.role === 'manager';
+  const role = currentProfile.role;
+  const isManager      = role === 'manager' || role === 'supermanager';
+  const isSuperManager = role === 'supermanager';
+  const isEmployee     = role === 'employee';
+
   document.getElementById('hdr-greeting').textContent = greeting();
   document.getElementById('hdr-name').textContent     = currentProfile.full_name;
   const badge = document.getElementById('hdr-badge');
-  badge.textContent = isM ? 'Gerente' : 'Vendedor';
-  badge.className   = 'badge ' + (isM ? 'badge-mgr' : 'badge-emp');
-  document.getElementById('tab-btn-cargar').style.display = isM ? 'flex' : 'none';
-  document.getElementById('tab-btn-admin').style.display  = isM ? 'flex' : 'none';
-  if (isM) {
-    fillEmployeeSelect();
-    renderProductRows();
-    renderRecentLogs();
-    renderUserList();
+  if (isSuperManager) { badge.textContent = 'Super Gerente'; badge.className = 'badge badge-super'; }
+  else if (isManager) { badge.textContent = 'Gerente';       badge.className = 'badge badge-mgr'; }
+  else                { badge.textContent = 'Vendedor';      badge.className = 'badge badge-emp'; }
+
+  document.getElementById('tab-btn-analisis').style.display = isSuperManager ? 'flex' : 'none';
+  document.getElementById('tab-btn-cargar').style.display   = isManager      ? 'flex' : 'none';
+  document.getElementById('tab-btn-admin').style.display    = isManager      ? 'flex' : 'none';
+
+  // Ocultar sección semanal si es manager
+  document.getElementById('prof-weekly-section').style.display = isEmployee ? 'block' : 'none';
+
+  if (isManager) {
+    fillEmployeeSelect(); renderProductRows(); renderRecentLogs(); renderUserList();
     document.getElementById('inp-goal').value  = monthlyGoal;
     document.getElementById('inp-fecha').value = today();
   }
-  // Inicializar rango con la semana actual
+
   initRangePicker();
+  renderTips();
+  initPushNotifications();
+
+  // Tip aleatorio al abrir
+  currentTipIndex = Math.floor(Math.random() * TIPS.length);
+  showTip(currentTipIndex);
+
   switchTab('ranking', document.querySelector('.tab'));
   renderRanking();
   renderProfile();
+  if (isSuperManager) renderAnalysis();
 }
 
 function switchTab(tab, el) {
@@ -465,13 +663,15 @@ function switchTab(tab, el) {
   if (el) el.classList.add('active');
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
+  if (tab === 'analisis') renderAnalysis();
 }
 
+/* ══════════════════════════════════
+   PERÍODO / FILTROS
+══════════════════════════════════ */
 function initRangePicker() {
-  // Por defecto el rango muestra la semana actual (lunes a hoy)
   const now = new Date();
-  const day = now.getDay();
-  const diff = day === 0 ? 6 : day - 1;
+  const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
   const lunes = new Date(now);
   lunes.setDate(now.getDate() - diff);
   document.getElementById('range-from').value = lunes.toISOString().slice(0,10);
@@ -482,56 +682,44 @@ function setPeriod(p, el) {
   period = p;
   document.querySelectorAll('.period-chip').forEach(c => c.classList.remove('active'));
   if (el) el.classList.add('active');
-  // Mostrar/ocultar el range picker
-  const picker = document.getElementById('range-picker');
-  if (p === 'range') {
-    picker.classList.add('visible');
-  } else {
-    picker.classList.remove('visible');
-  }
+  document.getElementById('range-picker').classList.toggle('visible', p === 'range');
   renderRanking();
+}
+
+function weekBounds() {
+  const now = new Date();
+  const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
+  const lunes = new Date(now); lunes.setHours(0,0,0,0); lunes.setDate(now.getDate() - diff);
+  const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
+  return { from: lunes.toISOString().slice(0,10), to: domingo.toISOString().slice(0,10) };
+}
+
+function filteredLogs() {
+  const hoy = today();
+  return allLogs.filter(l => {
+    if (period === 'all') return true;
+    const f = l.fecha;
+    if (period === 'month') return f.slice(0,7) === hoy.slice(0,7);
+    if (period === 'week') { const b = weekBounds(); return f >= b.from && f <= b.to; }
+    if (period === 'range') {
+      const from = document.getElementById('range-from').value;
+      const to   = document.getElementById('range-to').value;
+      if (!from && !to) return true;
+      if (from && !to) return f >= from;
+      if (!from && to) return f <= to;
+      return f >= from && f <= to;
+    }
+    return true;
+  });
 }
 
 function getPoints(uid) {
   return filteredLogs().filter(l => l.user_id === uid).reduce((s,l) => s + l.pts, 0);
 }
 
-function filteredLogs() {
-  const now = new Date();
-  const hoy = today();
-  return allLogs.filter(l => {
-    if (period === 'all') return true;
-    const fecha = l.fecha; // string YYYY-MM-DD, comparación directa sin zona horaria
-
-    if (period === 'month') {
-      return fecha.slice(0,7) === hoy.slice(0,7);
-    }
-    if (period === 'week') {
-      // Semana calendario: lunes a domingo
-      const now2 = new Date();
-      const day = now2.getDay();
-      const diff = day === 0 ? 6 : day - 1; // lunes = inicio
-      const lunes = new Date(now2);
-      lunes.setHours(0,0,0,0);
-      lunes.setDate(now2.getDate() - diff);
-      const domingo = new Date(lunes);
-      domingo.setDate(lunes.getDate() + 6);
-      const lunesStr   = lunes.toISOString().slice(0,10);
-      const domingoStr = domingo.toISOString().slice(0,10);
-      return fecha >= lunesStr && fecha <= domingoStr;
-    }
-    if (period === 'range') {
-      const from = document.getElementById('range-from').value;
-      const to   = document.getElementById('range-to').value;
-      if (!from && !to) return true;
-      if (from && !to) return fecha >= from;
-      if (!from && to) return fecha <= to;
-      return fecha >= from && fecha <= to;
-    }
-    return true;
-  });
-}
-
+/* ══════════════════════════════════
+   RANKING
+══════════════════════════════════ */
 function renderRanking() {
   const employees = allProfiles.filter(p => p.role === 'employee');
   const ranked = employees.map(e => ({ ...e, pts: getPoints(e.id) })).sort((a,b) => b.pts - a.pts);
@@ -540,14 +728,13 @@ function renderRanking() {
   document.getElementById('m-pts').textContent   = fmt(total);
   const max = ranked[0]?.pts || 1;
   document.getElementById('ranking-list').innerHTML = ranked.map((e,i) => {
-    const medal  = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-    const cls    = i===0?'top1':i===1?'top2':i===2?'top3':'';
-    const color  = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
-    const avHTML = avatarHTML(e, 36);
-    const isMe   = e.id === currentProfile.id;
+    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+    const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
+    const color = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
+    const isMe  = e.id === currentProfile.id;
     return `<div class="rank-row">
       <div class="rank-num ${cls}">${medal}</div>
-      ${avHTML}
+      ${avatarHTML(e,36)}
       <div style="flex:1;">
         <div class="rank-name">${e.full_name}${isMe?'<span class="me-chip">yo</span>':''}</div>
         <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.pts/max*100)}%;background:${color}"></div></div>
@@ -557,6 +744,9 @@ function renderRanking() {
   }).join('') || '<div class="empty-state"><i class="ti ti-users"></i>Sin vendedores</div>';
 }
 
+/* ══════════════════════════════════
+   PERFIL
+══════════════════════════════════ */
 function renderProfile() {
   const p    = currentProfile;
   const logs = allLogs.filter(l => l.user_id === p.id);
@@ -564,30 +754,49 @@ function renderProfile() {
   const hoy  = today();
   const mes  = logs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
   const pct  = Math.min(100, Math.round(mes/monthlyGoal*100));
+
   applyAvatar(document.getElementById('prof-av'), p, 64);
-  document.getElementById('prof-name').textContent     = p.full_name;
-  document.getElementById('prof-role').textContent     = p.role==='manager'?'Gerente':'Vendedor';
-  document.getElementById('prof-pts').textContent      = fmt(all);
-  document.getElementById('prof-pct').textContent      = pct + '%';
-  document.getElementById('prof-bar').style.width      = pct + '%';
-  document.getElementById('prof-mes-pts').textContent  = fmt(mes) + ' pts este mes';
+  document.getElementById('prof-name').textContent = p.full_name;
+  document.getElementById('prof-role').textContent = roleLabel(p.role);
+  document.getElementById('prof-pts').textContent  = fmt(all);
+  document.getElementById('prof-pct').textContent  = pct + '%';
+  document.getElementById('prof-bar').style.width  = pct + '%';
+  document.getElementById('prof-mes-pts').textContent    = fmt(mes) + ' pts este mes';
   document.getElementById('prof-goal-label').textContent = 'Meta: ' + monthlyGoal + ' pts';
+
   const employees = allProfiles.filter(pr=>pr.role==='employee');
   const ranked    = employees.map(e=>({id:e.id,pts:getPoints(e.id)})).sort((a,b)=>b.pts-a.pts);
   const pos       = ranked.findIndex(e=>e.id===p.id);
-  document.getElementById('prof-rank').textContent = p.role==='manager'?'—':(pos>=0?'#'+(pos+1):'—');
-  document.getElementById('prof-products').innerHTML = PRODUCTS.map(pr => {
-    const qty = logs.reduce((s,l)=>s+(l[pr.id]||0),0);
-    const ep  = logs.reduce((s,l)=>s+(l[pr.id]||0)*pr.pts,0);
-    return `<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+  document.getElementById('prof-rank').textContent = p.role==='employee'?(pos>=0?'#'+(pos+1):'—'):'—';
+
+  // Evolución semanal propia (días lun-dom)
+  if (p.role === 'employee') {
+    renderWeekChart('prof-week-chart', logs, '#534AB7');
+  }
+
+  // Productos rankeados por CANTIDAD
+  const productStats = PRODUCTS.map(pr => ({
+    ...pr,
+    qty: logs.reduce((s,l)=>s+(l[pr.id]||0),0),
+    ep:  logs.reduce((s,l)=>s+(l[pr.id]||0)*pr.pts,0)
+  })).sort((a,b) => b.qty - a.qty);
+
+  const maxQty = productStats[0]?.qty || 1;
+  document.getElementById('prof-products').innerHTML = productStats.map((pr,i) => `
+    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
+      <div style="font-size:13px;font-weight:600;color:var(--text3);min-width:16px;">${i+1}</div>
       <span style="font-size:22px;">${pr.icon}</span>
-      <div style="flex:1;"><div style="font-size:13px;font-weight:600;">${pr.name}</div>
-        <div style="font-size:12px;color:var(--text2);">${qty} ${pr.unit}${qty!==1?'s':''} vendidos</div></div>
-      <div style="text-align:right;"><div style="font-size:14px;font-weight:600;color:var(--accent);">${fmt(ep)} pts</div>
-        <div style="font-size:11px;color:var(--text3);">${pr.pts} pts/u</div></div>
-    </div>`;
-  }).join('');
-  const sorted = [...logs].sort((a,b)=> b.fecha.localeCompare(a.fecha));
+      <div style="flex:1;">
+        <div style="font-size:13px;font-weight:600;">${pr.name}</div>
+        <div class="bar-bg" style="margin-top:4px;"><div class="bar-fill" style="width:${Math.round(pr.qty/maxQty*100)}%;background:${pr.color}"></div></div>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:14px;font-weight:600;color:${pr.color};">${pr.qty} <span style="font-size:11px;color:var(--text3);">${pr.unit}s</span></div>
+        <div style="font-size:11px;color:var(--text3);">${fmt(pr.ep)} pts</div>
+      </div>
+    </div>`).join('');
+
+  const sorted = [...logs].sort((a,b) => b.fecha.localeCompare(a.fecha));
   const histEl = document.getElementById('prof-history');
   if (!sorted.length) { histEl.innerHTML='<div class="empty-state"><i class="ti ti-history"></i>Sin registros aún</div>'; return; }
   histEl.innerHTML = sorted.map(l => {
@@ -600,6 +809,230 @@ function renderProfile() {
   }).join('');
 }
 
+/* ══════════════════════════════════
+   SEMANA CHART (barras por día)
+══════════════════════════════════ */
+function renderWeekChart(elId, logs, color) {
+  const el = document.getElementById(elId);
+  const days = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
+  const b = weekBounds();
+  const dayPts = Array(7).fill(0);
+  logs.forEach(l => {
+    if (l.fecha >= b.from && l.fecha <= b.to) {
+      const d = new Date(l.fecha+'T00:00:00');
+      const idx = (d.getDay() + 6) % 7; // lunes=0
+      dayPts[idx] += l.pts;
+    }
+  });
+  const max = Math.max(...dayPts, 1);
+  el.innerHTML = dayPts.map((pts,i) => `
+    <div class="week-col">
+      <div class="week-val">${pts > 0 ? fmt(pts) : ''}</div>
+      <div class="week-bar-wrap">
+        <div class="week-bar" style="height:${Math.round(pts/max*100)}%;background:${color};opacity:${pts>0?1:0.15};"></div>
+      </div>
+      <div class="week-label">${days[i]}</div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════
+   ANÁLISIS (supermanager)
+══════════════════════════════════ */
+function renderAnalysis() {
+  const hoy = today();
+  const wb  = weekBounds();
+
+  // Métricas globales
+  const weekLogs  = allLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to);
+  const monthLogs = allLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7));
+  document.getElementById('an-week-pts').textContent  = fmt(weekLogs.reduce((s,l)=>s+l.pts,0));
+  document.getElementById('an-month-pts').textContent = fmt(monthLogs.reduce((s,l)=>s+l.pts,0));
+  document.getElementById('an-total-logs').textContent = allLogs.length;
+
+  // Evolución de las últimas 6 semanas
+  renderLastWeeksChart();
+
+  // Participación por producto
+  renderProductShare();
+
+  // Mejor vendedor por producto
+  renderProductRanking();
+
+  // Crecimiento semana a semana por vendedor
+  renderGrowth();
+}
+
+function getWeekStart(offsetWeeks) {
+  const now = new Date();
+  const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
+  const lunes = new Date(now);
+  lunes.setHours(0,0,0,0);
+  lunes.setDate(now.getDate() - diff - offsetWeeks * 7);
+  return lunes.toISOString().slice(0,10);
+}
+
+function renderLastWeeksChart() {
+  const el = document.getElementById('an-week-chart');
+  const weeks = [];
+  for (let i=5; i>=0; i--) {
+    const from = getWeekStart(i);
+    const to   = new Date(from+'T00:00:00');
+    to.setDate(to.getDate()+6);
+    const toStr = to.toISOString().slice(0,10);
+    const pts = allLogs.filter(l=>l.fecha>=from&&l.fecha<=toStr).reduce((s,l)=>s+l.pts,0);
+    const label = new Date(from+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
+    weeks.push({ label, pts });
+  }
+  const max = Math.max(...weeks.map(w=>w.pts), 1);
+  el.innerHTML = weeks.map((w,i) => `
+    <div class="week-col">
+      <div class="week-val">${w.pts > 0 ? fmt(w.pts) : ''}</div>
+      <div class="week-bar-wrap">
+        <div class="week-bar" style="height:${Math.round(w.pts/max*100)}%;background:${i===5?'var(--accent)':'var(--accent-bg)'};border:${i===5?'none':'1px solid var(--accent)'};"></div>
+      </div>
+      <div class="week-label">${w.label}</div>
+    </div>`).join('');
+}
+
+function renderProductShare() {
+  const el = document.getElementById('an-product-share');
+  const totals = PRODUCTS.map(p => ({
+    ...p,
+    qty: allLogs.reduce((s,l)=>s+(l[p.id]||0),0),
+    pts: allLogs.reduce((s,l)=>s+(l[p.id]||0)*p.pts,0)
+  }));
+  const maxQty = Math.max(...totals.map(p=>p.qty), 1);
+  const totalPts = totals.reduce((s,p)=>s+p.pts,0);
+  el.innerHTML = totals.sort((a,b)=>b.qty-a.qty).map(p => `
+    <div class="stat-bar-row">
+      <div class="stat-bar-label"><span style="font-size:16px;">${p.icon}</span> ${p.name}</div>
+      <div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:${Math.round(p.qty/maxQty*100)}%;background:${p.color};"></div></div>
+      <div class="stat-bar-val" style="color:${p.color};">${p.qty}</div>
+      <div style="font-size:11px;color:var(--text3);min-width:36px;text-align:right;">${totalPts>0?Math.round(p.pts/totalPts*100):0}%</div>
+    </div>`).join('');
+}
+
+function renderProductRanking() {
+  const el = document.getElementById('an-product-ranking');
+  const employees = allProfiles.filter(p=>p.role==='employee');
+  el.innerHTML = PRODUCTS.map(pr => {
+    const ranked = employees.map(e => ({
+      name: e.full_name,
+      qty: allLogs.filter(l=>l.user_id===e.id).reduce((s,l)=>s+(l[pr.id]||0),0)
+    })).sort((a,b)=>b.qty-a.qty).slice(0,3);
+    return `<div class="card" style="margin-bottom:10px;">
+      <div style="font-size:14px;font-weight:600;margin-bottom:10px;">${pr.icon} ${pr.name}</div>
+      ${ranked.map((r,i)=>`
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
+          <div style="font-size:12px;color:var(--text3);min-width:16px;">${i===0?'🥇':i===1?'🥈':'🥉'}</div>
+          <div style="flex:1;font-size:13px;">${r.name}</div>
+          <div style="font-size:13px;font-weight:600;color:${pr.color};">${r.qty} ${pr.unit}s</div>
+        </div>`).join('')}
+    </div>`;
+  }).join('');
+}
+
+function renderGrowth() {
+  const el = document.getElementById('an-growth');
+  const employees = allProfiles.filter(p=>p.role==='employee');
+  const thisWeek = getWeekStart(0);
+  const lastWeek = getWeekStart(1);
+  const tw = new Date(thisWeek+'T00:00:00'); tw.setDate(tw.getDate()+6);
+  const lw = new Date(lastWeek+'T00:00:00'); lw.setDate(lw.getDate()+6);
+  const twStr = tw.toISOString().slice(0,10);
+  const lwStr = lw.toISOString().slice(0,10);
+
+  const data = employees.map(e => {
+    const myLogs = allLogs.filter(l=>l.user_id===e.id);
+    const curr = myLogs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+l.pts,0);
+    const prev = myLogs.filter(l=>l.fecha>=lastWeek&&l.fecha<=lwStr).reduce((s,l)=>s+l.pts,0);
+    const delta = curr - prev;
+    return { name: e.full_name, curr, prev, delta };
+  }).sort((a,b)=>b.delta-a.delta);
+
+  el.innerHTML = data.map(d => {
+    const color = d.delta > 0 ? 'var(--success)' : d.delta < 0 ? 'var(--danger)' : 'var(--text3)';
+    const icon  = d.delta > 0 ? '↑' : d.delta < 0 ? '↓' : '→';
+    return `<div class="stat-bar-row">
+      <div class="stat-bar-label" style="font-size:13px;">${d.name}</div>
+      <div style="font-size:12px;color:var(--text3);">sem. ant: ${fmt(d.prev)}</div>
+      <div style="font-size:13px;font-weight:600;color:${color};min-width:60px;text-align:right;">${icon} ${fmt(Math.abs(d.delta))} pts</div>
+    </div>`;
+  }).join('') || '<div class="empty-state" style="padding:1rem;">Sin datos suficientes</div>';
+}
+
+/* ══════════════════════════════════
+   TIPS
+══════════════════════════════════ */
+function showTip(idx) {
+  const tip = TIPS[idx];
+  document.getElementById('tip-cat').textContent  = tip.cat;
+  document.getElementById('tip-text').textContent = tip.text;
+  document.getElementById('tip-counter').textContent = `${idx+1} / ${TIPS.length}`;
+}
+function nextTip() { currentTipIndex = (currentTipIndex + 1) % TIPS.length; showTip(currentTipIndex); }
+function prevTip() { currentTipIndex = (currentTipIndex - 1 + TIPS.length) % TIPS.length; showTip(currentTipIndex); }
+
+function renderTips() {
+  const el = document.getElementById('tips-list');
+  const catColors = {
+    '🤝 Reciprocidad':'#0F6E56','✅ Compromiso y coherencia':'#534AB7',
+    '👥 Prueba social':'#0C447C','🎓 Autoridad':'#712B13',
+    '😊 Simpatía':'#633806','⏳ Escasez':'#b91c1c','🎮 Estrategia — Conos':'#993C1D',
+    '🎮 Estrategia — Combos':'#534AB7','🎮 Estrategia — Café':'#0F6E56','🎮 Estrategia — Pileta':'#BA7517'
+  };
+  el.innerHTML = TIPS.map((tip, i) => `
+    <div class="tip-list-item" onclick="currentTipIndex=${i};showTip(${i});switchTab('tips',document.querySelector('.tab:nth-child(3)'));">
+      <div class="tip-list-cat" style="color:${catColors[tip.cat]||'var(--accent)'};">${tip.cat}</div>
+      <div class="tip-list-text">${tip.text}</div>
+    </div>`).join('');
+}
+
+/* ══════════════════════════════════
+   PUSH NOTIFICATIONS
+══════════════════════════════════ */
+function initPushNotifications() {
+  if (!('Notification' in window)) return;
+  if (Notification.permission === 'granted') {
+    sendTipNotification();
+  } else if (Notification.permission === 'default') {
+    document.getElementById('push-banner').style.display = 'flex';
+  }
+}
+
+function hidePushBanner() {
+  document.getElementById('push-banner').style.display = 'none';
+}
+
+async function requestPushPermission() {
+  const permission = await Notification.requestPermission();
+  hidePushBanner();
+  if (permission === 'granted') {
+    showToast('Notificaciones activadas');
+    sendTipNotification();
+  }
+}
+
+function sendTipNotification() {
+  const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
+  // Solo enviar una vez por sesión (verificar con sessionStorage)
+  if (sessionStorage.getItem('tip-sent')) return;
+  sessionStorage.setItem('tip-sent', '1');
+  setTimeout(() => {
+    try {
+      new Notification('💡 Consejo de venta — SalesRank IVS', {
+        body: tip.text,
+        icon: '/favicon.ico',
+        badge: '/favicon.ico',
+        tag: 'ivs-tip'
+      });
+    } catch(e) {}
+  }, 3000);
+}
+
+/* ══════════════════════════════════
+   CARGA DE VENTAS
+══════════════════════════════════ */
 function renderProductRows() {
   document.getElementById('product-rows').innerHTML = PRODUCTS.map(p => `
     <div class="product-row">
@@ -618,24 +1051,13 @@ function renderProductRows() {
   updateSummary();
 }
 
-function changeQty(pid, d) {
-  qtys[pid] = Math.max(0,(qtys[pid]||0)+d);
-  document.getElementById('qty-'+pid).value = qtys[pid];
-  updateSummary();
-}
-function onQtyInput(pid) {
-  const v = parseInt(document.getElementById('qty-'+pid).value);
-  qtys[pid] = (!isNaN(v)&&v>=0)?v:0;
-  updateSummary();
-}
-function onQtyBlur(pid) {
-  const v = parseInt(document.getElementById('qty-'+pid).value);
-  qtys[pid] = (!isNaN(v)&&v>=0)?v:0;
-  document.getElementById('qty-'+pid).value = qtys[pid];
-}
+function changeQty(pid, d) { qtys[pid]=Math.max(0,(qtys[pid]||0)+d); document.getElementById('qty-'+pid).value=qtys[pid]; updateSummary(); }
+function onQtyInput(pid) { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; updateSummary(); }
+function onQtyBlur(pid)  { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; document.getElementById('qty-'+pid).value=qtys[pid]; }
+
 function updateSummary() {
   let total=0; const parts=[];
-  PRODUCTS.forEach(p => { const q=qtys[p.id]||0; if(q>0){const e=q*p.pts;total+=e;parts.push(p.icon+' ×'+q+' = '+fmt(e)+' pts');} });
+  PRODUCTS.forEach(p=>{const q=qtys[p.id]||0;if(q>0){const e=q*p.pts;total+=e;parts.push(p.icon+' ×'+q+' = '+fmt(e)+' pts');}});
   document.getElementById('pts-total').textContent     = fmt(total);
   document.getElementById('pts-breakdown').textContent = parts.length?parts.join('  ·  '):'Ingresá unidades vendidas';
 }
@@ -649,47 +1071,44 @@ async function submitLog() {
   if (!fecha) { showToast('Ingresá la fecha del turno'); return; }
   if (pts===0){ showToast('Ingresá al menos un producto'); return; }
   const row = {
-    user_id: uid, registered_by: currentProfile.id,
-    fecha, pts, nota,
-    pileta_cheddar: qtys.pileta_cheddar||0,
-    combo_grande:   qtys.combo_grande||0,
-    cafe_espresso:  qtys.cafe_espresso||0,
-    cono_especial:  qtys.cono_especial||0,
+    user_id: uid, registered_by: currentProfile.id, fecha, pts, nota,
+    pileta_cheddar: qtys.pileta_cheddar||0, combo_grande: qtys.combo_grande||0,
+    cafe_espresso:  qtys.cafe_espresso||0,  cono_especial: qtys.cono_especial||0,
   };
   const { data, error } = await sb.from('sales_logs').insert(row).select().single();
   if (error) { showToast('Error al guardar: '+error.message); return; }
   allLogs.unshift(data);
-  PRODUCTS.forEach(p => { qtys[p.id]=0; document.getElementById('qty-'+p.id).value=0; });
-  document.getElementById('inp-nota').value = '';
+  PRODUCTS.forEach(p=>{qtys[p.id]=0;document.getElementById('qty-'+p.id).value=0;});
+  document.getElementById('inp-nota').value='';
   updateSummary();
   showToast('¡'+fmt(pts)+' puntos registrados!');
   renderRanking(); renderRecentLogs();
-  if (currentProfile.id === uid) renderProfile();
+  if (currentProfile.id===uid) renderProfile();
 }
 
 function renderRecentLogs() {
-  const recent = allLogs.slice(0,10);
   const el = document.getElementById('recent-logs');
-  if (!recent.length){ el.innerHTML='<div class="empty-state"><i class="ti ti-clipboard-list"></i>Sin registros</div>'; return; }
-  el.innerHTML = recent.map(l => {
+  if (!allLogs.length){ el.innerHTML='<div class="empty-state"><i class="ti ti-clipboard-list"></i>Sin registros</div>'; return; }
+  el.innerHTML = allLogs.slice(0,10).map(l => {
     const prof  = allProfiles.find(p=>p.id===l.user_id);
-    const name  = prof?.full_name || '—';
     const chips = PRODUCTS.filter(p=>l[p.id]>0).map(p=>`<span class="log-chip">${p.icon}${l[p.id]}</span>`).join('');
     const d     = new Date(l.fecha+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
     return `<div class="history-row"><div style="flex:1;">
-      <div style="font-weight:600;font-size:13px;">${name} <span style="font-weight:400;color:var(--text3);">· ${d}</span></div>
+      <div style="font-weight:600;font-size:13px;">${prof?.full_name||'—'} <span style="font-weight:400;color:var(--text3);">· ${d}</span></div>
       <div class="log-chips" style="margin-top:3px;">${chips}</div></div>
       <div class="h-pts">+${fmt(l.pts)} pts</div></div>`;
   }).join('');
 }
 
 function fillEmployeeSelect() {
-  const employees = allProfiles.filter(p=>p.role==='employee');
   const sel = document.getElementById('sel-ivs');
   sel.innerHTML = '<option value="">— Seleccioná un vendedor —</option>' +
-    employees.map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
+    allProfiles.filter(p=>p.role==='employee').map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
 }
 
+/* ══════════════════════════════════
+   FOTOS
+══════════════════════════════════ */
 function triggerPhoto() { document.getElementById('photo-input').click(); }
 
 async function uploadPhoto(event) {
@@ -709,7 +1128,7 @@ async function uploadPhoto(event) {
   applyAvatar(document.getElementById('prof-av'), currentProfile, 64);
   renderRanking();
   showToast('Foto actualizada');
-  event.target.value = '';
+  event.target.value='';
 }
 
 function compressImage(file, maxPx) {
@@ -719,18 +1138,21 @@ function compressImage(file, maxPx) {
       const img = new Image();
       img.onload = () => {
         let w=img.width, h=img.height;
-        if (w>h){ if(w>maxPx){h=Math.round(h*maxPx/w);w=maxPx;} }
-        else    { if(h>maxPx){w=Math.round(w*maxPx/h);h=maxPx;} }
+        if(w>h){if(w>maxPx){h=Math.round(h*maxPx/w);w=maxPx;}}
+        else{if(h>maxPx){w=Math.round(w*maxPx/h);h=maxPx;}}
         const c=document.createElement('canvas'); c.width=w; c.height=h;
         c.getContext('2d').drawImage(img,0,0,w,h);
         c.toBlob(blob=>resolve(blob),'image/jpeg',0.82);
       };
-      img.src = e.target.result;
+      img.src=e.target.result;
     };
     reader.readAsDataURL(file);
   });
 }
 
+/* ══════════════════════════════════
+   ADMIN
+══════════════════════════════════ */
 async function createEmployee() {
   const name  = document.getElementById('new-name').value.trim();
   const email = document.getElementById('new-email').value.trim();
@@ -740,8 +1162,7 @@ async function createEmployee() {
   const initials = (parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
   const color    = COLORS[allProfiles.length % COLORS.length];
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
-  const { error } = await sb.auth.signUp({
-    email, password: pass,
+  const { error } = await sb.auth.signUp({ email, password: pass,
     options: { data: { username, full_name: name, role: 'employee', initials, color } }
   });
   if (error){ showToast('Error: '+error.message); return; }
@@ -766,27 +1187,30 @@ function renderUserList() {
       ${avatarHTML(p,36)}
       <div style="flex:1;">
         <div style="font-size:14px;font-weight:600;">${p.full_name}</div>
-        <div style="font-size:12px;color:var(--text2);">${p.username} · ${p.role==='manager'?'Gerente':'Vendedor'}</div>
+        <div style="font-size:12px;color:var(--text2);">${p.username} · ${roleLabel(p.role)}</div>
       </div>
     </div>`).join('');
 }
 
+/* ══════════════════════════════════
+   HELPERS
+══════════════════════════════════ */
+function roleLabel(role) {
+  if (role==='supermanager') return 'Super Gerente';
+  if (role==='manager') return 'Gerente';
+  return 'Vendedor';
+}
+
 function avatarHTML(profile, size) {
-  if (profile.photo_url) {
-    return `<div class="avatar" style="width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;"></div>`;
-  }
+  if (profile.photo_url) return `<div class="avatar" style="width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;"></div>`;
   return `<div class="avatar ${profile.color}" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;">${profile.initials}</div>`;
 }
 
 function applyAvatar(el, profile, size) {
   if (profile.photo_url) {
-    el.className  = 'avatar';
-    el.style.cssText = `width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;`;
-    el.textContent = '';
+    el.className='avatar'; el.style.cssText=`width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;`; el.textContent='';
   } else {
-    el.className  = 'avatar '+profile.color;
-    el.style.cssText = `width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;`;
-    el.textContent = profile.initials;
+    el.className='avatar '+profile.color; el.style.cssText=`width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;`; el.textContent=profile.initials;
   }
 }
 
