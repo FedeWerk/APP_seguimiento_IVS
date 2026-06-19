@@ -326,7 +326,8 @@
     <div class="tab" onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
     <div class="tab" onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
     <div class="tab" id="tab-btn-analisis" onclick="switchTab('analisis',this)" style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
-    <div class="tab" id="tab-btn-cargar"  onclick="switchTab('cargar',this)"  style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
+    <div class="tab" id="tab-btn-cargar"  onclick="switchTab('cargar',this)"  style="display:none;"><i class="ti ti-circle-plus"></i>+ Cargar</div>
+    <div class="tab" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
     <div class="tab" id="tab-btn-admin"   onclick="switchTab('admin',this)"   style="display:none;"><i class="ti ti-settings"></i>Admin</div>
   </div>
 
@@ -474,6 +475,38 @@
     </div>
     <div class="section-title">Últimos registros</div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="recent-logs"></div>
+  </div>
+
+  <!-- ══ HISTORIAL ══ -->
+  <div id="tab-historial" class="tab-content">
+    <div style="padding:16px 16px 0;">
+      <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Historial de carga</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Qué se cargó a cada vendedor y cuándo</div>
+
+      <label>Vendedor</label>
+      <select id="hist-vendor" style="margin-bottom:10px;" onchange="renderHistorial()">
+        <option value="">— Todos los vendedores —</option>
+      </select>
+
+      <div style="display:flex;gap:10px;margin-bottom:6px;">
+        <div style="flex:1;">
+          <label>Desde</label>
+          <input type="date" id="hist-from" onchange="renderHistorial()" />
+        </div>
+        <div style="flex:1;">
+          <label>Hasta</label>
+          <input type="date" id="hist-to" onchange="renderHistorial()" />
+        </div>
+      </div>
+    </div>
+
+    <div class="metric-grid">
+      <div class="metric-card"><div class="metric-label">Registros</div><div class="metric-value" id="hist-count">—</div></div>
+      <div class="metric-card"><div class="metric-label">Puntos totales</div><div class="metric-value" id="hist-pts">—</div></div>
+    </div>
+
+    <div class="section-title">Resultados</div>
+    <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="hist-list"></div>
   </div>
 
   <!-- ══ ADMIN ══ -->
@@ -633,6 +666,7 @@ function showApp() {
 
   document.getElementById('tab-btn-analisis').style.display = isSuperManager ? 'flex' : 'none';
   document.getElementById('tab-btn-cargar').style.display   = isManager      ? 'flex' : 'none';
+  document.getElementById('tab-btn-historial').style.display = isManager     ? 'flex' : 'none';
   document.getElementById('tab-btn-admin').style.display    = isManager      ? 'flex' : 'none';
 
   // Ocultar sección semanal si es manager
@@ -640,6 +674,7 @@ function showApp() {
 
   if (isManager) {
     fillEmployeeSelect(); renderProductRows(); renderRecentLogs(); renderUserList();
+    fillHistorialVendorSelect();
     document.getElementById('inp-goal').value  = monthlyGoal;
     document.getElementById('inp-fecha').value = today();
   }
@@ -664,6 +699,7 @@ function switchTab(tab, el) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   if (tab === 'analisis') renderAnalysis();
+  if (tab === 'historial') renderHistorial();
 }
 
 /* ══════════════════════════════════
@@ -1104,6 +1140,49 @@ function fillEmployeeSelect() {
   const sel = document.getElementById('sel-ivs');
   sel.innerHTML = '<option value="">— Seleccioná un vendedor —</option>' +
     allProfiles.filter(p=>p.role==='employee').map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
+}
+
+/* ══════════════════════════════════
+   HISTORIAL DE CARGA
+══════════════════════════════════ */
+function fillHistorialVendorSelect() {
+  const sel = document.getElementById('hist-vendor');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Todos los vendedores —</option>' +
+    allProfiles.filter(p=>p.role==='employee').map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
+}
+
+function renderHistorial() {
+  const vendorId = document.getElementById('hist-vendor')?.value || '';
+  const from = document.getElementById('hist-from')?.value || '';
+  const to   = document.getElementById('hist-to')?.value || '';
+
+  let logs = [...allLogs];
+  if (vendorId) logs = logs.filter(l => l.user_id === vendorId);
+  if (from) logs = logs.filter(l => l.fecha >= from);
+  if (to)   logs = logs.filter(l => l.fecha <= to);
+  logs.sort((a,b) => b.fecha.localeCompare(a.fecha));
+
+  const totalPts = logs.reduce((s,l) => s + l.pts, 0);
+  document.getElementById('hist-count').textContent = logs.length;
+  document.getElementById('hist-pts').textContent    = fmt(totalPts);
+
+  const el = document.getElementById('hist-list');
+  if (!logs.length) { el.innerHTML = '<div class="empty-state"><i class="ti ti-file-search"></i>Sin registros para este filtro</div>'; return; }
+
+  el.innerHTML = logs.map(l => {
+    const prof  = allProfiles.find(p=>p.id===l.user_id);
+    const reg   = allProfiles.find(p=>p.id===l.registered_by);
+    const chips = PRODUCTS.filter(p=>l[p.id]>0).map(p=>`<span class="log-chip">${p.icon} ${l[p.id]} ${p.unit}${l[p.id]!==1?'s':''}</span>`).join('');
+    const d = new Date(l.fecha+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short',year:'numeric'});
+    return `<div class="history-row"><div style="flex:1;">
+      <div style="font-weight:600;font-size:13px;">${prof?.full_name||'—'} <span style="font-weight:400;color:var(--text3);">· ${d}</span></div>
+      <div class="log-chips" style="margin-top:4px;">${chips}</div>
+      ${l.nota ? `<div style="font-size:12px;color:var(--text3);margin-top:4px;">${l.nota}</div>` : ''}
+      <div style="font-size:11px;color:var(--text3);margin-top:4px;">Cargado por ${reg?.full_name||'—'}</div>
+      </div>
+      <div class="h-pts">+${fmt(l.pts)} pts</div></div>`;
+  }).join('');
 }
 
 /* ══════════════════════════════════
