@@ -303,7 +303,6 @@
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="screen-login" class="screen active">
   <div class="login-wrap">
     <div class="login-logo">
@@ -324,7 +323,6 @@
   </div>
 </div>
 
-<!-- OLVIDÉ CONTRASEÑA -->
 <div id="screen-forgot" class="screen">
   <div class="login-wrap">
     <div class="login-logo">
@@ -343,7 +341,6 @@
   </div>
 </div>
 
-<!-- NUEVA CONTRASEÑA (desde enlace de email) -->
 <div id="screen-reset" class="screen">
   <div class="login-wrap">
     <div class="login-logo">
@@ -361,10 +358,8 @@
   </div>
 </div>
 
-<!-- APP -->
 <div id="screen-app" class="screen">
 
-  <!-- Banner permiso push -->
   <div id="push-banner" class="push-banner" style="display:none;">
     <i class="ti ti-bell"></i>
     <div class="push-banner-text">Activá las notificaciones para recibir consejos de venta</div>
@@ -394,12 +389,10 @@
     <div class="tab" data-tab="admin"     id="tab-btn-admin"   onclick="switchTab('admin',this)"   style="display:none;"><i class="ti ti-settings"></i>Admin</div>
   </div>
 
-  <!-- ══ INICIO / DASHBOARD ══ -->
   <div id="tab-inicio" class="tab-content active">
     <div id="dash-content"></div>
   </div>
 
-  <!-- ══ RANKING ══ -->
   <div id="tab-ranking" class="tab-content">
     <div class="metric-grid">
       <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value" id="m-total">—</div></div>
@@ -420,7 +413,6 @@
     <div class="rank-list" id="ranking-list"><div class="loader">Cargando…</div></div>
   </div>
 
-  <!-- ══ PERFIL ══ -->
   <div id="tab-perfil" class="tab-content">
     <div style="padding:16px;">
       <div class="card" style="display:flex;align-items:center;gap:16px;">
@@ -452,7 +444,6 @@
         </div>
       </div>
 
-      <!-- Evolución semanal propia (solo employees) -->
       <div id="prof-weekly-section">
         <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Mi semana actual</div>
         <div class="week-chart" id="prof-week-chart"></div>
@@ -465,9 +456,7 @@
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="prof-history"></div>
   </div>
 
-  <!-- ══ CONSEJOS ══ -->
   <div id="tab-tips" class="tab-content">
-    <!-- Tip aleatorio destacado -->
     <div class="tip-card" id="featured-tip">
       <div class="tip-category"><i class="ti ti-sparkles"></i> <span id="tip-cat">—</span></div>
       <div class="tip-text" id="tip-text">Cargando consejo…</div>
@@ -482,41 +471,34 @@
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);" id="tips-list"></div>
   </div>
 
-  <!-- ══ ANÁLISIS (supermanager) ══ -->
   <div id="tab-analisis" class="tab-content">
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Panel de análisis</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Evolución y participación del equipo IVS</div>
     </div>
 
-    <!-- Métricas globales -->
     <div class="metric-grid-3">
       <div class="metric-card"><div class="metric-label">Pts esta semana</div><div class="metric-value" id="an-week-pts">—</div></div>
       <div class="metric-card"><div class="metric-label">Pts este mes</div><div class="metric-value" id="an-month-pts">—</div></div>
       <div class="metric-card"><div class="metric-label">Registros totales</div><div class="metric-value" id="an-total-logs">—</div></div>
     </div>
 
-    <!-- Evolución semanal del equipo -->
     <div class="section-title">Evolución semanal del equipo</div>
     <div style="padding:0 16px;">
       <div class="week-chart" id="an-week-chart"></div>
       <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center;">Últimas 6 semanas · puntos totales del equipo</div>
     </div>
 
-    <!-- Participación por producto -->
     <div class="section-title">Participación por producto</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-product-share"></div>
 
-    <!-- Ranking por producto -->
     <div class="section-title">Mejores vendedores por producto</div>
     <div style="padding:0 16px 16px;" id="an-product-ranking"></div>
 
-    <!-- Crecimiento por vendedor -->
     <div class="section-title">Crecimiento semana a semana</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-growth"></div>
   </div>
 
-  <!-- ══ CARGAR ══ -->
   <div id="tab-cargar" class="tab-content">
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Registrar venta sugestiva</div>
@@ -545,7 +527,6 @@
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="recent-logs"></div>
   </div>
 
-  <!-- ══ HISTORIAL ══ -->
   <div id="tab-historial" class="tab-content">
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Historial de carga</div>
@@ -577,7 +558,6 @@
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="hist-list"></div>
   </div>
 
-  <!-- ══ ADMIN ══ -->
   <div id="tab-admin" class="tab-content">
     <div style="padding:16px;">
       <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Administración</div>
@@ -594,924 +574,559 @@
         <input type="number" id="inp-goal" placeholder="100" min="1" />
         <button class="btn" onclick="saveGoal()"><i class="ti ti-check"></i> Actualizar meta</button>
       </div>
-      <div style="font-size:14px;font-weight:600;margin:1rem 0 .75rem;">Usuarios del sistema</div>
-      <div id="user-list"></div>
     </div>
   </div>
 
-</div>
-
-<div class="toast" id="toast"></div>
+</div> <div id="toast" class="toast"></div>
 
 <script>
-const SUPABASE_URL = 'https://yxeagaoxosveblpfxvwq.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWFnYW94b3N2ZWJscGZ4dndxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzExNTIsImV4cCI6MjA5NTE0NzE1Mn0.5DEPtur08XeZIRhIkEHlGG4D8oV4c4KdfpM_7ww8IDg';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // 1. CONFIGURACIÓN DE SUPABASE
+  const SUPABASE_URL = "https://tu-proyecto.supabase.co";
+  const SUPABASE_ANON_KEY = "tu-anon-key-de-supabase";
+  
+  const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-const PRODUCTS = [
-  { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3,   unit:'pileta', color:'#BA7517' },
-  { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2,   unit:'combo',  color:'#534AB7' },
-  { id:'cafe_espresso',  name:'Café espresso',     icon:'☕', pts:5,   unit:'café',   color:'#0F6E56' },
-  { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3,   unit:'cono',   color:'#993C1D' },
-];
-const COLORS = ['av-teal','av-coral','av-amber','av-pink','av-blue','av-purple'];
+  // 2. ESTADO GLOBAL DE LA APLICACIÓN
+  let currentUser = null;       
+  let currentRole = 'employee';  
+  let activePeriod = 'week';     
+  let employeesList = [];       
+  
+  const PRODUCTS = [
+    { id: 'prod_1', name: 'Sundaes / Postres', points: 1, icon: '🍦' },
+    { id: 'prod_2', name: 'Agrandado de Combo', points: 2, icon: '🍔' },
+    { id: 'prod_3', name: 'Café / Desayunos', points: 1, icon: '☕' },
+    { id: 'prod_4', name: 'Promoción del mes', points: 3, icon: '✨' }
+  ];
 
-/* ── TIPS BANCO COMPLETO ── */
-const TIPS = [
-  // RECIPROCIDAD
-  { cat:'🤝 Reciprocidad', text:'Cuando el cliente siente que recibió algo genuino, tiende a devolver el favor comprando más. Ofrecé el café como si fuera una recomendación personal, no una venta.' },
-  { cat:'🤝 Reciprocidad', text:'Antes de sugerir, conectá. Un comentario amable o una sonrisa crea una deuda social invisible que hace al cliente más receptivo.' },
-  { cat:'🤝 Reciprocidad', text:'Si el cliente pide algo y vos se lo resolvés rápido y bien, ese momento es ideal para sugerir algo más. Ya te ganaste su confianza.' },
-  // COMPROMISO
-  { cat:'✅ Compromiso y coherencia', text:'Si el cliente ya dijo que sí a algo, es más fácil que diga que sí a lo siguiente. Empezá con algo pequeño antes de ofrecer el combo grande.' },
-  { cat:'✅ Compromiso y coherencia', text:'Usá preguntas que lleven al sí: "¿Lo querés con o sin helado?" en lugar de "¿Querés el cono?" Asumir la venta cambia el resultado.' },
-  { cat:'✅ Compromiso y coherencia', text:'Cuando el cliente eligió un combo, ya está en modo "sí". Ese es el mejor momento para sugerir la pileta de cheddar.' },
-  // PRUEBA SOCIAL
-  { cat:'👥 Prueba social', text:'"La mayoría de nuestros clientes piden el café espresso después del combo." Cuando la gente sabe que otros eligen algo, confía más.' },
-  { cat:'👥 Prueba social', text:'"El cono especial es lo más pedido los fines de semana." La referencia al grupo genera pertenencia y deseo.' },
-  { cat:'👥 Prueba social', text:'Mencionar que algo "se está terminando rápido hoy" activa la prueba social y la escasez al mismo tiempo.' },
-  // AUTORIDAD
-  { cat:'🎓 Autoridad', text:'Hablá con seguridad y conocimiento del producto. La confianza en tu voz vale más que cualquier descripción.' },
-  { cat:'🎓 Autoridad', text:'"El café espresso que tenemos es de grano seleccionado." Un dato específico genera más confianza que un elogio genérico.' },
-  { cat:'🎓 Autoridad', text:'Cuando recomendás algo con convicción y explicás por qué, el cliente percibe que estás de su lado, no vendiéndole.' },
-  // SIMPATÍA
-  { cat:'😊 Simpatía', text:'La gente le compra más a quien le cae bien. Un tono cálido antes de sugerir algo duplica las chances de que acepte.' },
-  { cat:'😊 Simpatía', text:'Usá el nombre del cliente si lo sabés. Personalizar la interacción hace que la sugerencia se sienta como un consejo de amigo.' },
-  { cat:'😊 Simpatía', text:'Reí, conectá, sé genuino. Nadie le dice que no a alguien que le generó una buena vibra en 10 segundos.' },
-  // ESCASEZ
-  { cat:'⏳ Escasez', text:'"Hoy es el último día que tenemos el cono especial a este precio." La urgencia activa el deseo de no perderse algo.' },
-  { cat:'⏳ Escasez', text:'"Quedan pocas unidades del café de hoy." La limitación real o percibida acelera la decisión.' },
-  { cat:'⏳ Escasez', text:'Combiná escasez con prueba social: "Se están yendo rápido hoy." Dos disparadores en una frase.' },
-  // ESTRATEGIA — CONOS
-  { cat:'🎮 Estrategia — Conos', text:'El cono es tu arma de volumen. Es accesible, el cliente casi nunca dice que no. Apuntá a vender 3 o más por turno como base.' },
-  { cat:'🎮 Estrategia — Conos', text:'La versión Oreo es la entrada más económica al cono. Si el cliente duda, ese es tu punto de entrada: bajo precio, alta aceptación.' },
-  { cat:'🎮 Estrategia — Conos', text:'Ofrecé el cono siempre al cierre del pedido, cuando el cliente ya decidió. Es el momento de menor resistencia.' },
-  // ESTRATEGIA — COMBOS
-  { cat:'🎮 Estrategia — Combos', text:'El combo grande es tu producto ancla. Una vez que el cliente lo elige, la pileta y el café se vuelven sugerencias naturales.' },
-  { cat:'🎮 Estrategia — Combos', text:'Si el cliente pide 2 combos o más, la pileta de cheddar es casi obligatoria de sugerir. Es lógico para ellos y son 3 puntos para vos.' },
-  { cat:'🎮 Estrategia — Combos', text:'No esperes que pidan más. Preguntá siempre: "¿Lo acompañamos con algo más?" después del combo.' },
-  // ESTRATEGIA — CAFÉ
-  { cat:'🎮 Estrategia — Café', text:'El café vale 5 puntos. Con vender 2 cafés por turno ya sumás 10 puntos. Es la jugada de mayor retorno por esfuerzo.' },
-  { cat:'🎮 Estrategia — Café', text:'El café se ofrece mejor después de la comida, no durante. Timing: cuando el cliente ya comió o está por terminar.' },
-  { cat:'🎮 Estrategia — Café', text:'No todos van a querer café, pero si no lo ofrecés, ninguno lo va a pedir. La tasa de conversión sube solo con preguntar.' },
-  // ESTRATEGIA — PILETA
-  { cat:'🎮 Estrategia — Pileta', text:'La pileta se vende sola cuando hay 2 o más combos en el pedido. Es una sugerencia que tiene sentido para el cliente.' },
-  { cat:'🎮 Estrategia — Pileta', text:'3 puntos por pileta. Si vendés 3 piletas en un turno ya tenés 9 puntos solo con ese producto.' },
-  { cat:'🎮 Estrategia — Pileta', text:'Presentá la pileta como una mejora, no como un extra: "¿Le agregamos el cheddar para compartir?"' },
-];
+  const TIPS = [
+    { cat: "CONECTAR", text: "Saludá con una sonrisa y tono entusiasta. Un cliente de buen humor está un 40% más predispuesto a aceptar una sugerencia." },
+    { cat: "SUGESTIVA", text: "Nunca preguntes '¿Querés algo más?'. Sé específico: '¿Te gustaría agregar un Sundae de chocolate por $XXX para coronar el combo?'." },
+    { cat: "ANÁLISIS", text: "Revisá qué producto te cuesta más vender. Practicá un speech de solo dos frases para ofrecerlo de forma natural en horas pico." },
+    { cat: "RAPIDEZ", text: "Ofrecé agregados rápidos de servir cuando veas que la fila se empieza a acumular. No demorás la operación y subís el IVS." }
+  ];
+  let currentTipIdx = 0;
 
-let currentTipIndex = 0;
-const qtys = {};
-PRODUCTS.forEach(p => qtys[p.id] = 0);
-
-let currentUser    = null;
-let currentProfile = null;
-let allProfiles    = [];
-let allLogs        = [];
-let monthlyGoal    = 100;
-let period         = 'week';
-
-/* Guards de sesión / navegación */
-let appInitialized = false;
-// Capturamos de forma síncrona si llegamos desde un enlace de recuperación,
-// antes de que Supabase procese y limpie el hash de la URL.
-let isRecovering   = window.location.hash.includes('type=recovery');
-
-/* ══════════════════════════════════
-   INIT
-══════════════════════════════════ */
-async function bootSession(session) {
-  if (!session || isRecovering) return;
-  currentUser = session.user;
-  if (appInitialized) return;   // evita re-render al volver de pestaña / refresh de token
-  appInitialized = true;
-  await loadAppData();
-  showApp();
-}
-
-(async () => {
-  if (isRecovering) showScreen('reset');
-  const { data: { session } } = await sb.auth.getSession();
-  await bootSession(session);
-})();
-
-sb.auth.onAuthStateChange(async (event, session) => {
-  if (event === 'PASSWORD_RECOVERY') {
-    isRecovering = true;
-    showScreen('reset');
-    return;
-  }
-  if (event === 'SIGNED_OUT') {
-    currentUser = null;
-    appInitialized = false;
-    isRecovering = false;
-    showScreen('login');
-    return;
-  }
-  // SIGNED_IN, INITIAL_SESSION, TOKEN_REFRESHED, USER_UPDATED
-  await bootSession(session);
-});
-
-/* ══════════════════════════════════
-   AUTH
-══════════════════════════════════ */
-async function doLogin() {
-  const email = document.getElementById('inp-email').value.trim();
-  const pass  = document.getElementById('inp-pass').value;
-  const errEl = document.getElementById('login-error');
-  errEl.style.display = 'none';
-  const { error } = await sb.auth.signInWithPassword({ email, password: pass });
-  if (error) { errEl.textContent = 'Email o contraseña incorrectos'; errEl.style.display = 'block'; }
-}
-async function doLogout() { await sb.auth.signOut(); }
-
-function goForgot() {
-  // Pre-cargar el email si ya lo escribió en el login
-  const typed = document.getElementById('inp-email').value.trim();
-  if (typed) document.getElementById('forgot-email').value = typed;
-  document.getElementById('forgot-msg').style.display = 'none';
-  showScreen('forgot');
-}
-
-async function sendResetEmail() {
-  const email = document.getElementById('forgot-email').value.trim();
-  if (!email) { showAuthMsg('forgot-msg', 'Ingresá tu email', true); return; }
-  // redirectTo vuelve a esta misma app (debe estar en los Redirect URLs de Supabase)
-  const redirectTo = window.location.origin + window.location.pathname;
-  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo });
-  if (error) { showAuthMsg('forgot-msg', 'Error: ' + error.message, true); return; }
-  showAuthMsg('forgot-msg', 'Listo. Te enviamos un enlace para restablecer tu contraseña. Revisá tu correo (y la carpeta de spam).', false);
-}
-
-async function submitNewPassword() {
-  const p1 = document.getElementById('reset-pass').value;
-  const p2 = document.getElementById('reset-pass2').value;
-  if (p1.length < 6) { showAuthMsg('reset-msg', 'La contraseña debe tener al menos 6 caracteres', true); return; }
-  if (p1 !== p2)     { showAuthMsg('reset-msg', 'Las contraseñas no coinciden', true); return; }
-  const { error } = await sb.auth.updateUser({ password: p1 });
-  if (error) { showAuthMsg('reset-msg', 'Error: ' + error.message, true); return; }
-  showAuthMsg('reset-msg', '¡Contraseña actualizada! Redirigiendo al inicio de sesión…', false);
-  setTimeout(async () => {
-    await sb.auth.signOut();                                   // dispara SIGNED_OUT → pantalla login
-    history.replaceState(null, '', window.location.pathname);  // limpia el hash del enlace
-  }, 1500);
-}
-
-function showAuthMsg(elId, msg, isError) {
-  const el = document.getElementById(elId);
-  el.textContent = msg;
-  el.style.color = isError ? 'var(--danger)' : 'var(--success)';
-  el.style.display = 'block';
-}
-
-/* ══════════════════════════════════
-   DATOS
-══════════════════════════════════ */
-async function loadAppData() {
-  const { data: prof } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
-  currentProfile = prof;
-  const { data: profs } = await sb.from('profiles').select('*').order('full_name');
-  allProfiles = profs || [];
-  const { data: logs } = await sb.from('sales_logs').select('*').order('fecha', { ascending: false });
-  allLogs = logs || [];
-  const { data: setting } = await sb.from('settings').select('value').eq('key','monthly_goal').single();
-  if (setting) monthlyGoal = parseInt(setting.value) || 100;
-}
-
-/* ══════════════════════════════════
-   NAVEGACIÓN
-══════════════════════════════════ */
-function showScreen(s) {
-  document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
-  document.getElementById('screen-' + s).classList.add('active');
-}
-
-function showApp() {
-  showScreen('app');
-  const role = currentProfile.role;
-  const isManager      = role === 'manager' || role === 'supermanager';
-  const isSuperManager = role === 'supermanager';
-  const isEmployee     = role === 'employee';
-
-  document.getElementById('hdr-greeting').textContent = greeting();
-  document.getElementById('hdr-name').textContent     = currentProfile.full_name;
-  const badge = document.getElementById('hdr-badge');
-  if (isSuperManager) { badge.textContent = 'Super Gerente'; badge.className = 'badge badge-super'; }
-  else if (isManager) { badge.textContent = 'Gerente';       badge.className = 'badge badge-mgr'; }
-  else                { badge.textContent = 'Vendedor';      badge.className = 'badge badge-emp'; }
-
-  document.getElementById('tab-btn-analisis').style.display = isSuperManager ? 'flex' : 'none';
-  document.getElementById('tab-btn-cargar').style.display   = isManager      ? 'flex' : 'none';
-  document.getElementById('tab-btn-historial').style.display = isManager     ? 'flex' : 'none';
-  document.getElementById('tab-btn-admin').style.display    = isManager      ? 'flex' : 'none';
-
-  // Ocultar sección semanal si es manager
-  document.getElementById('prof-weekly-section').style.display = isEmployee ? 'block' : 'none';
-
-  if (isManager) {
-    fillEmployeeSelect(); renderProductRows(); renderRecentLogs(); renderUserList();
-    fillHistorialVendorSelect();
-    document.getElementById('inp-goal').value  = monthlyGoal;
-    document.getElementById('inp-fecha').value = today();
-  }
-
-  initRangePicker();
-  renderTips();
-  initPushNotifications();
-
-  // Tip aleatorio al abrir
-  currentTipIndex = Math.floor(Math.random() * TIPS.length);
-  showTip(currentTipIndex);
-
-  // Arrancamos en el Dashboard
-  renderDashboard();
-  switchTab('inicio');
-  renderRanking();
-  renderProfile();
-  if (isSuperManager) renderAnalysis();
-}
-
-function switchTab(tab, el) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  const btn = el || document.querySelector('.tab[data-tab="' + tab + '"]');
-  if (btn) btn.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
-  window.scrollTo(0, 0);
-  if (tab === 'inicio')   renderDashboard();
-  if (tab === 'analisis') renderAnalysis();
-  if (tab === 'historial') renderHistorial();
-}
-
-/* ══════════════════════════════════
-   DASHBOARD (inicio)
-══════════════════════════════════ */
-function renderDashboard() {
-  if (!currentProfile) return;
-  const p = currentProfile;
-  const role = p.role;
-  const isManager  = role === 'manager' || role === 'supermanager';
-  const isSuper    = role === 'supermanager';
-  const isEmployee = role === 'employee';
-  const hoy = today();
-  const wb  = weekBounds();
-  const el  = document.getElementById('dash-content');
-
-  let metricsHTML = '';
-  if (isEmployee) {
-    const myLogs   = allLogs.filter(l => l.user_id === p.id);
-    const monthPts = myLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
-    const weekPts  = myLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to).reduce((s,l)=>s+l.pts,0);
-    const employees = allProfiles.filter(pr => pr.role === 'employee');
-    const ranked = employees
-      .map(e => ({ id:e.id, pts: allLogs.filter(l=>l.user_id===e.id).reduce((s,l)=>s+l.pts,0) }))
-      .sort((a,b)=>b.pts-a.pts);
-    const pos = ranked.findIndex(e => e.id === p.id);
-    metricsHTML = `
-      <div class="metric-grid-3" style="padding:8px 16px 0;">
-        <div class="metric-card"><div class="metric-label">Mis pts (mes)</div><div class="metric-value">${fmt(monthPts)}</div></div>
-        <div class="metric-card"><div class="metric-label">Posición</div><div class="metric-value">${pos>=0?'#'+(pos+1):'—'}</div></div>
-        <div class="metric-card"><div class="metric-label">Esta semana</div><div class="metric-value">${fmt(weekPts)}</div></div>
-      </div>`;
-  } else {
-    const employees = allProfiles.filter(pr => pr.role === 'employee');
-    const weekPts   = allLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to).reduce((s,l)=>s+l.pts,0);
-    const monthPts  = allLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
-    metricsHTML = `
-      <div class="metric-grid-3" style="padding:8px 16px 0;">
-        <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value">${employees.length}</div></div>
-        <div class="metric-card"><div class="metric-label">Pts equipo (sem)</div><div class="metric-value">${fmt(weekPts)}</div></div>
-        <div class="metric-card"><div class="metric-label">Pts equipo (mes)</div><div class="metric-value">${fmt(monthPts)}</div></div>
-      </div>`;
-  }
-
-  const tiles = [];
-  tiles.push({ tab:'ranking', icon:'ti-trophy',      bg:'var(--gold-bg)',   color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
-  if (isManager) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)',  color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
-  if (isManager) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)', color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
-  if (isSuper)   tiles.push({ tab:'analisis',  icon:'ti-chart-bar',   bg:'#E6F1FB',           color:'#0C447C',        title:'Análisis',        desc:'Evolución del equipo' });
-  tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE',         color:'#085041',     title:'Mi perfil', desc:'Tus puntos y productos' });
-  tiles.push({ tab:'tips',   icon:'ti-bulb',        bg:'var(--gold-bg)',  color:'var(--gold)', title:'Consejos',  desc:'Técnicas de venta' });
-  if (isManager) tiles.push({ tab:'admin', icon:'ti-settings', bg:'var(--bg2)', color:'var(--text2)', title:'Admin', desc:'Usuarios y metas' });
-
-  const tilesHTML = tiles.map(t => `
-    <div class="dash-tile" onclick="switchTab('${t.tab}')">
-      <div class="dash-tile-icon" style="background:${t.bg};color:${t.color};"><i class="ti ${t.icon}"></i></div>
-      <div class="dash-tile-title">${t.title}</div>
-      <div class="dash-tile-desc">${t.desc}</div>
-    </div>`).join('');
-
-  el.innerHTML = `
-    <div class="dash-hero">
-      <div class="dash-hero-title">${greeting().replace(',', '')} 👋</div>
-      <div class="dash-hero-sub">${isEmployee ? 'Tu resumen de venta sugestiva' : 'Resumen del equipo IVS'}</div>
-    </div>
-    ${metricsHTML}
-    <div class="section-title">Accesos</div>
-    <div class="dash-nav-grid">${tilesHTML}</div>`;
-}
-
-/* ══════════════════════════════════
-   PERÍODO / FILTROS
-══════════════════════════════════ */
-function initRangePicker() {
-  const now = new Date();
-  const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
-  const lunes = new Date(now);
-  lunes.setDate(now.getDate() - diff);
-  document.getElementById('range-from').value = lunes.toISOString().slice(0,10);
-  document.getElementById('range-to').value   = now.toISOString().slice(0,10);
-}
-
-function setPeriod(p, el) {
-  period = p;
-  document.querySelectorAll('.period-chip').forEach(c => c.classList.remove('active'));
-  if (el) el.classList.add('active');
-  document.getElementById('range-picker').classList.toggle('visible', p === 'range');
-  renderRanking();
-}
-
-function weekBounds() {
-  const now = new Date();
-  const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
-  const lunes = new Date(now); lunes.setHours(0,0,0,0); lunes.setDate(now.getDate() - diff);
-  const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
-  return { from: lunes.toISOString().slice(0,10), to: domingo.toISOString().slice(0,10) };
-}
-
-function filteredLogs() {
-  const hoy = today();
-  return allLogs.filter(l => {
-    if (period === 'all') return true;
-    const f = l.fecha;
-    if (period === 'month') return f.slice(0,7) === hoy.slice(0,7);
-    if (period === 'week') { const b = weekBounds(); return f >= b.from && f <= b.to; }
-    if (period === 'range') {
-      const from = document.getElementById('range-from').value;
-      const to   = document.getElementById('range-to').value;
-      if (!from && !to) return true;
-      if (from && !to) return f >= from;
-      if (!from && to) return f <= to;
-      return f >= from && f <= to;
-    }
-    return true;
+  document.addEventListener("DOMContentLoaded", async () => {
+    initApp();
   });
-}
 
-function getPoints(uid) {
-  return filteredLogs().filter(l => l.user_id === uid).reduce((s,l) => s + l.pts, 0);
-}
-
-/* ══════════════════════════════════
-   RANKING
-══════════════════════════════════ */
-function renderRanking() {
-  const employees = allProfiles.filter(p => p.role === 'employee');
-  const ranked = employees.map(e => ({ ...e, pts: getPoints(e.id) })).sort((a,b) => b.pts - a.pts);
-  const total  = ranked.reduce((s,e) => s+e.pts, 0);
-  document.getElementById('m-total').textContent = employees.length;
-  document.getElementById('m-pts').textContent   = fmt(total);
-  const max = ranked[0]?.pts || 1;
-  document.getElementById('ranking-list').innerHTML = ranked.map((e,i) => {
-    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-    const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
-    const color = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
-    const isMe  = e.id === currentProfile.id;
-    return `<div class="rank-row">
-      <div class="rank-num ${cls}">${medal}</div>
-      ${avatarHTML(e,36)}
-      <div style="flex:1;">
-        <div class="rank-name">${e.full_name}${isMe?'<span class="me-chip">yo</span>':''}</div>
-        <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.pts/max*100)}%;background:${color}"></div></div>
-      </div>
-      <div class="rank-pts">${fmt(e.pts)}<small>pts</small></div>
-    </div>`;
-  }).join('') || '<div class="empty-state"><i class="ti ti-users"></i>Sin vendedores</div>';
-}
-
-/* ══════════════════════════════════
-   PERFIL
-══════════════════════════════════ */
-function renderProfile() {
-  const p    = currentProfile;
-  const logs = allLogs.filter(l => l.user_id === p.id);
-  const all  = logs.reduce((s,l) => s+l.pts, 0);
-  const hoy  = today();
-  const mes  = logs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
-  const pct  = Math.min(100, Math.round(mes/monthlyGoal*100));
-
-  applyAvatar(document.getElementById('prof-av'), p, 64);
-  document.getElementById('prof-name').textContent = p.full_name;
-  document.getElementById('prof-role').textContent = roleLabel(p.role);
-  document.getElementById('prof-pts').textContent  = fmt(all);
-  document.getElementById('prof-pct').textContent  = pct + '%';
-  document.getElementById('prof-bar').style.width  = pct + '%';
-  document.getElementById('prof-mes-pts').textContent    = fmt(mes) + ' pts este mes';
-  document.getElementById('prof-goal-label').textContent = 'Meta: ' + monthlyGoal + ' pts';
-
-  const employees = allProfiles.filter(pr=>pr.role==='employee');
-  const ranked    = employees.map(e=>({id:e.id,pts:getPoints(e.id)})).sort((a,b)=>b.pts-a.pts);
-  const pos       = ranked.findIndex(e=>e.id===p.id);
-  document.getElementById('prof-rank').textContent = p.role==='employee'?(pos>=0?'#'+(pos+1):'—'):'—';
-
-  // Evolución semanal propia (días lun-dom)
-  if (p.role === 'employee') {
-    renderWeekChart('prof-week-chart', logs, '#534AB7');
-  }
-
-  // Productos rankeados por CANTIDAD
-  const productStats = PRODUCTS.map(pr => ({
-    ...pr,
-    qty: logs.reduce((s,l)=>s+(l[pr.id]||0),0),
-    ep:  logs.reduce((s,l)=>s+(l[pr.id]||0)*pr.pts,0)
-  })).sort((a,b) => b.qty - a.qty);
-
-  const maxQty = productStats[0]?.qty || 1;
-  document.getElementById('prof-products').innerHTML = productStats.map((pr,i) => `
-    <div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);">
-      <div style="font-size:13px;font-weight:600;color:var(--text3);min-width:16px;">${i+1}</div>
-      <span style="font-size:22px;">${pr.icon}</span>
-      <div style="flex:1;">
-        <div style="font-size:13px;font-weight:600;">${pr.name}</div>
-        <div class="bar-bg" style="margin-top:4px;"><div class="bar-fill" style="width:${Math.round(pr.qty/maxQty*100)}%;background:${pr.color}"></div></div>
-      </div>
-      <div style="text-align:right;">
-        <div style="font-size:14px;font-weight:600;color:${pr.color};">${pr.qty} <span style="font-size:11px;color:var(--text3);">${pr.unit}s</span></div>
-        <div style="font-size:11px;color:var(--text3);">${fmt(pr.ep)} pts</div>
-      </div>
-    </div>`).join('');
-
-  const sorted = [...logs].sort((a,b) => b.fecha.localeCompare(a.fecha));
-  const histEl = document.getElementById('prof-history');
-  if (!sorted.length) { histEl.innerHTML='<div class="empty-state"><i class="ti ti-history"></i>Sin registros aún</div>'; return; }
-  histEl.innerHTML = sorted.map(l => {
-    const chips = PRODUCTS.filter(pr=>l[pr.id]>0).map(pr=>`<span class="log-chip">${pr.icon} ${l[pr.id]} ${pr.unit}${l[pr.id]!==1?'s':''}</span>`).join('');
-    const d = new Date(l.fecha+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
-    return `<div class="history-row"><div style="flex:1;">
-      <div style="font-weight:600;font-size:13px;">${d}${l.nota?' · <span style="font-weight:400;color:var(--text3);">'+l.nota+'</span>':''}</div>
-      <div class="log-chips">${chips}</div></div>
-      <div class="h-pts">+${fmt(l.pts)} pts</div></div>`;
-  }).join('');
-}
-
-/* ══════════════════════════════════
-   SEMANA CHART (barras por día)
-══════════════════════════════════ */
-function renderWeekChart(elId, logs, color) {
-  const el = document.getElementById(elId);
-  const days = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-  const b = weekBounds();
-  const dayPts = Array(7).fill(0);
-  logs.forEach(l => {
-    if (l.fecha >= b.from && l.fecha <= b.to) {
-      const d = new Date(l.fecha+'T00:00:00');
-      const idx = (d.getDay() + 6) % 7; // lunes=0
-      dayPts[idx] += l.pts;
+  async function initApp() {
+    const { data: { session }, error } = await supabase.auth.getSession();
+    
+    if (session) {
+      await fetchUserProfile(session.user.id);
+    } else {
+      showScreen('login');
     }
-  });
-  const max = Math.max(...dayPts, 1);
-  el.innerHTML = dayPts.map((pts,i) => `
-    <div class="week-col">
-      <div class="week-val">${pts > 0 ? fmt(pts) : ''}</div>
-      <div class="week-bar-wrap">
-        <div class="week-bar" style="height:${Math.round(pts/max*100)}%;background:${color};opacity:${pts>0?1:0.15};"></div>
-      </div>
-      <div class="week-label">${days[i]}</div>
-    </div>`).join('');
-}
+    
+    supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        await fetchUserProfile(session.user.id);
+      } else if (event === 'SIGNED_OUT') {
+        currentUser = null;
+        showScreen('login');
+      }
+    });
 
-/* ══════════════════════════════════
-   ANÁLISIS (supermanager)
-══════════════════════════════════ */
-function renderAnalysis() {
-  const hoy = today();
-  const wb  = weekBounds();
-
-  // Métricas globales
-  const weekLogs  = allLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to);
-  const monthLogs = allLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7));
-  document.getElementById('an-week-pts').textContent  = fmt(weekLogs.reduce((s,l)=>s+l.pts,0));
-  document.getElementById('an-month-pts').textContent = fmt(monthLogs.reduce((s,l)=>s+l.pts,0));
-  document.getElementById('an-total-logs').textContent = allLogs.length;
-
-  // Evolución de las últimas 6 semanas
-  renderLastWeeksChart();
-
-  // Participación por producto
-  renderProductShare();
-
-  // Mejor vendedor por producto
-  renderProductRanking();
-
-  // Crecimiento semana a semana por vendedor
-  renderGrowth();
-}
-
-function getWeekStart(offsetWeeks) {
-  const now = new Date();
-  const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
-  const lunes = new Date(now);
-  lunes.setHours(0,0,0,0);
-  lunes.setDate(now.getDate() - diff - offsetWeeks * 7);
-  return lunes.toISOString().slice(0,10);
-}
-
-function renderLastWeeksChart() {
-  const el = document.getElementById('an-week-chart');
-  const weeks = [];
-  for (let i=5; i>=0; i--) {
-    const from = getWeekStart(i);
-    const to   = new Date(from+'T00:00:00');
-    to.setDate(to.getDate()+6);
-    const toStr = to.toISOString().slice(0,10);
-    const pts = allLogs.filter(l=>l.fecha>=from&&l.fecha<=toStr).reduce((s,l)=>s+l.pts,0);
-    const label = new Date(from+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
-    weeks.push({ label, pts });
+    renderTips();
   }
-  const max = Math.max(...weeks.map(w=>w.pts), 1);
-  el.innerHTML = weeks.map((w,i) => `
-    <div class="week-col">
-      <div class="week-val">${w.pts > 0 ? fmt(w.pts) : ''}</div>
-      <div class="week-bar-wrap">
-        <div class="week-bar" style="height:${Math.round(w.pts/max*100)}%;background:${i===5?'var(--accent)':'var(--accent-bg)'};border:${i===5?'none':'1px solid var(--accent)'};"></div>
-      </div>
-      <div class="week-label">${w.label}</div>
-    </div>`).join('');
-}
 
-function renderProductShare() {
-  const el = document.getElementById('an-product-share');
-  const totals = PRODUCTS.map(p => ({
-    ...p,
-    qty: allLogs.reduce((s,l)=>s+(l[p.id]||0),0),
-    pts: allLogs.reduce((s,l)=>s+(l[p.id]||0)*p.pts,0)
-  }));
-  const maxQty = Math.max(...totals.map(p=>p.qty), 1);
-  const totalPts = totals.reduce((s,p)=>s+p.pts,0);
-  el.innerHTML = totals.sort((a,b)=>b.qty-a.qty).map(p => `
-    <div class="stat-bar-row">
-      <div class="stat-bar-label"><span style="font-size:16px;">${p.icon}</span> ${p.name}</div>
-      <div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:${Math.round(p.qty/maxQty*100)}%;background:${p.color};"></div></div>
-      <div class="stat-bar-val" style="color:${p.color};">${p.qty}</div>
-      <div style="font-size:11px;color:var(--text3);min-width:36px;text-align:right;">${totalPts>0?Math.round(p.pts/totalPts*100):0}%</div>
-    </div>`).join('');
-}
-
-function renderProductRanking() {
-  const el = document.getElementById('an-product-ranking');
-  const employees = allProfiles.filter(p=>p.role==='employee');
-  el.innerHTML = PRODUCTS.map(pr => {
-    const ranked = employees.map(e => ({
-      name: e.full_name,
-      qty: allLogs.filter(l=>l.user_id===e.id).reduce((s,l)=>s+(l[pr.id]||0),0)
-    })).sort((a,b)=>b.qty-a.qty).slice(0,3);
-    return `<div class="card" style="margin-bottom:10px;">
-      <div style="font-size:14px;font-weight:600;margin-bottom:10px;">${pr.icon} ${pr.name}</div>
-      ${ranked.map((r,i)=>`
-        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">
-          <div style="font-size:12px;color:var(--text3);min-width:16px;">${i===0?'🥇':i===1?'🥈':'🥉'}</div>
-          <div style="flex:1;font-size:13px;">${r.name}</div>
-          <div style="font-size:13px;font-weight:600;color:${pr.color};">${r.qty} ${pr.unit}s</div>
-        </div>`).join('')}
-    </div>`;
-  }).join('');
-}
-
-function renderGrowth() {
-  const el = document.getElementById('an-growth');
-  const employees = allProfiles.filter(p=>p.role==='employee');
-  const thisWeek = getWeekStart(0);
-  const lastWeek = getWeekStart(1);
-  const tw = new Date(thisWeek+'T00:00:00'); tw.setDate(tw.getDate()+6);
-  const lw = new Date(lastWeek+'T00:00:00'); lw.setDate(lw.getDate()+6);
-  const twStr = tw.toISOString().slice(0,10);
-  const lwStr = lw.toISOString().slice(0,10);
-
-  const data = employees.map(e => {
-    const myLogs = allLogs.filter(l=>l.user_id===e.id);
-    const curr = myLogs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+l.pts,0);
-    const prev = myLogs.filter(l=>l.fecha>=lastWeek&&l.fecha<=lwStr).reduce((s,l)=>s+l.pts,0);
-    const delta = curr - prev;
-    return { name: e.full_name, curr, prev, delta };
-  }).sort((a,b)=>b.delta-a.delta);
-
-  el.innerHTML = data.map(d => {
-    const color = d.delta > 0 ? 'var(--success)' : d.delta < 0 ? 'var(--danger)' : 'var(--text3)';
-    const icon  = d.delta > 0 ? '↑' : d.delta < 0 ? '↓' : '→';
-    return `<div class="stat-bar-row">
-      <div class="stat-bar-label" style="font-size:13px;">${d.name}</div>
-      <div style="font-size:12px;color:var(--text3);">sem. ant: ${fmt(d.prev)}</div>
-      <div style="font-size:13px;font-weight:600;color:${color};min-width:60px;text-align:right;">${icon} ${fmt(Math.abs(d.delta))} pts</div>
-    </div>`;
-  }).join('') || '<div class="empty-state" style="padding:1rem;">Sin datos suficientes</div>';
-}
-
-/* ══════════════════════════════════
-   TIPS
-══════════════════════════════════ */
-function showTip(idx) {
-  const tip = TIPS[idx];
-  document.getElementById('tip-cat').textContent  = tip.cat;
-  document.getElementById('tip-text').textContent = tip.text;
-  document.getElementById('tip-counter').textContent = `${idx+1} / ${TIPS.length}`;
-}
-function nextTip() { currentTipIndex = (currentTipIndex + 1) % TIPS.length; showTip(currentTipIndex); }
-function prevTip() { currentTipIndex = (currentTipIndex - 1 + TIPS.length) % TIPS.length; showTip(currentTipIndex); }
-
-function renderTips() {
-  const el = document.getElementById('tips-list');
-  const catColors = {
-    '🤝 Reciprocidad':'#0F6E56','✅ Compromiso y coherencia':'#534AB7',
-    '👥 Prueba social':'#0C447C','🎓 Autoridad':'#712B13',
-    '😊 Simpatía':'#633806','⏳ Escasez':'#b91c1c','🎮 Estrategia — Conos':'#993C1D',
-    '🎮 Estrategia — Combos':'#534AB7','🎮 Estrategia — Café':'#0F6E56','🎮 Estrategia — Pileta':'#BA7517'
-  };
-  el.innerHTML = TIPS.map((tip, i) => `
-    <div class="tip-list-item" onclick="currentTipIndex=${i};showTip(${i});switchTab('tips');">
-      <div class="tip-list-cat" style="color:${catColors[tip.cat]||'var(--accent)'};">${tip.cat}</div>
-      <div class="tip-list-text">${tip.text}</div>
-    </div>`).join('');
-}
-
-/* ══════════════════════════════════
-   PUSH NOTIFICATIONS
-══════════════════════════════════ */
-function initPushNotifications() {
-  if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') {
-    sendTipNotification();
-  } else if (Notification.permission === 'default') {
-    document.getElementById('push-banner').style.display = 'flex';
+  // 3. MANEJO DE PANTALLAS Y PESTAÑAS (SPA)
+  function showScreen(screenId) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById(`screen-${screenId}`);
+    if (target) target.classList.add('active');
   }
-}
 
-function hidePushBanner() {
-  document.getElementById('push-banner').style.display = 'none';
-}
+  // Se eliminó submitNewPassword duplicado
+  function switchTab(tabId, el) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    
+    el.classList.add('active');
+    const content = document.getElementById(`tab-${tabId}`);
+    if (content) content.classList.add('active');
 
-async function requestPushPermission() {
-  const permission = await Notification.requestPermission();
-  hidePushBanner();
-  if (permission === 'granted') {
-    showToast('Notificaciones activadas');
-    sendTipNotification();
+    if (tabId === 'ranking') renderRanking();
+    if (tabId === 'perfil') renderPerfil();
+    if (tabId === 'cargar') prepareCargarTab();
+    if (tabId === 'historial') renderHistorial();
   }
-}
 
-function sendTipNotification() {
-  const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
-  // Solo enviar una vez por sesión (verificar con sessionStorage)
-  if (sessionStorage.getItem('tip-sent')) return;
-  sessionStorage.setItem('tip-sent', '1');
-  setTimeout(() => {
+  // 4. AUTENTICACIÓN
+  async function doLogin() {
+    const email = document.getElementById('inp-email').value.trim();
+    const pass = document.getElementById('inp-pass').value;
+    const errDiv = document.getElementById('login-error');
+    errDiv.style.display = 'none';
+
+    if (!email || !pass) {
+      showError(errDiv, "Por favor, completa todos los campos.");
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+    if (error) showError(errDiv, "Credenciales incorrectas o usuario inválido.");
+  }
+
+  async function doLogout() {
+    await supabase.auth.signOut();
+  }
+
+  function goForgot() { showScreen('forgot'); }
+  
+  async function sendResetEmail() {
+    const email = document.getElementById('forgot-email').value.trim();
+    const msgDiv = document.getElementById('forgot-msg');
+    msgDiv.style.display = 'block';
+    
+    if(!email) {
+      msgDiv.style.color = 'var(--danger)';
+      msgDiv.innerText = "Ingresá un correo válido.";
+      return;
+    }
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: window.location.href, 
+    });
+
+    if (error) {
+      msgDiv.style.color = 'var(--danger)';
+      msgDiv.innerText = error.message;
+    } else {
+      msgDiv.style.color = 'var(--success)';
+      msgDiv.innerText = "¡Enlace enviado! Revisá tu casilla de correo.";
+    }
+  }
+
+  function showError(element, text) {
+    element.innerText = text;
+    element.style.display = 'block';
+  }
+
+  // 5. OBTENCIÓN DE DATOS DE USUARIO
+  async function fetchUserProfile(uid) {
     try {
-      new Notification('💡 Consejo de venta — SalesRank IVS', {
-        body: tip.text,
-        icon: '/favicon.ico',
-        badge: '/favicon.ico',
-        tag: 'ivs-tip'
-      });
-    } catch(e) {}
-  }, 3000);
-}
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', uid)
+        .single();
 
-/* ══════════════════════════════════
-   CARGA DE VENTAS
-══════════════════════════════════ */
-function renderProductRows() {
-  document.getElementById('product-rows').innerHTML = PRODUCTS.map(p => `
-    <div class="product-row">
-      <div class="product-icon">${p.icon}</div>
-      <div style="flex:1;">
-        <div style="font-size:14px;font-weight:600;">${p.name}</div>
-        <div style="font-size:12px;color:var(--text2);">${p.pts} pts por ${p.unit}</div>
-      </div>
-      <div class="qty-ctrl">
-        <button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button>
-        <input class="qty-input" type="number" id="qty-${p.id}" value="0" min="0"
-               inputmode="numeric" oninput="onQtyInput('${p.id}')" onblur="onQtyBlur('${p.id}')" />
-        <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
-      </div>
-    </div>`).join('');
-  updateSummary();
-}
+      if (error || !data) {
+        showToast("Error al obtener perfil. Contactá al administrador.");
+        await doLogout();
+        return;
+      }
 
-function changeQty(pid, d) { qtys[pid]=Math.max(0,(qtys[pid]||0)+d); document.getElementById('qty-'+pid).value=qtys[pid]; updateSummary(); }
-function onQtyInput(pid) { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; updateSummary(); }
-function onQtyBlur(pid)  { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; document.getElementById('qty-'+pid).value=qtys[pid]; }
-
-function updateSummary() {
-  let total=0; const parts=[];
-  PRODUCTS.forEach(p=>{const q=qtys[p.id]||0;if(q>0){const e=q*p.pts;total+=e;parts.push(p.icon+' ×'+q+' = '+fmt(e)+' pts');}});
-  document.getElementById('pts-total').textContent     = fmt(total);
-  document.getElementById('pts-breakdown').textContent = parts.length?parts.join('  ·  '):'Ingresá unidades vendidas';
-}
-
-async function submitLog() {
-  const uid   = document.getElementById('sel-ivs').value;
-  const fecha = document.getElementById('inp-fecha').value;
-  const nota  = document.getElementById('inp-nota').value.trim();
-  const pts   = PRODUCTS.reduce((s,p)=>s+(qtys[p.id]||0)*p.pts,0);
-  if (!uid)   { showToast('Seleccioná un vendedor'); return; }
-  if (!fecha) { showToast('Ingresá la fecha del turno'); return; }
-  if (pts===0){ showToast('Ingresá al menos un producto'); return; }
-  const row = {
-    user_id: uid, registered_by: currentProfile.id, fecha, pts, nota,
-    pileta_cheddar: qtys.pileta_cheddar||0, combo_grande: qtys.combo_grande||0,
-    cafe_espresso:  qtys.cafe_espresso||0,  cono_especial: qtys.cono_especial||0,
-  };
-  const { data, error } = await sb.from('sales_logs').insert(row).select().single();
-  if (error) { showToast('Error al guardar: '+error.message); return; }
-  allLogs.unshift(data);
-  PRODUCTS.forEach(p=>{qtys[p.id]=0;document.getElementById('qty-'+p.id).value=0;});
-  document.getElementById('inp-nota').value='';
-  updateSummary();
-  showToast('¡'+fmt(pts)+' puntos registrados!');
-  renderRanking(); renderRecentLogs(); renderDashboard();
-  if (currentProfile.id===uid) renderProfile();
-}
-
-function renderRecentLogs() {
-  const el = document.getElementById('recent-logs');
-  if (!allLogs.length){ el.innerHTML='<div class="empty-state"><i class="ti ti-clipboard-list"></i>Sin registros</div>'; return; }
-  el.innerHTML = allLogs.slice(0,10).map(l => {
-    const prof  = allProfiles.find(p=>p.id===l.user_id);
-    const chips = PRODUCTS.filter(p=>l[p.id]>0).map(p=>`<span class="log-chip">${p.icon}${l[p.id]}</span>`).join('');
-    const d     = new Date(l.fecha+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
-    return `<div class="history-row"><div style="flex:1;">
-      <div style="font-weight:600;font-size:13px;">${prof?.full_name||'—'} <span style="font-weight:400;color:var(--text3);">· ${d}</span></div>
-      <div class="log-chips" style="margin-top:3px;">${chips}</div></div>
-      <div class="h-pts">+${fmt(l.pts)} pts</div></div>`;
-  }).join('');
-}
-
-function fillEmployeeSelect() {
-  const sel = document.getElementById('sel-ivs');
-  sel.innerHTML = '<option value="">— Seleccioná un vendedor —</option>' +
-    allProfiles.filter(p=>p.role==='employee').map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
-}
-
-/* ══════════════════════════════════
-   HISTORIAL DE CARGA
-══════════════════════════════════ */
-function fillHistorialVendorSelect() {
-  const sel = document.getElementById('hist-vendor');
-  if (!sel) return;
-  sel.innerHTML = '<option value="">— Todos los vendedores —</option>' +
-    allProfiles.filter(p=>p.role==='employee').map(e=>`<option value="${e.id}">${e.full_name}</option>`).join('');
-}
-
-function renderHistorial() {
-  const vendorId = document.getElementById('hist-vendor')?.value || '';
-  const from = document.getElementById('hist-from')?.value || '';
-  const to   = document.getElementById('hist-to')?.value || '';
-
-  let logs = [...allLogs];
-  if (vendorId) logs = logs.filter(l => l.user_id === vendorId);
-  if (from) logs = logs.filter(l => l.fecha >= from);
-  if (to)   logs = logs.filter(l => l.fecha <= to);
-  logs.sort((a,b) => b.fecha.localeCompare(a.fecha));
-
-  const totalPts = logs.reduce((s,l) => s + l.pts, 0);
-  document.getElementById('hist-count').textContent = logs.length;
-  document.getElementById('hist-pts').textContent    = fmt(totalPts);
-
-  const el = document.getElementById('hist-list');
-  if (!logs.length) { el.innerHTML = '<div class="empty-state"><i class="ti ti-file-search"></i>Sin registros para este filtro</div>'; return; }
-
-  el.innerHTML = logs.map(l => {
-    const prof  = allProfiles.find(p=>p.id===l.user_id);
-    const reg   = allProfiles.find(p=>p.id===l.registered_by);
-    const chips = PRODUCTS.filter(p=>l[p.id]>0).map(p=>`<span class="log-chip">${p.icon} ${l[p.id]} ${p.unit}${l[p.id]!==1?'s':''}</span>`).join('');
-    const d = new Date(l.fecha+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short',year:'numeric'});
-    return `<div class="history-row"><div style="flex:1;">
-      <div style="font-weight:600;font-size:13px;">${prof?.full_name||'—'} <span style="font-weight:400;color:var(--text3);">· ${d}</span></div>
-      <div class="log-chips" style="margin-top:4px;">${chips}</div>
-      ${l.nota ? `<div style="font-size:12px;color:var(--text3);margin-top:4px;">${l.nota}</div>` : ''}
-      <div style="font-size:11px;color:var(--text3);margin-top:4px;">Cargado por ${reg?.full_name||'—'}</div>
-      </div>
-      <div class="h-pts">+${fmt(l.pts)} pts</div></div>`;
-  }).join('');
-}
-
-/* ══════════════════════════════════
-   FOTOS
-══════════════════════════════════ */
-function triggerPhoto() { document.getElementById('photo-input').click(); }
-
-async function uploadPhoto(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  if (file.size > 5*1024*1024){ showToast('La foto debe pesar menos de 5 MB'); return; }
-  const compressed = await compressImage(file, 400);
-  const path = `${currentProfile.id}/avatar.jpg`;
-  const { error: upErr } = await sb.storage.from('avatars').upload(path, compressed, { upsert: true, contentType: 'image/jpeg' });
-  if (upErr){ showToast('Error al subir foto'); return; }
-  const { data: { publicUrl } } = sb.storage.from('avatars').getPublicUrl(path);
-  const urlWithTs = publicUrl + '?t=' + Date.now();
-  await sb.from('profiles').update({ photo_url: urlWithTs }).eq('id', currentProfile.id);
-  currentProfile.photo_url = urlWithTs;
-  const idx = allProfiles.findIndex(p=>p.id===currentProfile.id);
-  if (idx>=0) allProfiles[idx].photo_url = urlWithTs;
-  applyAvatar(document.getElementById('prof-av'), currentProfile, 64);
-  renderRanking();
-  showToast('Foto actualizada');
-  event.target.value='';
-}
-
-function compressImage(file, maxPx) {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onload = e => {
-      const img = new Image();
-      img.onload = () => {
-        let w=img.width, h=img.height;
-        if(w>h){if(w>maxPx){h=Math.round(h*maxPx/w);w=maxPx;}}
-        else{if(h>maxPx){w=Math.round(w*maxPx/h);h=maxPx;}}
-        const c=document.createElement('canvas'); c.width=w; c.height=h;
-        c.getContext('2d').drawImage(img,0,0,w,h);
-        c.toBlob(blob=>resolve(blob),'image/jpeg',0.82);
-      };
-      img.src=e.target.result;
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-/* ══════════════════════════════════
-   ADMIN
-══════════════════════════════════ */
-async function createEmployee() {
-  const name  = document.getElementById('new-name').value.trim();
-  const email = document.getElementById('new-email').value.trim();
-  const pass  = document.getElementById('new-pass').value;
-  if (!name||!email||!pass){ showToast('Completá todos los campos'); return; }
-  const parts    = name.split(' ');
-  const initials = (parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
-  const color    = COLORS[allProfiles.length % COLORS.length];
-  const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
-  const { error } = await sb.auth.signUp({ email, password: pass,
-    options: { data: { username, full_name: name, role: 'employee', initials, color } }
-  });
-  if (error){ showToast('Error: '+error.message); return; }
-  showToast('Vendedor creado');
-  ['new-name','new-email','new-pass'].forEach(id=>document.getElementById(id).value='');
-  const { data } = await sb.from('profiles').select('*').order('full_name');
-  allProfiles = data || [];
-  renderUserList(); fillEmployeeSelect(); renderRanking(); renderDashboard();
-}
-
-async function saveGoal() {
-  const g = parseInt(document.getElementById('inp-goal').value);
-  if (!g||g<1){ showToast('Ingresá una meta válida'); return; }
-  await sb.from('settings').upsert({ key:'monthly_goal', value: String(g) });
-  monthlyGoal = g;
-  showToast('Meta actualizada a '+g+' pts');
-}
-
-function renderUserList() {
-  document.getElementById('user-list').innerHTML = allProfiles.map(p => `
-    <div class="card" style="display:flex;align-items:center;gap:12px;padding:12px;margin-bottom:8px;">
-      ${avatarHTML(p,36)}
-      <div style="flex:1;">
-        <div style="font-size:14px;font-weight:600;">${p.full_name}</div>
-        <div style="font-size:12px;color:var(--text2);">${p.username} · ${roleLabel(p.role)}</div>
-      </div>
-    </div>`).join('');
-}
-
-/* ══════════════════════════════════
-   HELPERS
-══════════════════════════════════ */
-function roleLabel(role) {
-  if (role==='supermanager') return 'Super Gerente';
-  if (role==='manager') return 'Gerente';
-  return 'Vendedor';
-}
-
-function avatarHTML(profile, size) {
-  if (profile.photo_url) return `<div class="avatar" style="width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;"></div>`;
-  return `<div class="avatar ${profile.color}" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;">${profile.initials}</div>`;
-}
-
-function applyAvatar(el, profile, size) {
-  if (profile.photo_url) {
-    el.className='avatar'; el.style.cssText=`width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;`; el.textContent='';
-  } else {
-    el.className='avatar '+profile.color; el.style.cssText=`width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;`; el.textContent=profile.initials;
+      currentUser = data;
+      currentRole = data.role; 
+      
+      setupUIForRole();
+      showScreen('app');
+      renderDashboard();
+    } catch (e) {
+      console.error(e);
+    }
   }
-}
 
-function fmt(n)  { return n.toFixed(1).replace(/\.0$/,''); }
-function today() { return new Date().toISOString().slice(0,10); }
-function greeting() {
-  const h=new Date().getHours();
-  return h<12?'Buenos días,':h<18?'Buenas tardes,':'Buenas noches,';
-}
-function showToast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg;
-  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
-}
-</script>
-</body>
-</html>
+  function setupUIForRole() {
+    document.getElementById('hdr-name').innerText = currentUser.name || "Usuario";
+    document.getElementById('hdr-greeting').innerText = getGreeting();
+    
+    const badge = document.getElementById('hdr-badge');
+    badge.className = "badge";
+    
+    document.getElementById('tab-btn-cargar').style.display = 'none';
+    document.getElementById('tab-btn-historial').style.display = 'none';
+    document.getElementById('tab-btn-analisis').style.display = 'none';
+    document.getElementById('tab-btn-admin').style.display = 'none';
+
+    if (currentRole === 'supermanager') {
+      badge.innerText = "Admin General";
+      badge.classList.add('badge-super');
+      document.getElementById('tab-btn-analisis').style.display = 'flex';
+      document.getElementById('tab-btn-cargar').style.display = 'flex';
+      document.getElementById('tab-btn-historial').style.display = 'flex';
+      document.getElementById('tab-btn-admin').style.display = 'flex';
+    } else if (currentRole === 'manager') {
+      badge.innerText = "Líder / Gerente";
+      badge.classList.add('badge-mgr');
+      document.getElementById('tab-btn-cargar').style.display = 'flex';
+      document.getElementById('tab-btn-historial').style.display = 'flex';
+    } else {
+      badge.innerText = "Vendedor IVS";
+      badge.classList.add('badge-emp');
+    }
+  }
+
+  function getGreeting() {
+    const hr = new Date().getHours();
+    if (hr < 12) return "¡Buen día!";
+    if (hr < 20) return "¡Buenas tardes!";
+    return "¡Buenas noches!";
+  }
+
+  // 6. RENDERIZADO DEL INICIO (DASHBOARD)
+  function renderDashboard() {
+    const dash = document.getElementById('dash-content');
+    
+    let html = `
+      <div class="dash-hero">
+        <div class="dash-hero-title">Panel de Control</div>
+        <div class="dash-hero-sub">Bienvenido al ecosistema de performance SalesRank.</div>
+      </div>
+    `;
+
+    if (currentRole === 'employee') {
+      html += `
+        <div class="pts-summary" style="margin-top:16px;">
+          <div>
+            <div class="pts-summary-label">Tus puntos acumulados</div>
+            <div class="pts-summary-sub">Foco en venta sugestiva</div>
+          </div>
+          <div class="pts-summary-val" id="dash-user-pts">...</div>
+        </div>
+      `;
+    }
+
+    html += `<div class="section-title">Accesos Directos</div><div class="dash-nav-grid">`;
+    
+    html += `
+      <div class="dash-tile" onclick="document.querySelector('[data-tab=ranking]').click()">
+        <div class="dash-tile-icon av-purple" style="color:var(--accent)"><i class="ti ti-trophy"></i></div>
+        <div class="dash-tile-title">Ver Ranking</div>
+        <div class="dash-tile-desc">Monitoreá las posiciones en tiempo real.</div>
+      </div>
+      <div class="dash-tile" onclick="document.querySelector('[data-tab=tips]').click()">
+        <div class="dash-tile-icon av-amber"><i class="ti ti-bulb" style="color:var(--gold)"></i></div>
+        <div class="dash-tile-title">Tips de venta</div>
+        <div class="dash-tile-desc">Estrategias efectivas en el punto de venta.</div>
+      </div>
+    `;
+
+    if (currentRole === 'manager' || currentRole === 'supermanager') {
+      html += `
+        <div class="dash-tile" onclick="document.querySelector('[data-tab=cargar]').click()">
+          <div class="dash-tile-icon av-teal"><i class="ti ti-circle-plus" style="color:var(--success)"></i></div>
+          <div class="dash-tile-title">Cargar Turno</div>
+          <div class="dash-tile-desc">Asigná unidades directo a los vendedores.</div>
+        </div>
+      `;
+    }
+    
+    if (currentRole === 'supermanager') {
+      html += `
+        <div class="dash-tile" onclick="document.querySelector('[data-tab=analisis]').click()">
+          <div class="dash-tile-icon av-coral"><i class="ti ti-chart-bar" style="color:var(--danger)"></i></div>
+          <div class="dash-tile-title">Métricas de Equipo</div>
+          <div class="dash-tile-desc">Estadísticas avanzadas e histórico global.</div>
+        </div>
+      `;
+    }
+
+    html += `</div>`;
+    dash.innerHTML = html;
+
+    if (currentRole === 'employee') {
+      fetchEmployeeDashPoints();
+    }
+  }
+
+  async function fetchEmployeeDashPoints() {
+    const { data } = await supabase.rpc('get_user_total_points', { user_uuid: currentUser.id });
+    const ptsDiv = document.getElementById('dash-user-pts');
+    if (ptsDiv) ptsDiv.innerText = data || 0;
+  }
+
+  // 7. PESTAÑA: RANKING DE VENDEDORES
+  function setPeriod(period, btn) {
+    document.querySelectorAll('.period-chip').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activePeriod = period;
+    
+    const picker = document.getElementById('range-picker');
+    if (period === 'range') {
+      picker.classList.add('visible');
+    } else {
+      picker.classList.remove('visible');
+      renderRanking();
+    }
+  }
+
+  async function renderRanking() {
+    const listContainer = document.getElementById('ranking-list');
+    listContainer.innerHTML = `<div class="loader">Procesando posiciones…</div>`;
+    
+    let fromDate, toDate;
+    const hoy = new Date();
+
+    if (activePeriod === 'week') {
+      const day = hoy.getDay(), diff = hoy.getDate() - day + (day == 0 ? -6 : 1);
+      fromDate = new Date(hoy.setDate(diff)).toISOString().split('T')[0];
+      toDate = new Date().toISOString().split('T')[0];
+    } else if (activePeriod === 'month') {
+      fromDate = new Date(hoy.getFullYear(), hoy.getMonth(), 1).toISOString().split('T')[0];
+      toDate = new Date().toISOString().split('T')[0];
+    } else if (activePeriod === 'range') {
+      fromDate = document.getElementById('range-from').value;
+      toDate = document.getElementById('range-to').value;
+    }
+
+    let { data: ranking, error } = await supabase.rpc('get_sales_ranking', { 
+      start_date: fromDate || '1970-01-01', 
+      end_date: toDate || '2100-01-01' 
+    });
+
+    if (error || !ranking || ranking.length === 0) {
+      listContainer.innerHTML = `<div class="empty-state"><i class="ti ti-mood-empty"></i>Sin registros en este rango.</div>`;
+      return;
+    }
+
+    document.getElementById('m-total').innerText = ranking.length;
+    const totalPtsEquipo = ranking.reduce((acc, r) => acc + (r.total_points || 0), 0);
+    document.getElementById('m-pts').innerText = totalPtsEquipo;
+
+    const maxPts = ranking[0].total_points || 1; 
+
+    let html = "";
+    ranking.forEach((row, index) => {
+      const pos = index + 1;
+      let topClass = "";
+      if (pos === 1) topClass = "top1";
+      if (pos === 2) topClass = "top2";
+      if (pos === 3) topClass = "top3";
+
+      const pctWidth = ((row.total_points || 0) / maxPts) * 100;
+      const esPropio = currentUser && row.profile_id === currentUser.id;
+
+      html += `
+        <div class="rank-row">
+          <div class="rank-num ${topClass}">${pos === 1 ? '🥇' : pos === 2 ? '🥈' : pos === 3 ? '🥉' : pos}</div>
+          <div class="rank-name">
+            ${row.name} ${esPropio ? '<span class="me-chip">Vos</span>' : ''}
+            <div class="bar-bg">
+              <div class="bar-fill" style="width: ${pctWidth}%; background: var(--accent);"></div>
+            </div>
+          </div>
+          <div class="rank-pts">
+            ${row.total_points}
+            <small>pts</small>
+          </div>
+        </div>
+      `;
+    });
+    listContainer.innerHTML = html;
+  }
+
+  // 8. PESTAÑA: SECCIÓN DE CARGA
+  async function prepareCargarTab() {
+    document.getElementById('inp-fecha').value = new Date().toISOString().split('T')[0];
+    
+    if (employeesList.length === 0) {
+      const { data } = await supabase
+        .from('profiles')
+        .select('id, name')
+        .eq('role', 'employee')
+        .order('name', { ascending: true });
+      employeesList = data || [];
+    }
+
+    const select = document.getElementById('sel-ivs');
+    select.innerHTML = `<option value="">— Seleccioná un vendedor —</option>` + 
+      employeesList.map(e => `<option value="${e.id}">${e.name}</option>`).join('');
+
+    const container = document.getElementById('product-rows');
+    container.innerHTML = PRODUCTS.map(p => `
+      <div class="product-row" data-id="${p.id}" data-points="${p.points}">
+        <div class="product-icon">${p.icon}</div>
+        <div style="flex:1;">
+          <div style="font-size:14px;font-weight:500;">${p.name}</div>
+          <div style="font-size:11px;color:var(--text2);">${p.points} Pts por unidad</div>
+        </div>
+        <div class="qty-ctrl">
+          <button class="qty-btn" onclick="offsetQty('${p.id}', -1)">-</button>
+          <input type="number" class="qty-input" id="qty-${p.id}" value="0" min="0" onchange="calculateLivePoints()" />
+          <button class="qty-btn" onclick="offsetQty('${p.id}', 1)">+</button>
+        </div>
+      </div>
+    `).join('');
+    
+    calculateLivePoints();
+    renderRecentLogs();
+  }
+
+  function offsetQty(prodId, delta) {
+    const input = document.getElementById(`qty-${prodId}`);
+    let val = parseInt(input.value) || 0;
+    val += delta;
+    if (val < 0) val = 0;
+    input.value = val;
+    calculateLivePoints();
+  }
+
+  function calculateLivePoints() {
+    let total = 0;
+    let breakdown = [];
+
+    PRODUCTS.forEach(p => {
+      const input = document.getElementById(`qty-${p.id}`);
+      const cant = parseInt(input.value) || 0;
+      if (cant > 0) {
+        const subtotal = cant * p.points;
+        total += subtotal;
+        breakdown.push(`${cant} x ${p.name}`);
+      }
+    });
+
+    document.getElementById('pts-total').innerText = total;
+    document.getElementById('pts-breakdown').innerText = breakdown.length > 0 ? breakdown.join(', ') : "Ingresá unidades vendidas";
+  }
+
+  async function submitLog() {
+    const employeeId = document.getElementById('sel-ivs').value;
+    const fecha = document.getElementById('inp-fecha').value;
+    const nota = document.getElementById('inp-nota').value.trim();
+    const totalPts = parseInt(document.getElementById('pts-total').innerText) || 0;
+
+    if (!employeeId) { showToast("⚠️ Por favor, seleccioná un vendedor."); return; }
+    if (!fecha) { showToast("⚠️ Elegí una fecha válida para el turno."); return; }
+    if (totalPts <= 0) { showToast("⚠️ Debes cargar al menos una unidad vendida."); return; }
+
+    let itemsCargados = {};
+    PRODUCTS.forEach(p => {
+      const input = document.getElementById(`qty-${p.id}`);
+      const cant = parseInt(input.value) || 0;
+      if(cant > 0) itemsCargados[p.id] = cant;
+    });
+
+    const { error } = await supabase.from('logs').insert([{
+      employee_id: employeeId,
+      created_by: currentUser.id,
+      date: fecha,
+      items: itemsCargados,
+      total_points: totalPts,
+      note: nota
+    }]);
+
+    if (error) {
+      showToast("❌ No se pudo guardar el registro.");
+    } else {
+      showToast("✅ ¡Puntos acreditados con éxito!");
+      PRODUCTS.forEach(p => document.getElementById(`qty-${p.id}`).value = 0);
+      document.getElementById('inp-nota').value = "";
+      calculateLivePoints();
+      renderRecentLogs();
+    }
+  }
+
+  async function renderRecentLogs() {
+    const recentDiv = document.getElementById('recent-logs');
+    const { data, error } = await supabase
+      .from('logs')
+      .select('id, total_points, date, profiles!employee_id(name)')
+      .order('created_at', { ascending: false })
+      .limit(3);
+
+    if (error || !data || data.length === 0) {
+      recentDiv.innerHTML = `<div class="empty-state">No hay cargas recientes en este turno.</div>`;
+      return;
+    }
+
+    recentDiv.innerHTML = data.map(l => `
+      <div class="history-row">
+        <div>
+          <div style="font-weight:500;">${l.profiles?.name || 'Vendedor'}</div>
+          <div style="font-size:11px;color:var(--text3);">${l.date}</div>
+        </div>
+        <div class="h-pts">+${l.total_points} pts</div>
+      </div>
+    `).join('');
+  }
+
+  // 9. PESTAÑA: MI PERFIL
+  async function renderPerfil() {
+    document.getElementById('prof-name').innerText = currentUser.name;
+    document.getElementById('prof-role').innerText = currentRole === 'employee' ? 'Vendedor de Salón / IVS' : 'Administrador de Local';
+    
+    const avatarContainer = document.getElementById('prof-av');
+    avatarContainer.innerText = currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U';
+
+    if(currentUser.avatar_url) {
+      avatarContainer.style.backgroundImage = `url(${currentUser.avatar_url})`;
+      avatarContainer.innerText = "";
+    }
+
+    const { data: totalPts } = await supabase.rpc('get_user_total_points', { user_uuid: currentUser.id });
+    const { data: rankPos } = await supabase.rpc('get_user_ranking_position', { user_uuid: currentUser.id });
+
+    document.getElementById('prof-pts').innerText = totalPts || 0;
+    document.getElementById('prof-rank').innerText = rankPos ? `#${rankPos}` : '—';
+
+    const { data: goalData } = await supabase.from('configs').select('value').eq('key', 'monthly_goal').single();
+    const metaMensual = goalData ? parseInt(goalData.value) : 100; 
+
+    const { data: mesPts } = await supabase.rpc('get_user_current_month_points', { user_uuid: currentUser.id });
+    const puntosMesActual = mesPts || 0;
+    
+    let pct = Math.round((puntosMesActual / metaMensual) * 100);
+    if(pct > 100) pct = 100;
+
+    document.getElementById('prof-pct').innerText = `${pct}%`;
+    document.getElementById('prof-bar').style.width = `${pct}%`;
+    document.getElementById('prof-mes-pts').innerText = `${puntosMesActual} pts acumulados`;
+    document.getElementById('prof-goal-label').innerText = `Meta: ${metaMensual} pts`;
+
+    renderUserHistoryLog();
+  }
+
+  async function renderUserHistoryLog() {
+    const histContainer = document.getElementById('prof-history');
+    const { data, error } = await supabase
+      .from('logs')
+      .select('date, total_points, items, note')
+      .eq('employee_id', currentUser.id)
+      .order('date', { ascending: false })
+      .limit(10);
+
+    if (error || !data || data.length === 0) {
+      histContainer.innerHTML = `<div class="empty-state">No registrás ventas cargadas todavía.</div>`;
+      return;
+    }
+
+    histContainer.innerHTML = data.map(l => {
+      const chips = Object.entries(l.items || {}).map(([id, qty]) => {
+        const prod = PRODUCTS.find(p => p.id === id);
+        return `<span class="log-chip">${qty} u. x ${prod ? prod.name : 'Ítem'}</span>`;
+      }).join('');
+
+      return `
+        <div class="history-row">
+          <div style="flex:1; margin-right: 12px;">
+            <div style="font-weight:500;">${l.date} ${l.note ? `<small style="color:var(--text3);">(${l.note})</small>` : ''}</div>
+            <div class="log-chips">${chips}</div>
+          </div>
+          <div class="h-pts">+${l.total_points} pts</div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function triggerPhoto() { document.getElementById('photo-input').click(); }
+  
+  async function uploadPhoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    showToast("Subiendo foto...");
+    const fileExt = file.name.split('.').pop();
+    const filePath = `${currentUser.id}/${Math.random()}.${fileExt}`;
+
+    let { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(filePath, file, { upsert: true });
+
+    if (uploadError) { showToast("Error al subir imagen."); return; }
+
+    const { data } =
