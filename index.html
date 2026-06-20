@@ -194,7 +194,7 @@
     .photo-ring:hover .cam-overlay { opacity: 1; }
     .photo-ring .cam-overlay i { color: #fff; font-size: 20px; }
 
-    /* ── Login ── */
+    /* ── Login / Auth ── */
     .login-wrap {
       min-height: 100vh; display: flex; flex-direction: column;
       justify-content: center; padding: 2rem 1.5rem; max-width: 420px; margin: 0 auto;
@@ -204,6 +204,27 @@
     .logo-icon i { font-size: 30px; color: var(--accent); }
     .login-logo h2 { font-size: 22px; font-weight: 700; }
     .login-logo p { font-size: 13px; color: var(--text2); margin-top: 4px; }
+    .auth-link { font-size: 13px; color: var(--accent); cursor: pointer; text-decoration: none; }
+    .auth-link:hover { text-decoration: underline; }
+    .auth-center { text-align: center; margin-top: 14px; }
+    .auth-msg { font-size: 13px; text-align: center; margin-top: 12px; display: none; line-height: 1.45; }
+
+    /* ── Dashboard ── */
+    .dash-hero { padding: 18px 16px 4px; }
+    .dash-hero-title { font-size: 20px; font-weight: 700; }
+    .dash-hero-sub { font-size: 13px; color: var(--text2); margin-top: 2px; }
+    .dash-nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 8px 16px 24px; }
+    .dash-tile {
+      background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 14px; cursor: pointer; transition: background .15s, transform .1s, border-color .15s;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .dash-tile:hover { background: var(--bg2); border-color: var(--border2); }
+    .dash-tile:active { transform: scale(.98); }
+    .dash-tile-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; margin-bottom: 2px; }
+    .dash-tile-icon i { font-size: 21px; }
+    .dash-tile-title { font-size: 14px; font-weight: 600; }
+    .dash-tile-desc { font-size: 12px; color: var(--text2); line-height: 1.3; }
 
     /* ── Toast ── */
     .toast {
@@ -293,9 +314,50 @@
     <label for="inp-email">Email</label>
     <input type="email" id="inp-email" placeholder="tu@email.com" autocomplete="email" />
     <label for="inp-pass">Contraseña</label>
-    <input type="password" id="inp-pass" placeholder="••••••" autocomplete="current-password" />
+    <input type="password" id="inp-pass" placeholder="••••••" autocomplete="current-password"
+           onkeydown="if(event.key==='Enter')doLogin()" />
     <button class="btn btn-primary" onclick="doLogin()"><i class="ti ti-login"></i> Ingresar</button>
+    <div class="auth-center">
+      <a class="auth-link" onclick="goForgot()">¿Olvidaste tu contraseña?</a>
+    </div>
     <div id="login-error" style="color:var(--danger);font-size:13px;text-align:center;margin-top:10px;display:none;"></div>
+  </div>
+</div>
+
+<!-- OLVIDÉ CONTRASEÑA -->
+<div id="screen-forgot" class="screen">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="logo-icon"><i class="ti ti-key"></i></div>
+      <h2>Recuperar contraseña</h2>
+      <p>Te enviaremos un enlace a tu correo</p>
+    </div>
+    <label for="forgot-email">Email</label>
+    <input type="email" id="forgot-email" placeholder="tu@email.com" autocomplete="email"
+           onkeydown="if(event.key==='Enter')sendResetEmail()" />
+    <button class="btn btn-primary" onclick="sendResetEmail()"><i class="ti ti-mail-forward"></i> Enviar enlace</button>
+    <div class="auth-center">
+      <a class="auth-link" onclick="showScreen('login')">← Volver al inicio de sesión</a>
+    </div>
+    <div id="forgot-msg" class="auth-msg"></div>
+  </div>
+</div>
+
+<!-- NUEVA CONTRASEÑA (desde enlace de email) -->
+<div id="screen-reset" class="screen">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="logo-icon"><i class="ti ti-lock"></i></div>
+      <h2>Nueva contraseña</h2>
+      <p>Elegí una nueva contraseña para tu cuenta</p>
+    </div>
+    <label for="reset-pass">Nueva contraseña</label>
+    <input type="password" id="reset-pass" placeholder="••••••" autocomplete="new-password" />
+    <label for="reset-pass2">Repetir contraseña</label>
+    <input type="password" id="reset-pass2" placeholder="••••••" autocomplete="new-password"
+           onkeydown="if(event.key==='Enter')submitNewPassword()" />
+    <button class="btn btn-primary" onclick="submitNewPassword()"><i class="ti ti-check"></i> Guardar contraseña</button>
+    <div id="reset-msg" class="auth-msg"></div>
   </div>
 </div>
 
@@ -322,17 +384,23 @@
   </div>
 
   <div class="tab-bar" id="tab-bar">
-    <div class="tab active" onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
-    <div class="tab" onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
-    <div class="tab" onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
-    <div class="tab" id="tab-btn-analisis" onclick="switchTab('analisis',this)" style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
-    <div class="tab" id="tab-btn-cargar"  onclick="switchTab('cargar',this)"  style="display:none;"><i class="ti ti-circle-plus"></i>+ Cargar</div>
-    <div class="tab" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
-    <div class="tab" id="tab-btn-admin"   onclick="switchTab('admin',this)"   style="display:none;"><i class="ti ti-settings"></i>Admin</div>
+    <div class="tab active" data-tab="inicio"  onclick="switchTab('inicio',this)"><i class="ti ti-home"></i>Inicio</div>
+    <div class="tab" data-tab="ranking" onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
+    <div class="tab" data-tab="perfil"  onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
+    <div class="tab" data-tab="tips"    onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
+    <div class="tab" data-tab="analisis"  id="tab-btn-analisis" onclick="switchTab('analisis',this)" style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
+    <div class="tab" data-tab="cargar"    id="tab-btn-cargar"  onclick="switchTab('cargar',this)"  style="display:none;"><i class="ti ti-circle-plus"></i>+ Cargar</div>
+    <div class="tab" data-tab="historial" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
+    <div class="tab" data-tab="admin"     id="tab-btn-admin"   onclick="switchTab('admin',this)"   style="display:none;"><i class="ti ti-settings"></i>Admin</div>
+  </div>
+
+  <!-- ══ INICIO / DASHBOARD ══ -->
+  <div id="tab-inicio" class="tab-content active">
+    <div id="dash-content"></div>
   </div>
 
   <!-- ══ RANKING ══ -->
-  <div id="tab-ranking" class="tab-content active">
+  <div id="tab-ranking" class="tab-content">
     <div class="metric-grid">
       <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value" id="m-total">—</div></div>
       <div class="metric-card"><div class="metric-label">Pts del equipo</div><div class="metric-value" id="m-pts">—</div></div>
@@ -603,17 +671,46 @@ let allLogs        = [];
 let monthlyGoal    = 100;
 let period         = 'week';
 
+/* Guards de sesión / navegación */
+let appInitialized = false;
+// Capturamos de forma síncrona si llegamos desde un enlace de recuperación,
+// antes de que Supabase procese y limpie el hash de la URL.
+let isRecovering   = window.location.hash.includes('type=recovery');
+
 /* ══════════════════════════════════
    INIT
 ══════════════════════════════════ */
+async function bootSession(session) {
+  if (!session || isRecovering) return;
+  currentUser = session.user;
+  if (appInitialized) return;   // evita re-render al volver de pestaña / refresh de token
+  appInitialized = true;
+  await loadAppData();
+  showApp();
+}
+
 (async () => {
+  if (isRecovering) showScreen('reset');
   const { data: { session } } = await sb.auth.getSession();
-  if (session) { currentUser = session.user; await loadAppData(); showApp(); }
-  sb.auth.onAuthStateChange(async (event, session) => {
-    if (event === 'SIGNED_IN' && session) { currentUser = session.user; await loadAppData(); showApp(); }
-    else if (event === 'SIGNED_OUT') { currentUser = null; showScreen('login'); }
-  });
+  await bootSession(session);
 })();
+
+sb.auth.onAuthStateChange(async (event, session) => {
+  if (event === 'PASSWORD_RECOVERY') {
+    isRecovering = true;
+    showScreen('reset');
+    return;
+  }
+  if (event === 'SIGNED_OUT') {
+    currentUser = null;
+    appInitialized = false;
+    isRecovering = false;
+    showScreen('login');
+    return;
+  }
+  // SIGNED_IN, INITIAL_SESSION, TOKEN_REFRESHED, USER_UPDATED
+  await bootSession(session);
+});
 
 /* ══════════════════════════════════
    AUTH
@@ -627,6 +724,45 @@ async function doLogin() {
   if (error) { errEl.textContent = 'Email o contraseña incorrectos'; errEl.style.display = 'block'; }
 }
 async function doLogout() { await sb.auth.signOut(); }
+
+function goForgot() {
+  // Pre-cargar el email si ya lo escribió en el login
+  const typed = document.getElementById('inp-email').value.trim();
+  if (typed) document.getElementById('forgot-email').value = typed;
+  document.getElementById('forgot-msg').style.display = 'none';
+  showScreen('forgot');
+}
+
+async function sendResetEmail() {
+  const email = document.getElementById('forgot-email').value.trim();
+  if (!email) { showAuthMsg('forgot-msg', 'Ingresá tu email', true); return; }
+  // redirectTo vuelve a esta misma app (debe estar en los Redirect URLs de Supabase)
+  const redirectTo = window.location.origin + window.location.pathname;
+  const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo });
+  if (error) { showAuthMsg('forgot-msg', 'Error: ' + error.message, true); return; }
+  showAuthMsg('forgot-msg', 'Listo. Te enviamos un enlace para restablecer tu contraseña. Revisá tu correo (y la carpeta de spam).', false);
+}
+
+async function submitNewPassword() {
+  const p1 = document.getElementById('reset-pass').value;
+  const p2 = document.getElementById('reset-pass2').value;
+  if (p1.length < 6) { showAuthMsg('reset-msg', 'La contraseña debe tener al menos 6 caracteres', true); return; }
+  if (p1 !== p2)     { showAuthMsg('reset-msg', 'Las contraseñas no coinciden', true); return; }
+  const { error } = await sb.auth.updateUser({ password: p1 });
+  if (error) { showAuthMsg('reset-msg', 'Error: ' + error.message, true); return; }
+  showAuthMsg('reset-msg', '¡Contraseña actualizada! Redirigiendo al inicio de sesión…', false);
+  setTimeout(async () => {
+    await sb.auth.signOut();                                   // dispara SIGNED_OUT → pantalla login
+    history.replaceState(null, '', window.location.pathname);  // limpia el hash del enlace
+  }, 1500);
+}
+
+function showAuthMsg(elId, msg, isError) {
+  const el = document.getElementById(elId);
+  el.textContent = msg;
+  el.style.color = isError ? 'var(--danger)' : 'var(--success)';
+  el.style.display = 'block';
+}
 
 /* ══════════════════════════════════
    DATOS
@@ -687,7 +823,9 @@ function showApp() {
   currentTipIndex = Math.floor(Math.random() * TIPS.length);
   showTip(currentTipIndex);
 
-  switchTab('ranking', document.querySelector('.tab'));
+  // Arrancamos en el Dashboard
+  renderDashboard();
+  switchTab('inicio');
   renderRanking();
   renderProfile();
   if (isSuperManager) renderAnalysis();
@@ -695,11 +833,82 @@ function showApp() {
 
 function switchTab(tab, el) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  if (el) el.classList.add('active');
+  const btn = el || document.querySelector('.tab[data-tab="' + tab + '"]');
+  if (btn) btn.classList.add('active');
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
+  window.scrollTo(0, 0);
+  if (tab === 'inicio')   renderDashboard();
   if (tab === 'analisis') renderAnalysis();
   if (tab === 'historial') renderHistorial();
+}
+
+/* ══════════════════════════════════
+   DASHBOARD (inicio)
+══════════════════════════════════ */
+function renderDashboard() {
+  if (!currentProfile) return;
+  const p = currentProfile;
+  const role = p.role;
+  const isManager  = role === 'manager' || role === 'supermanager';
+  const isSuper    = role === 'supermanager';
+  const isEmployee = role === 'employee';
+  const hoy = today();
+  const wb  = weekBounds();
+  const el  = document.getElementById('dash-content');
+
+  let metricsHTML = '';
+  if (isEmployee) {
+    const myLogs   = allLogs.filter(l => l.user_id === p.id);
+    const monthPts = myLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
+    const weekPts  = myLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to).reduce((s,l)=>s+l.pts,0);
+    const employees = allProfiles.filter(pr => pr.role === 'employee');
+    const ranked = employees
+      .map(e => ({ id:e.id, pts: allLogs.filter(l=>l.user_id===e.id).reduce((s,l)=>s+l.pts,0) }))
+      .sort((a,b)=>b.pts-a.pts);
+    const pos = ranked.findIndex(e => e.id === p.id);
+    metricsHTML = `
+      <div class="metric-grid-3" style="padding:8px 16px 0;">
+        <div class="metric-card"><div class="metric-label">Mis pts (mes)</div><div class="metric-value">${fmt(monthPts)}</div></div>
+        <div class="metric-card"><div class="metric-label">Posición</div><div class="metric-value">${pos>=0?'#'+(pos+1):'—'}</div></div>
+        <div class="metric-card"><div class="metric-label">Esta semana</div><div class="metric-value">${fmt(weekPts)}</div></div>
+      </div>`;
+  } else {
+    const employees = allProfiles.filter(pr => pr.role === 'employee');
+    const weekPts   = allLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to).reduce((s,l)=>s+l.pts,0);
+    const monthPts  = allLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
+    metricsHTML = `
+      <div class="metric-grid-3" style="padding:8px 16px 0;">
+        <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value">${employees.length}</div></div>
+        <div class="metric-card"><div class="metric-label">Pts equipo (sem)</div><div class="metric-value">${fmt(weekPts)}</div></div>
+        <div class="metric-card"><div class="metric-label">Pts equipo (mes)</div><div class="metric-value">${fmt(monthPts)}</div></div>
+      </div>`;
+  }
+
+  const tiles = [];
+  tiles.push({ tab:'ranking', icon:'ti-trophy',      bg:'var(--gold-bg)',   color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
+  if (isManager) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)',  color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
+  if (isManager) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)', color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
+  if (isSuper)   tiles.push({ tab:'analisis',  icon:'ti-chart-bar',   bg:'#E6F1FB',           color:'#0C447C',        title:'Análisis',        desc:'Evolución del equipo' });
+  tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE',         color:'#085041',     title:'Mi perfil', desc:'Tus puntos y productos' });
+  tiles.push({ tab:'tips',   icon:'ti-bulb',        bg:'var(--gold-bg)',  color:'var(--gold)', title:'Consejos',  desc:'Técnicas de venta' });
+  if (isManager) tiles.push({ tab:'admin', icon:'ti-settings', bg:'var(--bg2)', color:'var(--text2)', title:'Admin', desc:'Usuarios y metas' });
+
+  const tilesHTML = tiles.map(t => `
+    <div class="dash-tile" onclick="switchTab('${t.tab}')">
+      <div class="dash-tile-icon" style="background:${t.bg};color:${t.color};"><i class="ti ${t.icon}"></i></div>
+      <div class="dash-tile-title">${t.title}</div>
+      <div class="dash-tile-desc">${t.desc}</div>
+    </div>`).join('');
+
+  el.innerHTML = `
+    <div class="dash-hero">
+      <div class="dash-hero-title">${greeting().replace(',', '')} 👋</div>
+      <div class="dash-hero-sub">${isEmployee ? 'Tu resumen de venta sugestiva' : 'Resumen del equipo IVS'}</div>
+    </div>
+    ${metricsHTML}
+    <div class="section-title">Accesos</div>
+    <div class="dash-nav-grid">${tilesHTML}</div>`;
 }
 
 /* ══════════════════════════════════
@@ -1018,7 +1227,7 @@ function renderTips() {
     '🎮 Estrategia — Combos':'#534AB7','🎮 Estrategia — Café':'#0F6E56','🎮 Estrategia — Pileta':'#BA7517'
   };
   el.innerHTML = TIPS.map((tip, i) => `
-    <div class="tip-list-item" onclick="currentTipIndex=${i};showTip(${i});switchTab('tips',document.querySelector('.tab:nth-child(3)'));">
+    <div class="tip-list-item" onclick="currentTipIndex=${i};showTip(${i});switchTab('tips');">
       <div class="tip-list-cat" style="color:${catColors[tip.cat]||'var(--accent)'};">${tip.cat}</div>
       <div class="tip-list-text">${tip.text}</div>
     </div>`).join('');
@@ -1118,7 +1327,7 @@ async function submitLog() {
   document.getElementById('inp-nota').value='';
   updateSummary();
   showToast('¡'+fmt(pts)+' puntos registrados!');
-  renderRanking(); renderRecentLogs();
+  renderRanking(); renderRecentLogs(); renderDashboard();
   if (currentProfile.id===uid) renderProfile();
 }
 
@@ -1249,7 +1458,7 @@ async function createEmployee() {
   ['new-name','new-email','new-pass'].forEach(id=>document.getElementById(id).value='');
   const { data } = await sb.from('profiles').select('*').order('full_name');
   allProfiles = data || [];
-  renderUserList(); fillEmployeeSelect(); renderRanking();
+  renderUserList(); fillEmployeeSelect(); renderRanking(); renderDashboard();
 }
 
 async function saveGoal() {
