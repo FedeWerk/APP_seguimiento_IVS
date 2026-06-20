@@ -581,8 +581,8 @@
 
 <script>
   // 1. CONFIGURACIÓN DE SUPABASE
-  const SUPABASE_URL = "https://tu-proyecto.supabase.co";
-  const SUPABASE_ANON_KEY = "tu-anon-key-de-supabase";
+  const SUPABASE_URL = "https://yxeagaoxosveblpfxvwq.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_MTM2y26c8dRIpG9w9a8VHA_JJXIrGMV";
   
   const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -639,7 +639,6 @@
     if (target) target.classList.add('active');
   }
 
-  // Se eliminó submitNewPassword duplicado
   function switchTab(tabId, el) {
     document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
@@ -1129,4 +1128,131 @@
 
     if (uploadError) { showToast("Error al subir imagen."); return; }
 
-    const { data } =
+    const { data } = supabase.storage.from('avatars').getPublicUrl(filePath);
+    const publicUrl = data.publicUrl;
+
+    await supabase.from('profiles').update({ avatar_url: publicUrl }).eq('id', currentUser.id);
+    
+    currentUser.avatar_url = publicUrl;
+    renderPerfil();
+    showToast("¡Foto actualizada!");
+  }
+
+  // 10. CAROUSEL DE CONSEJOS
+  function renderTips() {
+    if(TIPS.length === 0) return;
+    const current = TIPS[currentTipIdx];
+    document.getElementById('tip-cat').innerText = current.cat;
+    document.getElementById('tip-text').innerText = current.text;
+    document.getElementById('tip-counter').innerText = `${currentTipIdx + 1} de ${TIPS.length}`;
+
+    const list = document.getElementById('tips-list');
+    list.innerHTML = TIPS.map(t => `
+      <div class="tip-list-item">
+        <div class="tip-list-cat" style="color:var(--gold);">${t.cat}</div>
+        <div class="tip-list-text">${t.text}</div>
+      </div>
+    `).join('');
+  }
+
+  function nextTip() {
+    currentTipIdx = (currentTipIdx + 1) % TIPS.length;
+    renderTips();
+  }
+
+  // 11. TOASTS GLOBAL
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.innerText = message;
+    toast.classList.add('show');
+    setTimeout(() => { toast.classList.remove('show'); }, 3500);
+  }
+
+  // 12. PESTAÑA: HISTORIAL GENERAL
+  async function renderHistorial() {
+    const vSelect = document.getElementById('hist-vendor');
+    if (vSelect.options.length <= 1) {
+      employeesList.forEach(e => {
+        const opt = document.createElement('option');
+        opt.value = e.id; opt.innerText = e.name;
+        vSelect.appendChild(opt);
+      });
+    }
+
+    const selVendor = vSelect.value;
+    const fDate = document.getElementById('hist-from').value;
+    const tDate = document.getElementById('hist-to').value;
+
+    let query = supabase
+      .from('logs')
+      .select('id, date, total_points, items, note, profiles!employee_id(name)', { count: 'exact' });
+
+    if (selVendor) query = query.eq('employee_id', selVendor);
+    if (fDate) query = query.gte('date', fDate);
+    if (tDate) query = query.lte('date', tDate);
+
+    const { data, count, error } = await query.order('date', { ascending: false });
+
+    document.getElementById('hist-count').innerText = count || 0;
+    const totalSuma = data ? data.reduce((acc, current) => acc + current.total_points, 0) : 0;
+    document.getElementById('hist-pts').innerText = totalSuma;
+
+    const list = document.getElementById('hist-list');
+    if (error || !data || data.length === 0) {
+      list.innerHTML = `<div class="empty-state">No se encontraron registros bajo esos filtros.</div>`;
+      return;
+    }
+
+    list.innerHTML = data.map(l => `
+      <div class="history-row">
+        <div>
+          <div style="font-weight:600;">${l.profiles?.name || 'Vendedor'}</div>
+          <div style="font-size:11px;color:var(--text2);">${l.date} ${l.note ? `• <i>${l.note}</i>` : ''}</div>
+        </div>
+        <div class="h-pts">+${l.total_points} pts</div>
+      </div>
+    `).join('');
+  }
+
+  // 13. PANEL ADMINISTRADOR
+  async function createEmployee() {
+    const name = document.getElementById('new-name').value.trim();
+    const email = document.getElementById('new-email').value.trim();
+    const pass = document.getElementById('new-pass').value;
+
+    if (!name || !email || !pass) { showToast("⚠️ Por favor completa los datos del nuevo vendedor."); return; }
+
+    showToast("Creando cuenta de acceso...");
+    
+    const { data, error } = await supabase.auth.signUp({ email, password: pass, options: { data: { full_name: name } } });
+
+    if (error) {  showToast(`❌ Error: ${error.message}`); return; }
+
+    if (data?.user) {
+      const { error: profileErr } = await supabase.from('profiles').insert([{
+        id: data.user.id, name: name, role: 'employee', avatar_url: null
+      }]);
+      
+      if(profileErr) {
+        showToast("Error al estampar perfil de base de datos.");
+      } else {
+        showToast("🎉 ¡Vendedor creado de forma correcta!");
+        document.getElementById('new-name').value = "";
+        document.getElementById('new-email').value = "";
+        document.getElementById('new-pass').value = "";
+        employeesList = []; 
+      }
+    }
+  }
+
+  async function saveGoal() {
+    const meta = parseInt(document.getElementById('inp-goal').value);
+    if (!meta || meta < 1) { showToast("Ingresá un valor numérico meta válido."); return; }
+
+    const { error } = await supabase.from('configs').upsert({ key: 'monthly_goal', value: meta.toString() }, { onConflict: 'key' });
+    if(error) showToast("Error al guardar la nueva configuración.");
+    else showToast("🎯 Objetivo global actualizado.");
+  }
+</script>
+</body>
+</html>
