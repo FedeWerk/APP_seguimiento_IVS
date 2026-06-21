@@ -702,7 +702,7 @@ async function bootSession(session) {
   await bootSession(session);
 })();
 
-sb.auth.onAuthStateChange(async (event, session) => {
+sb.auth.onAuthStateChange((event, session) => {
   if (event === 'PASSWORD_RECOVERY') {
     isRecovering = true;
     showScreen('reset');
@@ -715,8 +715,12 @@ sb.auth.onAuthStateChange(async (event, session) => {
     showScreen('login');
     return;
   }
-  // SIGNED_IN, INITIAL_SESSION, TOKEN_REFRESHED, USER_UPDATED
-  await bootSession(session);
+  // SIGNED_IN, INITIAL_SESSION, TOKEN_REFRESHED, USER_UPDATED.
+  // IMPORTANTE: el callback corre DENTRO del lock de auth de supabase-js.
+  // Hacer 'await sb.from(...)' acá adentro (loadAppData) deadlockea: getSession
+  // y las queries quedan colgadas y la app no pasa del login. Por eso diferimos
+  // bootSession con setTimeout(0), para que corra FUERA del lock.
+  setTimeout(() => { bootSession(session); }, 0);
 });
 
 /* ══════════════════════════════════
