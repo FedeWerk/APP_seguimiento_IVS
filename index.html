@@ -361,6 +361,21 @@
   </div>
 </div>
 
+<!-- ERROR DE CARGA -->
+<div id="screen-error" class="screen">
+  <div class="login-wrap">
+    <div class="login-logo">
+      <div class="logo-icon"><i class="ti ti-alert-triangle"></i></div>
+      <h2>Algo salió mal</h2>
+      <p id="error-detail">No pudimos cargar tus datos.</p>
+    </div>
+    <button class="btn btn-primary" onclick="location.reload()"><i class="ti ti-refresh"></i> Reintentar</button>
+    <div class="auth-center">
+      <a class="auth-link" onclick="doLogout()">Cerrar sesión</a>
+    </div>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="screen-app" class="screen">
 
@@ -692,7 +707,17 @@ async function bootSession(session) {
   currentUser = session.user;
   if (appInitialized) return;   // evita re-render al volver de pestaña / refresh de token
   appInitialized = true;
-  await loadAppData();
+  try {
+    await loadAppData();
+  } catch (e) {
+    appInitialized = false;     // permite reintentar
+    console.error('Error cargando datos:', e);
+    return showLoadError('No pudimos cargar tus datos. Revisá tu conexión e intentá de nuevo.');
+  }
+  if (!currentProfile) {
+    appInitialized = false;
+    return showLoadError('Tu cuenta no tiene un perfil asociado. Avisale al administrador para que lo cree.');
+  }
   showApp();
 }
 
@@ -779,8 +804,10 @@ function showAuthMsg(elId, msg, isError) {
    DATOS
 ══════════════════════════════════ */
 async function loadAppData() {
-  const { data: prof } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
-  currentProfile = prof;
+  const { data: prof, error: profErr } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+  // PGRST116 = "no rows": autenticado pero sin perfil. Otros errores (red) se propagan.
+  if (profErr && profErr.code !== 'PGRST116') throw profErr;
+  currentProfile = prof || null;
   const { data: profs } = await sb.from('profiles').select('*').order('full_name');
   allProfiles = profs || [];
   const { data: logs } = await sb.from('sales_logs').select('*').order('fecha', { ascending: false });
@@ -795,6 +822,12 @@ async function loadAppData() {
 function showScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
+}
+
+function showLoadError(msg) {
+  const el = document.getElementById('error-detail');
+  if (el) el.textContent = msg;
+  showScreen('error');
 }
 
 function showApp() {
