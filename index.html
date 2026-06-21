@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SalesRank IVS</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.33.0/dist/tabler-icons.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.108.2"></script>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
@@ -606,7 +606,14 @@
 <script>
 const SUPABASE_URL = 'https://yxeagaoxosveblpfxvwq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWFnYW94b3N2ZWJscGZ4dndxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzExNTIsImV4cCI6MjA5NTE0NzE1Mn0.5DEPtur08XeZIRhIkEHlGG4D8oV4c4KdfpM_7ww8IDg';
-const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+// Lock no-op: evita el deadlock de navigator.locks en supabase-js v2
+// (app de una sola pestaña, no necesita coordinación de locks entre tabs).
+// Sin esto, getSession() y sb.from(...) se cuelgan y la app no pasa del login.
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth: {
+    lock: async (name, acquireTimeout, fn) => await fn(),
+  },
+});
 
 const PRODUCTS = [
   { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3,   unit:'pileta', color:'#BA7517' },
