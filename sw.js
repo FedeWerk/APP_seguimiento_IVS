@@ -1,50 +1,56 @@
-/* SalesRank IVS — service worker mínimo (PWA instalable + offline básico) */
-const CACHE = 'salesrank-ivs-v1';
-const SHELL = [
-  '/',
-  '/index.html',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/apple-touch-icon.png',
-  '/favicon-32.png',
-  '/manifest.json',
-];
+/* ══════════════════════════════════════════════════════
+   SalesRank IVS — Service Worker
+   Maneja Web Push real (app cerrada incluida) + caché básica
+   ══════════════════════════════════════════════════════ */
+
+const SW_VERSION = 'ivs-v2';
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())
-  );
+  // Activar el nuevo SW inmediatamente sin esperar a cerrar pestañas
+  self.skipWaiting();
 });
 
 self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches.keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim())
-  );
+  // Tomar control de las páginas abiertas de inmediato
+  event.waitUntil(self.clients.claim());
 });
 
-self.addEventListener('fetch', (event) => {
-  const req = event.request;
-
-  // Solo GET del mismo origen. Supabase / CDN (otros orígenes) van directo a la red.
-  if (req.method !== 'GET' || new URL(req.url).origin !== self.location.origin) return;
-
-  // Navegaciones: network-first para recibir SIEMPRE el HTML actualizado;
-  // si no hay red, servimos el index cacheado (offline).
-  if (req.mode === 'navigate') {
-    event.respondWith(
-      fetch(req)
-        .then((res) => {
-          const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put('/index.html', copy));
-          return res;
-        })
-        .catch(() => caches.match('/index.html'))
-    );
-    return;
+/* ── PUSH: llega un mensaje del servidor ── */
+self.addEventListener('push', (event) => {
+  let data = {};
+  try {
+    data = event.data ? event.data.json() : {};
+  } catch (e) {
+    data = { title: 'SalesRank IVS', body: event.data ? event.data.text() : '' };
   }
 
-  // Resto de assets propios (íconos, manifest): cache-first.
-  event.respondWith(caches.match(req).then((r) => r || fetch(req)));
+  const title = data.title || 'SalesRank IVS';
+  const options = {
+    body: data.body || '',
+    icon: data.icon || '/icon-192.png',
+    badge: '/icon-192.png',
+    tag: data.tag || 'ivs-push',
+    data: { url: data.url || '/' },
+    vibrate: [100, 50, 100],
+    renotify: true,
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+/* ── Click en la notificación: abrir / enfocar la app ── */
+self.addEventListener('notificationclick', (event) => {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/';
+
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Si ya hay una ventana abierta, enfocarla
+      for (const client of clientList) {
+        if ('focus' in client) return client.focus();
+      }
+      // Si no, abrir una nueva
+      if (self.clients.openWindow) return self.clients.openWindow(targetUrl);
+    })
+  );
 });
