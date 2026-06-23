@@ -712,6 +712,10 @@
 ══════════════════════════════════ */
 const SUPABASE_URL = 'https://yxeagaoxosveblpfxvwq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWFnYW94b3N2ZWJscGZ4dndxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzExNTIsImV4cCI6MjA5NTE0NzE1Mn0.5DEPtur08XeZIRhIkEHlGG4D8oV4c4KdfpM_7ww8IDg';
+
+// Clave PÚBLICA VAPID — no es secreta (identifica la app ante el servicio de push).
+// La privada vive solo como secret de la Edge Function, nunca acá.
+const VAPID_PUBLIC_KEY = 'BDAQ27IXPVkSqlHC4MyppekgpRBlrlC4ePaNMjmljOluiRYetlhu67VJaJTO58ScdaCwTuc8lgMhdZiXw25-JFc';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { lock: async (name, acquireTimeout, fn) => await fn() },
 });
@@ -1385,15 +1389,56 @@ function renderTips() {
 ══════════════════════════════════ */
 function initPushNotifications() {
   if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') { sendTipNotification(); }
-  else if (Notification.permission === 'default') { document.getElementById('push-banner').style.display = 'flex'; }
+  if (Notification.permission === 'granted') {
+    subscribeToPush();      // asegura que el dispositivo esté suscrito y al día
+    sendTipNotification();
+  } else if (Notification.permission === 'default') {
+    document.getElementById('push-banner').style.display = 'flex';
+  }
 }
 function hidePushBanner() { document.getElementById('push-banner').style.display = 'none'; }
+
 async function requestPushPermission() {
   const permission = await Notification.requestPermission();
   hidePushBanner();
-  if (permission === 'granted') { showToast('Notificaciones activadas'); sendTipNotification(); }
+  if (permission === 'granted') {
+    const ok = await subscribeToPush();
+    showToast(ok ? 'Notificaciones activadas' : 'No se pudieron activar las notificaciones');
+    if (ok) sendTipNotification();
+  }
 }
+
+/* Suscribe ESTE dispositivo a Web Push y guarda la suscripción en Supabase */
+async function subscribeToPush() {
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
+    console.warn('Push no soportado en este dispositivo');
+    return false;
+  }
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    let sub = await registration.pushManager.getSubscription();
+    if (!sub) {
+      sub = await registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+      });
+    }
+    const j = sub.toJSON();
+    const { error } = await sb.from('push_subscriptions').upsert({
+      user_id:  currentProfile.id,
+      endpoint: sub.endpoint,
+      p256dh:   j.keys.p256dh,
+      auth:     j.keys.auth,
+    }, { onConflict: 'endpoint' });
+    if (error) { console.error('Error guardando suscripción:', error); return false; }
+    return true;
+  } catch (e) {
+    console.error('Error suscribiendo a push:', e);
+    return false;
+  }
+}
+
+/* Consejo local del arranque (solo mientras la app está abierta) */
 function sendTipNotification() {
   const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
   if (sessionStorage.getItem('tip-sent')) return;
@@ -1401,6 +1446,36 @@ function sendTipNotification() {
   setTimeout(() => {
     try { new Notification('💡 Consejo de venta — SalesRank IVS', { body: tip.text, icon: '/icon-192.png', badge: '/icon-192.png', tag: 'ivs-tip' }); } catch(e) {}
   }, 3000);
+}
+
+/* Convierte la clave VAPID base64-url a Uint8Array (formato que pide el navegador) */
+function urlBase64ToUint8Array(base64String) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const raw = atob(base64);
+  const arr = new Uint8Array(raw.length);
+  for (let i = 0; i < raw.length; ++i) arr[i] = raw.charCodeAt(i);
+  return arr;
+}
+
+/* Invoca la Edge Function que manda el push a todo el equipo */
+async function notifyCompetition(name, endDate) {
+  try {
+    const { data, error } = await sb.functions.invoke('send-push', {
+      body: {
+        title: '⚡ Nueva Competencia Express',
+        body: `${name} — ¡puntos especiales hasta ${fmtDate(endDate)}! Entrá y empezá a sumar.`,
+        url: '/',
+        tag: 'comp-' + Date.now(),
+      },
+    });
+    if (error) { console.warn('No se pudo notificar:', error); showToast('No se pudo enviar el aviso'); return; }
+    if (data && data.sent !== undefined) {
+      showToast(`Aviso enviado a ${data.sent} dispositivo${data.sent===1?'':'s'}`);
+    }
+  } catch (e) {
+    console.warn('Error al notificar competencia:', e);
+  }
 }
 
 /* ══════════════════════════════════
@@ -1657,6 +1732,9 @@ async function createCompetition() {
 
   showToast('¡Competencia creada!');
 
+  // Avisar al equipo por push (si hay dispositivos suscritos)
+  notifyCompetition(name, end);
+
   // Limpiar formulario
   document.getElementById('comp-name').value  = '';
   document.getElementById('comp-start').value = '';
@@ -1740,7 +1818,10 @@ function renderCompList() {
       </div>
       <div class="comp-card-body">
         ${productLines}
-        <div style="display:flex;gap:8px;margin-top:10px;">
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-gold" onclick="notifyCompetition(${JSON.stringify(c.name)}, '${c.end_date}')">
+            <i class="ti ti-bell"></i> Avisar
+          </button>
           <button class="btn btn-sm ${c.active ? '' : 'btn-primary'}" onclick="toggleCompetition(${c.id}, ${c.active})">
             <i class="ti ${toggleIcon}"></i> ${toggleLabel}
           </button>
