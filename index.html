@@ -98,6 +98,13 @@
     .btn:active { transform: scale(.98); }
     .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
     .btn-primary:hover { background: var(--accent-dark); }
+    .btn-danger { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
+    .btn-danger:hover { background: #fecaca; }
+    .btn-sm {
+      padding: 5px 12px; font-size: 12px; margin-top: 0; width: auto;
+    }
+    .btn-gold { background: var(--gold-bg); color: var(--gold); border-color: rgba(186,117,23,0.3); }
+    .btn-gold:hover { background: #fde68a; }
 
     /* ── Inputs ── */
     input, select {
@@ -274,7 +281,6 @@
     }
     .tip-btn:hover { background: rgba(186,117,23,0.1); }
     .tip-counter { font-size: 11px; color: var(--text3); margin-left: auto; }
-
     .tip-list-item {
       padding: 14px 16px; border-bottom: 1px solid var(--border);
       cursor: pointer; transition: background .15s;
@@ -291,7 +297,6 @@
     .stat-bar-wrap { flex: 2; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
     .stat-bar-fill { height: 100%; border-radius: 4px; transition: width .5s; }
     .stat-bar-val { font-size: 13px; font-weight: 600; min-width: 36px; text-align: right; }
-
     .week-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 0 16px; margin-top: 8px; }
     .week-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .week-bar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; }
@@ -299,11 +304,10 @@
     .week-label { font-size: 9px; color: var(--text3); }
     .week-val { font-size: 9px; color: var(--text2); font-weight: 600; }
 
-    /* ── Push permission banner ── */
+    /* ── Push banner ── */
     .push-banner {
       background: var(--accent-bg); border-bottom: 1px solid rgba(83,74,183,0.2);
-      padding: 10px 16px; display: flex; align-items: center; gap: 10px;
-      font-size: 13px;
+      padding: 10px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px;
     }
     .push-banner i { color: var(--accent); font-size: 18px; flex-shrink: 0; }
     .push-banner-text { flex: 1; color: var(--text2); }
@@ -311,6 +315,62 @@
       padding: 5px 12px; border-radius: 20px; font-size: 12px; font-family: var(--font);
       border: none; background: var(--accent); color: white; cursor: pointer; white-space: nowrap;
     }
+
+    /* ── Competencias Express ── */
+    .comp-card {
+      border: 1px solid var(--border); border-radius: var(--radius);
+      margin-bottom: 10px; overflow: hidden;
+    }
+    .comp-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 14px; background: var(--bg2);
+    }
+    .comp-card-title { font-size: 14px; font-weight: 600; }
+    .comp-card-dates { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .comp-card-body { padding: 10px 14px; }
+    .comp-product-line {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+    }
+    .comp-product-line:last-child { border-bottom: none; }
+    .comp-badge-active {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+      background: var(--success-bg); color: var(--success); white-space: nowrap;
+    }
+    .comp-badge-upcoming {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+      background: var(--accent-bg); color: var(--accent-dark); white-space: nowrap;
+    }
+    .comp-badge-ended {
+      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
+      background: var(--bg3); color: var(--text3); white-space: nowrap;
+    }
+    /* Banner competencia activa en carga */
+    .comp-active-banner {
+      background: linear-gradient(135deg, #0F6E56 0%, #085041 100%);
+      color: #fff; padding: 10px 16px; font-size: 12px;
+      display: flex; align-items: center; gap: 8px; margin-bottom: 0;
+    }
+    .comp-active-banner i { font-size: 16px; flex-shrink: 0; }
+    /* Punto modificado en fila producto */
+    .pts-modified {
+      font-size: 11px; background: var(--success-bg); color: var(--success);
+      padding: 1px 6px; border-radius: 10px; font-weight: 700;
+    }
+
+    /* ── Puntos base editor ── */
+    .pts-edit-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .pts-edit-row:last-child { border-bottom: none; }
+    .pts-edit-icon { font-size: 24px; flex-shrink: 0; }
+    .pts-edit-name { flex: 1; font-size: 14px; font-weight: 500; }
+    .pts-edit-input {
+      width: 64px; text-align: center; font-size: 16px; font-weight: 700;
+      color: var(--accent); margin: 0; padding: 6px 8px;
+    }
+    .pts-edit-label { font-size: 11px; color: var(--text3); }
   </style>
 </head>
 <body>
@@ -355,7 +415,7 @@
   </div>
 </div>
 
-<!-- NUEVA CONTRASEÑA (desde enlace de email) -->
+<!-- NUEVA CONTRASEÑA -->
 <div id="screen-reset" class="screen">
   <div class="login-wrap">
     <div class="login-logo">
@@ -373,7 +433,7 @@
   </div>
 </div>
 
-<!-- ERROR DE CARGA -->
+<!-- ERROR -->
 <div id="screen-error" class="screen">
   <div class="login-wrap">
     <div class="login-logo">
@@ -382,16 +442,13 @@
       <p id="error-detail">No pudimos cargar tus datos.</p>
     </div>
     <button class="btn btn-primary" onclick="location.reload()"><i class="ti ti-refresh"></i> Reintentar</button>
-    <div class="auth-center">
-      <a class="auth-link" onclick="doLogout()">Cerrar sesión</a>
-    </div>
+    <div class="auth-center"><a class="auth-link" onclick="doLogout()">Cerrar sesión</a></div>
   </div>
 </div>
 
 <!-- APP -->
 <div id="screen-app" class="screen">
 
-  <!-- Banner permiso push -->
   <div id="push-banner" class="push-banner" style="display:none;">
     <i class="ti ti-bell"></i>
     <div class="push-banner-text">Activá las notificaciones para recibir consejos de venta</div>
@@ -411,17 +468,17 @@
   </div>
 
   <div class="tab-bar" id="tab-bar">
-    <div class="tab active" data-tab="inicio"  onclick="switchTab('inicio',this)"><i class="ti ti-home"></i>Inicio</div>
-    <div class="tab" data-tab="ranking" onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
-    <div class="tab" data-tab="perfil"  onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
-    <div class="tab" data-tab="tips"    onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
-    <div class="tab" data-tab="analisis"  id="tab-btn-analisis" onclick="switchTab('analisis',this)" style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
-    <div class="tab" data-tab="cargar"    id="tab-btn-cargar"  onclick="switchTab('cargar',this)"  style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
+    <div class="tab active" data-tab="inicio"    onclick="switchTab('inicio',this)"><i class="ti ti-home"></i>Inicio</div>
+    <div class="tab" data-tab="ranking"           onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
+    <div class="tab" data-tab="perfil"            onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
+    <div class="tab" data-tab="tips"              onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
+    <div class="tab" data-tab="analisis"  id="tab-btn-analisis"  onclick="switchTab('analisis',this)"  style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
+    <div class="tab" data-tab="cargar"    id="tab-btn-cargar"    onclick="switchTab('cargar',this)"    style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
     <div class="tab" data-tab="historial" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
-    <div class="tab" data-tab="admin"     id="tab-btn-admin"   onclick="switchTab('admin',this)"   style="display:none;"><i class="ti ti-settings"></i>Admin</div>
+    <div class="tab" data-tab="admin"     id="tab-btn-admin"     onclick="switchTab('admin',this)"     style="display:none;"><i class="ti ti-settings"></i>Admin</div>
   </div>
 
-  <!-- ══ INICIO / DASHBOARD ══ -->
+  <!-- ══ INICIO ══ -->
   <div id="tab-inicio" class="tab-content active">
     <div id="dash-content"></div>
   </div>
@@ -478,13 +535,10 @@
           <span id="prof-mes-pts"></span><span id="prof-goal-label"></span>
         </div>
       </div>
-
-      <!-- Evolución semanal propia (solo employees) -->
       <div id="prof-weekly-section">
         <div style="font-size:13px;font-weight:600;margin-bottom:8px;">Mi semana actual</div>
         <div class="week-chart" id="prof-week-chart"></div>
       </div>
-
       <div style="font-size:13px;font-weight:600;margin:16px 0 10px;">Mis productos — ranking por cantidad</div>
       <div id="prof-products"></div>
     </div>
@@ -494,7 +548,6 @@
 
   <!-- ══ CONSEJOS ══ -->
   <div id="tab-tips" class="tab-content">
-    <!-- Tip aleatorio destacado -->
     <div class="tip-card" id="featured-tip">
       <div class="tip-category"><i class="ti ti-sparkles"></i> <span id="tip-cat">—</span></div>
       <div class="tip-text" id="tip-text">Cargando consejo…</div>
@@ -504,47 +557,41 @@
         <span class="tip-counter" id="tip-counter"></span>
       </div>
     </div>
-
     <div class="section-title">Todos los consejos</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);" id="tips-list"></div>
   </div>
 
-  <!-- ══ ANÁLISIS (supermanager) ══ -->
+  <!-- ══ ANÁLISIS ══ -->
   <div id="tab-analisis" class="tab-content">
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Panel de análisis</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Evolución y participación del equipo IVS</div>
     </div>
-
-    <!-- Métricas globales -->
     <div class="metric-grid-3">
       <div class="metric-card"><div class="metric-label">Pts esta semana</div><div class="metric-value" id="an-week-pts">—</div></div>
       <div class="metric-card"><div class="metric-label">Pts este mes</div><div class="metric-value" id="an-month-pts">—</div></div>
       <div class="metric-card"><div class="metric-label">Registros totales</div><div class="metric-value" id="an-total-logs">—</div></div>
     </div>
-
-    <!-- Evolución semanal del equipo -->
     <div class="section-title">Evolución semanal del equipo</div>
     <div style="padding:0 16px;">
       <div class="week-chart" id="an-week-chart"></div>
       <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center;">Últimas 6 semanas · puntos totales del equipo</div>
     </div>
-
-    <!-- Participación por producto -->
     <div class="section-title">Participación por producto</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-product-share"></div>
-
-    <!-- Ranking por producto -->
     <div class="section-title">Mejores vendedores por producto</div>
     <div style="padding:0 16px 16px;" id="an-product-ranking"></div>
-
-    <!-- Crecimiento por vendedor -->
     <div class="section-title">Crecimiento semana a semana</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-growth"></div>
   </div>
 
   <!-- ══ CARGAR ══ -->
   <div id="tab-cargar" class="tab-content">
+    <!-- Banner competencia activa (se muestra si hay una) -->
+    <div id="comp-active-banner" style="display:none;" class="comp-active-banner">
+      <i class="ti ti-bolt"></i>
+      <div id="comp-active-text">Competencia express activa</div>
+    </div>
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Registrar venta sugestiva</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Ingresá las unidades vendidas por turno</div>
@@ -553,7 +600,7 @@
         <option value="">— Seleccioná un vendedor —</option>
       </select>
       <label>Fecha del turno</label>
-      <input type="date" id="inp-fecha" style="margin-bottom:14px;" />
+      <input type="date" id="inp-fecha" style="margin-bottom:14px;" onchange="onFechaChange()" />
     </div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);margin-bottom:12px;" id="product-rows"></div>
     <div class="pts-summary">
@@ -577,29 +624,19 @@
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Historial de carga</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Qué se cargó a cada vendedor y cuándo</div>
-
       <label>Vendedor</label>
       <select id="hist-vendor" style="margin-bottom:10px;" onchange="renderHistorial()">
         <option value="">— Todos los vendedores —</option>
       </select>
-
       <div style="display:flex;gap:10px;margin-bottom:6px;">
-        <div style="flex:1;">
-          <label>Desde</label>
-          <input type="date" id="hist-from" onchange="renderHistorial()" />
-        </div>
-        <div style="flex:1;">
-          <label>Hasta</label>
-          <input type="date" id="hist-to" onchange="renderHistorial()" />
-        </div>
+        <div style="flex:1;"><label>Desde</label><input type="date" id="hist-from" onchange="renderHistorial()" /></div>
+        <div style="flex:1;"><label>Hasta</label><input type="date" id="hist-to" onchange="renderHistorial()" /></div>
       </div>
     </div>
-
     <div class="metric-grid">
       <div class="metric-card"><div class="metric-label">Registros</div><div class="metric-value" id="hist-count">—</div></div>
       <div class="metric-card"><div class="metric-label">Puntos totales</div><div class="metric-value" id="hist-pts">—</div></div>
     </div>
-
     <div class="section-title">Resultados</div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);" id="hist-list"></div>
   </div>
@@ -609,6 +646,8 @@
     <div style="padding:16px;">
       <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Administración</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Usuarios y configuración</div>
+
+      <!-- Crear vendedor -->
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-user-plus" style="margin-right:6px;"></i>Crear vendedor</div>
         <label>Nombre completo</label><input type="text" id="new-name" placeholder="Juan Pérez" />
@@ -616,11 +655,48 @@
         <label>Contraseña temporal</label><input type="password" id="new-pass" placeholder="••••••" />
         <button class="btn" onclick="createEmployee()"><i class="ti ti-plus"></i> Crear vendedor</button>
       </div>
+
+      <!-- Objetivo mensual -->
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-target" style="margin-right:6px;"></i>Objetivo mensual</div>
         <input type="number" id="inp-goal" placeholder="100" min="1" />
         <button class="btn" onclick="saveGoal()"><i class="ti ti-check"></i> Actualizar meta</button>
       </div>
+
+      <!-- ── PUNTOS BASE (solo supermanager) ── -->
+      <div id="admin-pts-section" style="display:none;">
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-coin" style="margin-right:6px;color:var(--gold);"></i>Puntos base por producto</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Estos son los puntos que valen siempre, salvo que haya una Competencia Express activa para ese producto.</div>
+          <div id="pts-base-editor"></div>
+          <button class="btn btn-primary" style="margin-top:12px;" onclick="saveBasePoints()"><i class="ti ti-device-floppy"></i> Guardar puntos base</button>
+        </div>
+
+        <!-- ── COMPETENCIAS EXPRESS ── -->
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-bolt" style="margin-right:6px;color:var(--success);"></i>Competencias Express</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Durante una competencia, los productos seleccionados valen los puntos especiales. Los registros guardados en ese período conservan esos puntos aunque la competencia termine.</div>
+
+          <!-- Nueva competencia -->
+          <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;">
+            <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2);">Nueva competencia</div>
+            <label>Nombre</label>
+            <input type="text" id="comp-name" placeholder="Ej: Semana del café" />
+            <div style="display:flex;gap:10px;">
+              <div style="flex:1;"><label>Fecha inicio</label><input type="date" id="comp-start" /></div>
+              <div style="flex:1;"><label>Fecha fin</label><input type="date" id="comp-end" /></div>
+            </div>
+            <div style="font-size:13px;font-weight:600;margin:10px 0 8px;color:var(--text2);">Productos con puntos especiales</div>
+            <div id="comp-product-inputs"></div>
+            <button class="btn btn-primary" onclick="createCompetition()"><i class="ti ti-bolt"></i> Crear competencia</button>
+          </div>
+
+          <!-- Lista de competencias -->
+          <div id="comp-list"><div class="loader" style="padding:1.5rem;">Cargando…</div></div>
+        </div>
+      </div>
+
+      <!-- Usuarios -->
       <div style="font-size:14px;font-weight:600;margin:1rem 0 .75rem;">Usuarios del sistema</div>
       <div id="user-list"></div>
     </div>
@@ -631,70 +707,30 @@
 <div class="toast" id="toast"></div>
 
 <script>
+/* ══════════════════════════════════
+   SUPABASE
+══════════════════════════════════ */
 const SUPABASE_URL = 'https://yxeagaoxosveblpfxvwq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWFnYW94b3N2ZWJscGZ4dndxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzExNTIsImV4cCI6MjA5NTE0NzE1Mn0.5DEPtur08XeZIRhIkEHlGG4D8oV4c4KdfpM_7ww8IDg';
-// Lock no-op: evita el deadlock de navigator.locks en supabase-js v2
-// (app de una sola pestaña, no necesita coordinación de locks entre tabs).
-// Sin esto, getSession() y sb.from(...) se cuelgan y la app no pasa del login.
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
-  auth: {
-    lock: async (name, acquireTimeout, fn) => await fn(),
-  },
+  auth: { lock: async (name, acquireTimeout, fn) => await fn() },
 });
 
-const PRODUCTS = [
-  { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3,   unit:'pileta', color:'#BA7517' },
-  { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2,   unit:'combo',  color:'#534AB7' },
-  { id:'cafe_espresso',  name:'Café espresso',     icon:'☕', pts:5,   unit:'café',   color:'#0F6E56' },
-  { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3,   unit:'cono',   color:'#993C1D' },
+/* ══════════════════════════════════
+   ESTADO GLOBAL
+══════════════════════════════════ */
+// Productos: se cargan desde Supabase; estos son los defaults mientras carga
+let PRODUCTS = [
+  { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3, unit:'pileta', color:'#BA7517' },
+  { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2, unit:'combo',  color:'#534AB7' },
+  { id:'cafe_espresso',  name:'Café espresso',     icon:'☕', pts:5, unit:'café',   color:'#0F6E56' },
+  { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3, unit:'cono',   color:'#993C1D' },
 ];
+
+let competitions = [];       // todas las competencias (con .products cargados)
+let activeCompetition = null; // competencia vigente HOY (o en la fecha seleccionada)
+
 const COLORS = ['av-teal','av-coral','av-amber','av-pink','av-blue','av-purple'];
-
-/* ── TIPS BANCO COMPLETO ── */
-const TIPS = [
-  // RECIPROCIDAD
-  { cat:'🤝 Reciprocidad', text:'Cuando el cliente siente que recibió algo genuino, tiende a devolver el favor comprando más. Ofrecé el café como si fuera una recomendación personal, no una venta.' },
-  { cat:'🤝 Reciprocidad', text:'Antes de sugerir, conectá. Un comentario amable o una sonrisa crea una deuda social invisible que hace al cliente más receptivo.' },
-  { cat:'🤝 Reciprocidad', text:'Si el cliente pide algo y vos se lo resolvés rápido y bien, ese momento es ideal para sugerir algo más. Ya te ganaste su confianza.' },
-  // COMPROMISO
-  { cat:'✅ Compromiso y coherencia', text:'Si el cliente ya dijo que sí a algo, es más fácil que diga que sí a lo siguiente. Empezá con algo pequeño antes de ofrecer el combo grande.' },
-  { cat:'✅ Compromiso y coherencia', text:'Usá preguntas que lleven al sí: "¿Lo querés con o sin helado?" en lugar de "¿Querés el cono?" Asumir la venta cambia el resultado.' },
-  { cat:'✅ Compromiso y coherencia', text:'Cuando el cliente eligió un combo, ya está en modo "sí". Ese es el mejor momento para sugerir la pileta de cheddar.' },
-  // PRUEBA SOCIAL
-  { cat:'👥 Prueba social', text:'"La mayoría de nuestros clientes piden el café espresso después del combo." Cuando la gente sabe que otros eligen algo, confía más.' },
-  { cat:'👥 Prueba social', text:'"El cono especial es lo más pedido los fines de semana." La referencia al grupo genera pertenencia y deseo.' },
-  { cat:'👥 Prueba social', text:'Mencionar que algo "se está terminando rápido hoy" activa la prueba social y la escasez al mismo tiempo.' },
-  // AUTORIDAD
-  { cat:'🎓 Autoridad', text:'Hablá con seguridad y conocimiento del producto. La confianza en tu voz vale más que cualquier descripción.' },
-  { cat:'🎓 Autoridad', text:'"El café espresso que tenemos es de grano seleccionado." Un dato específico genera más confianza que un elogio genérico.' },
-  { cat:'🎓 Autoridad', text:'Cuando recomendás algo con convicción y explicás por qué, el cliente percibe que estás de su lado, no vendiéndole.' },
-  // SIMPATÍA
-  { cat:'😊 Simpatía', text:'La gente le compra más a quien le cae bien. Un tono cálido antes de sugerir algo duplica las chances de que acepte.' },
-  { cat:'😊 Simpatía', text:'Usá el nombre del cliente si lo sabés. Personalizar la interacción hace que la sugerencia se sienta como un consejo de amigo.' },
-  { cat:'😊 Simpatía', text:'Reí, conectá, sé genuino. Nadie le dice que no a alguien que le generó una buena vibra en 10 segundos.' },
-  // ESCASEZ
-  { cat:'⏳ Escasez', text:'"Hoy es el último día que tenemos el cono especial a este precio." La urgencia activa el deseo de no perderse algo.' },
-  { cat:'⏳ Escasez', text:'"Quedan pocas unidades del café de hoy." La limitación real o percibida acelera la decisión.' },
-  { cat:'⏳ Escasez', text:'Combiná escasez con prueba social: "Se están yendo rápido hoy." Dos disparadores en una frase.' },
-  // ESTRATEGIA — CONOS
-  { cat:'🎮 Estrategia — Conos', text:'El cono es tu arma de volumen. Es accesible, el cliente casi nunca dice que no. Apuntá a vender 3 o más por turno como base.' },
-  { cat:'🎮 Estrategia — Conos', text:'La versión Oreo es la entrada más económica al cono. Si el cliente duda, ese es tu punto de entrada: bajo precio, alta aceptación.' },
-  { cat:'🎮 Estrategia — Conos', text:'Ofrecé el cono siempre al cierre del pedido, cuando el cliente ya decidió. Es el momento de menor resistencia.' },
-  // ESTRATEGIA — COMBOS
-  { cat:'🎮 Estrategia — Combos', text:'El combo grande es tu producto ancla. Una vez que el cliente lo elige, la pileta y el café se vuelven sugerencias naturales.' },
-  { cat:'🎮 Estrategia — Combos', text:'Si el cliente pide 2 combos o más, la pileta de cheddar es casi obligatoria de sugerir. Es lógico para ellos y son 3 puntos para vos.' },
-  { cat:'🎮 Estrategia — Combos', text:'No esperes que pidan más. Preguntá siempre: "¿Lo acompañamos con algo más?" después del combo.' },
-  // ESTRATEGIA — CAFÉ
-  { cat:'🎮 Estrategia — Café', text:'El café vale 5 puntos. Con vender 2 cafés por turno ya sumás 10 puntos. Es la jugada de mayor retorno por esfuerzo.' },
-  { cat:'🎮 Estrategia — Café', text:'El café se ofrece mejor después de la comida, no durante. Timing: cuando el cliente ya comió o está por terminar.' },
-  { cat:'🎮 Estrategia — Café', text:'No todos van a querer café, pero si no lo ofrecés, ninguno lo va a pedir. La tasa de conversión sube solo con preguntar.' },
-  // ESTRATEGIA — PILETA
-  { cat:'🎮 Estrategia — Pileta', text:'La pileta se vende sola cuando hay 2 o más combos en el pedido. Es una sugerencia que tiene sentido para el cliente.' },
-  { cat:'🎮 Estrategia — Pileta', text:'3 puntos por pileta. Si vendés 3 piletas en un turno ya tenés 9 puntos solo con ese producto.' },
-  { cat:'🎮 Estrategia — Pileta', text:'Presentá la pileta como una mejora, no como un extra: "¿Le agregamos el cheddar para compartir?"' },
-];
-
-let currentTipIndex = 0;
 const qtys = {};
 PRODUCTS.forEach(p => qtys[p.id] = 0);
 
@@ -704,11 +740,9 @@ let allProfiles    = [];
 let allLogs        = [];
 let monthlyGoal    = 100;
 let period         = 'week';
+let currentTipIndex = 0;
 
-/* Guards de sesión / navegación */
 let appInitialized = false;
-// Capturamos de forma síncrona si llegamos desde un enlace de recuperación,
-// antes de que Supabase procese y limpie el hash de la URL.
 let isRecovering   = window.location.hash.includes('type=recovery');
 
 /* ══════════════════════════════════
@@ -717,12 +751,12 @@ let isRecovering   = window.location.hash.includes('type=recovery');
 async function bootSession(session) {
   if (!session || isRecovering) return;
   currentUser = session.user;
-  if (appInitialized) return;   // evita re-render al volver de pestaña / refresh de token
+  if (appInitialized) return;
   appInitialized = true;
   try {
     await loadAppData();
   } catch (e) {
-    appInitialized = false;     // permite reintentar
+    appInitialized = false;
     console.error('Error cargando datos:', e);
     return showLoadError('No pudimos cargar tus datos. Revisá tu conexión e intentá de nuevo.');
   }
@@ -740,23 +774,8 @@ async function bootSession(session) {
 })();
 
 sb.auth.onAuthStateChange((event, session) => {
-  if (event === 'PASSWORD_RECOVERY') {
-    isRecovering = true;
-    showScreen('reset');
-    return;
-  }
-  if (event === 'SIGNED_OUT') {
-    currentUser = null;
-    appInitialized = false;
-    isRecovering = false;
-    showScreen('login');
-    return;
-  }
-  // SIGNED_IN, INITIAL_SESSION, TOKEN_REFRESHED, USER_UPDATED.
-  // IMPORTANTE: el callback corre DENTRO del lock de auth de supabase-js.
-  // Hacer 'await sb.from(...)' acá adentro (loadAppData) deadlockea: getSession
-  // y las queries quedan colgadas y la app no pasa del login. Por eso diferimos
-  // bootSession con setTimeout(0), para que corra FUERA del lock.
+  if (event === 'PASSWORD_RECOVERY') { isRecovering = true; showScreen('reset'); return; }
+  if (event === 'SIGNED_OUT') { currentUser = null; appInitialized = false; isRecovering = false; showScreen('login'); return; }
   setTimeout(() => { bootSession(session); }, 0);
 });
 
@@ -774,7 +793,6 @@ async function doLogin() {
 async function doLogout() { await sb.auth.signOut(); }
 
 function goForgot() {
-  // Pre-cargar el email si ya lo escribió en el login
   const typed = document.getElementById('inp-email').value.trim();
   if (typed) document.getElementById('forgot-email').value = typed;
   document.getElementById('forgot-msg').style.display = 'none';
@@ -784,7 +802,6 @@ function goForgot() {
 async function sendResetEmail() {
   const email = document.getElementById('forgot-email').value.trim();
   if (!email) { showAuthMsg('forgot-msg', 'Ingresá tu email', true); return; }
-  // redirectTo vuelve a esta misma app (debe estar en los Redirect URLs de Supabase)
   const redirectTo = window.location.origin + window.location.pathname;
   const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo });
   if (error) { showAuthMsg('forgot-msg', 'Error: ' + error.message, true); return; }
@@ -798,10 +815,10 @@ async function submitNewPassword() {
   if (p1 !== p2)     { showAuthMsg('reset-msg', 'Las contraseñas no coinciden', true); return; }
   const { error } = await sb.auth.updateUser({ password: p1 });
   if (error) { showAuthMsg('reset-msg', 'Error: ' + error.message, true); return; }
-  showAuthMsg('reset-msg', '¡Contraseña actualizada! Redirigiendo al inicio de sesión…', false);
+  showAuthMsg('reset-msg', '¡Contraseña actualizada! Redirigiendo…', false);
   setTimeout(async () => {
-    await sb.auth.signOut();                                   // dispara SIGNED_OUT → pantalla login
-    history.replaceState(null, '', window.location.pathname);  // limpia el hash del enlace
+    await sb.auth.signOut();
+    history.replaceState(null, '', window.location.pathname);
   }, 1500);
 }
 
@@ -817,15 +834,64 @@ function showAuthMsg(elId, msg, isError) {
 ══════════════════════════════════ */
 async function loadAppData() {
   const { data: prof, error: profErr } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
-  // PGRST116 = "no rows": autenticado pero sin perfil. Otros errores (red) se propagan.
   if (profErr && profErr.code !== 'PGRST116') throw profErr;
   currentProfile = prof || null;
+
   const { data: profs } = await sb.from('profiles').select('*').order('full_name');
   allProfiles = profs || [];
+
   const { data: logs } = await sb.from('sales_logs').select('*').order('fecha', { ascending: false });
   allLogs = logs || [];
+
   const { data: setting } = await sb.from('settings').select('value').eq('key','monthly_goal').single();
   if (setting) monthlyGoal = parseInt(setting.value) || 100;
+
+  // Cargar puntos base desde Supabase
+  await loadProductConfig();
+
+  // Cargar competencias
+  await loadCompetitions();
+}
+
+async function loadProductConfig() {
+  const { data, error } = await sb.from('product_config').select('*');
+  if (error || !data || !data.length) return; // fallback a defaults
+  PRODUCTS = PRODUCTS.map(p => {
+    const remote = data.find(d => d.id === p.id);
+    return remote ? { ...p, pts: Number(remote.base_points), name: remote.name } : p;
+  });
+}
+
+async function loadCompetitions() {
+  const { data: comps, error } = await sb
+    .from('express_competitions')
+    .select('*, express_competition_products(*)')
+    .order('start_date', { ascending: false });
+  if (error) { console.error('Error cargando competencias:', error); return; }
+  competitions = (comps || []).map(c => ({
+    ...c,
+    products: c.express_competition_products || []
+  }));
+  updateActiveCompetition(today());
+}
+
+/* Dado una fecha (string YYYY-MM-DD), detecta la competencia activa */
+function updateActiveCompetition(fecha) {
+  activeCompetition = competitions.find(c =>
+    c.active && fecha >= c.start_date && fecha <= c.end_date
+  ) || null;
+}
+
+/* Dado una fecha, devuelve los puntos efectivos para cada producto */
+function getEffectivePoints(fecha) {
+  updateActiveCompetition(fecha);
+  return PRODUCTS.map(p => {
+    if (!activeCompetition) return { ...p };
+    const override = activeCompetition.products.find(cp => cp.product_id === p.id);
+    return override
+      ? { ...p, pts: Number(override.points), boosted: true, compName: activeCompetition.name }
+      : { ...p };
+  });
 }
 
 /* ══════════════════════════════════
@@ -835,7 +901,6 @@ function showScreen(s) {
   document.querySelectorAll('.screen').forEach(x => x.classList.remove('active'));
   document.getElementById('screen-' + s).classList.add('active');
 }
-
 function showLoadError(msg) {
   const el = document.getElementById('error-detail');
   if (el) el.textContent = msg;
@@ -856,13 +921,15 @@ function showApp() {
   else if (isManager) { badge.textContent = 'Gerente';       badge.className = 'badge badge-mgr'; }
   else                { badge.textContent = 'Vendedor';      badge.className = 'badge badge-emp'; }
 
-  document.getElementById('tab-btn-analisis').style.display = isSuperManager ? 'flex' : 'none';
-  document.getElementById('tab-btn-cargar').style.display   = isManager      ? 'flex' : 'none';
-  document.getElementById('tab-btn-historial').style.display = isManager     ? 'flex' : 'none';
-  document.getElementById('tab-btn-admin').style.display    = isManager      ? 'flex' : 'none';
-
-  // Ocultar sección semanal si es manager
+  document.getElementById('tab-btn-analisis').style.display  = isSuperManager ? 'flex' : 'none';
+  document.getElementById('tab-btn-cargar').style.display    = isManager      ? 'flex' : 'none';
+  document.getElementById('tab-btn-historial').style.display = isManager      ? 'flex' : 'none';
+  document.getElementById('tab-btn-admin').style.display     = isManager      ? 'flex' : 'none';
   document.getElementById('prof-weekly-section').style.display = isEmployee ? 'block' : 'none';
+
+  // Sección de puntos/competencias: solo supermanager
+  const superSection = document.getElementById('admin-pts-section');
+  if (superSection) superSection.style.display = isSuperManager ? 'block' : 'none';
 
   if (isManager) {
     fillEmployeeSelect(); renderProductRows(); renderRecentLogs(); renderUserList();
@@ -871,15 +938,17 @@ function showApp() {
     document.getElementById('inp-fecha').value = today();
   }
 
+  if (isSuperManager) {
+    renderPtsBaseEditor();
+    renderCompProductInputs();
+    renderCompList();
+  }
+
   initRangePicker();
   renderTips();
   initPushNotifications();
-
-  // Tip aleatorio al abrir
   currentTipIndex = Math.floor(Math.random() * TIPS.length);
   showTip(currentTipIndex);
-
-  // Arrancamos en el Dashboard
   renderDashboard();
   switchTab('inicio');
   renderRanking();
@@ -894,13 +963,13 @@ function switchTab(tab, el) {
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.getElementById('tab-' + tab).classList.add('active');
   window.scrollTo(0, 0);
-  if (tab === 'inicio')   renderDashboard();
-  if (tab === 'analisis') renderAnalysis();
+  if (tab === 'inicio')    renderDashboard();
+  if (tab === 'analisis')  renderAnalysis();
   if (tab === 'historial') renderHistorial();
 }
 
 /* ══════════════════════════════════
-   DASHBOARD (inicio)
+   DASHBOARD
 ══════════════════════════════════ */
 function renderDashboard() {
   if (!currentProfile) return;
@@ -912,6 +981,15 @@ function renderDashboard() {
   const hoy = today();
   const wb  = weekBounds();
   const el  = document.getElementById('dash-content');
+
+  // Banner de competencia activa
+  updateActiveCompetition(hoy);
+  const compBanner = activeCompetition
+    ? `<div style="background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;padding:10px 16px;font-size:12px;display:flex;align-items:center;gap:8px;margin-bottom:0;">
+        <i class="ti ti-bolt" style="font-size:16px;"></i>
+        <div><strong>Competencia activa:</strong> ${activeCompetition.name} · hasta ${fmtDate(activeCompetition.end_date)}</div>
+      </div>`
+    : '';
 
   let metricsHTML = '';
   if (isEmployee) {
@@ -942,12 +1020,12 @@ function renderDashboard() {
   }
 
   const tiles = [];
-  tiles.push({ tab:'ranking', icon:'ti-trophy',      bg:'var(--gold-bg)',   color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
+  tiles.push({ tab:'ranking',  icon:'ti-trophy',      bg:'var(--gold-bg)',   color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
   if (isManager) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)',  color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
   if (isManager) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)', color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
   if (isSuper)   tiles.push({ tab:'analisis',  icon:'ti-chart-bar',   bg:'#E6F1FB',           color:'#0C447C',        title:'Análisis',        desc:'Evolución del equipo' });
-  tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE',         color:'#085041',     title:'Mi perfil', desc:'Tus puntos y productos' });
-  tiles.push({ tab:'tips',   icon:'ti-bulb',        bg:'var(--gold-bg)',  color:'var(--gold)', title:'Consejos',  desc:'Técnicas de venta' });
+  tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE',        color:'#085041',     title:'Mi perfil', desc:'Tus puntos y productos' });
+  tiles.push({ tab:'tips',   icon:'ti-bulb',         bg:'var(--gold-bg)', color:'var(--gold)', title:'Consejos',  desc:'Técnicas de venta' });
   if (isManager) tiles.push({ tab:'admin', icon:'ti-settings', bg:'var(--bg2)', color:'var(--text2)', title:'Admin', desc:'Usuarios y metas' });
 
   const tilesHTML = tiles.map(t => `
@@ -958,6 +1036,7 @@ function renderDashboard() {
     </div>`).join('');
 
   el.innerHTML = `
+    ${compBanner}
     <div class="dash-hero">
       <div class="dash-hero-title">${greeting().replace(',', '')} 👋</div>
       <div class="dash-hero-sub">${isEmployee ? 'Tu resumen de venta sugestiva' : 'Resumen del equipo IVS'}</div>
@@ -978,7 +1057,6 @@ function initRangePicker() {
   document.getElementById('range-from').value = lunes.toISOString().slice(0,10);
   document.getElementById('range-to').value   = now.toISOString().slice(0,10);
 }
-
 function setPeriod(p, el) {
   period = p;
   document.querySelectorAll('.period-chip').forEach(c => c.classList.remove('active'));
@@ -986,7 +1064,6 @@ function setPeriod(p, el) {
   document.getElementById('range-picker').classList.toggle('visible', p === 'range');
   renderRanking();
 }
-
 function weekBounds() {
   const now = new Date();
   const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
@@ -994,14 +1071,13 @@ function weekBounds() {
   const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
   return { from: lunes.toISOString().slice(0,10), to: domingo.toISOString().slice(0,10) };
 }
-
 function filteredLogs() {
   const hoy = today();
   return allLogs.filter(l => {
     if (period === 'all') return true;
     const f = l.fecha;
     if (period === 'month') return f.slice(0,7) === hoy.slice(0,7);
-    if (period === 'week') { const b = weekBounds(); return f >= b.from && f <= b.to; }
+    if (period === 'week')  { const b = weekBounds(); return f >= b.from && f <= b.to; }
     if (period === 'range') {
       const from = document.getElementById('range-from').value;
       const to   = document.getElementById('range-to').value;
@@ -1013,7 +1089,6 @@ function filteredLogs() {
     return true;
   });
 }
-
 function getPoints(uid) {
   return filteredLogs().filter(l => l.user_id === uid).reduce((s,l) => s + l.pts, 0);
 }
@@ -1070,12 +1145,8 @@ function renderProfile() {
   const pos       = ranked.findIndex(e=>e.id===p.id);
   document.getElementById('prof-rank').textContent = p.role==='employee'?(pos>=0?'#'+(pos+1):'—'):'—';
 
-  // Evolución semanal propia (días lun-dom)
-  if (p.role === 'employee') {
-    renderWeekChart('prof-week-chart', logs, '#534AB7');
-  }
+  if (p.role === 'employee') renderWeekChart('prof-week-chart', logs, '#534AB7');
 
-  // Productos rankeados por CANTIDAD
   const productStats = PRODUCTS.map(pr => ({
     ...pr,
     qty: logs.reduce((s,l)=>s+(l[pr.id]||0),0),
@@ -1111,7 +1182,7 @@ function renderProfile() {
 }
 
 /* ══════════════════════════════════
-   SEMANA CHART (barras por día)
+   SEMANA CHART
 ══════════════════════════════════ */
 function renderWeekChart(elId, logs, color) {
   const el = document.getElementById(elId);
@@ -1121,7 +1192,7 @@ function renderWeekChart(elId, logs, color) {
   logs.forEach(l => {
     if (l.fecha >= b.from && l.fecha <= b.to) {
       const d = new Date(l.fecha+'T00:00:00');
-      const idx = (d.getDay() + 6) % 7; // lunes=0
+      const idx = (d.getDay() + 6) % 7;
       dayPts[idx] += l.pts;
     }
   });
@@ -1137,29 +1208,19 @@ function renderWeekChart(elId, logs, color) {
 }
 
 /* ══════════════════════════════════
-   ANÁLISIS (supermanager)
+   ANÁLISIS
 ══════════════════════════════════ */
 function renderAnalysis() {
   const hoy = today();
   const wb  = weekBounds();
-
-  // Métricas globales
   const weekLogs  = allLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to);
   const monthLogs = allLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7));
-  document.getElementById('an-week-pts').textContent  = fmt(weekLogs.reduce((s,l)=>s+l.pts,0));
-  document.getElementById('an-month-pts').textContent = fmt(monthLogs.reduce((s,l)=>s+l.pts,0));
+  document.getElementById('an-week-pts').textContent   = fmt(weekLogs.reduce((s,l)=>s+l.pts,0));
+  document.getElementById('an-month-pts').textContent  = fmt(monthLogs.reduce((s,l)=>s+l.pts,0));
   document.getElementById('an-total-logs').textContent = allLogs.length;
-
-  // Evolución de las últimas 6 semanas
   renderLastWeeksChart();
-
-  // Participación por producto
   renderProductShare();
-
-  // Mejor vendedor por producto
   renderProductRanking();
-
-  // Crecimiento semana a semana por vendedor
   renderGrowth();
 }
 
@@ -1242,7 +1303,6 @@ function renderGrowth() {
   const lw = new Date(lastWeek+'T00:00:00'); lw.setDate(lw.getDate()+6);
   const twStr = tw.toISOString().slice(0,10);
   const lwStr = lw.toISOString().slice(0,10);
-
   const data = employees.map(e => {
     const myLogs = allLogs.filter(l=>l.user_id===e.id);
     const curr = myLogs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+l.pts,0);
@@ -1250,7 +1310,6 @@ function renderGrowth() {
     const delta = curr - prev;
     return { name: e.full_name, curr, prev, delta };
   }).sort((a,b)=>b.delta-a.delta);
-
   el.innerHTML = data.map(d => {
     const color = d.delta > 0 ? 'var(--success)' : d.delta < 0 ? 'var(--danger)' : 'var(--text3)';
     const icon  = d.delta > 0 ? '↑' : d.delta < 0 ? '↓' : '→';
@@ -1265,6 +1324,39 @@ function renderGrowth() {
 /* ══════════════════════════════════
    TIPS
 ══════════════════════════════════ */
+const TIPS = [
+  { cat:'🤝 Reciprocidad', text:'Cuando el cliente siente que recibió algo genuino, tiende a devolver el favor comprando más. Ofrecé el café como si fuera una recomendación personal, no una venta.' },
+  { cat:'🤝 Reciprocidad', text:'Antes de sugerir, conectá. Un comentario amable o una sonrisa crea una deuda social invisible que hace al cliente más receptivo.' },
+  { cat:'🤝 Reciprocidad', text:'Si el cliente pide algo y vos se lo resolvés rápido y bien, ese momento es ideal para sugerir algo más. Ya te ganaste su confianza.' },
+  { cat:'✅ Compromiso y coherencia', text:'Si el cliente ya dijo que sí a algo, es más fácil que diga que sí a lo siguiente. Empezá con algo pequeño antes de ofrecer el combo grande.' },
+  { cat:'✅ Compromiso y coherencia', text:'Usá preguntas que lleven al sí: "¿Lo querés con o sin helado?" en lugar de "¿Querés el cono?" Asumir la venta cambia el resultado.' },
+  { cat:'✅ Compromiso y coherencia', text:'Cuando el cliente eligió un combo, ya está en modo "sí". Ese es el mejor momento para sugerir la pileta de cheddar.' },
+  { cat:'👥 Prueba social', text:'"La mayoría de nuestros clientes piden el café espresso después del combo." Cuando la gente sabe que otros eligen algo, confía más.' },
+  { cat:'👥 Prueba social', text:'"El cono especial es lo más pedido los fines de semana." La referencia al grupo genera pertenencia y deseo.' },
+  { cat:'👥 Prueba social', text:'Mencionar que algo "se está terminando rápido hoy" activa la prueba social y la escasez al mismo tiempo.' },
+  { cat:'🎓 Autoridad', text:'Hablá con seguridad y conocimiento del producto. La confianza en tu voz vale más que cualquier descripción.' },
+  { cat:'🎓 Autoridad', text:'"El café espresso que tenemos es de grano seleccionado." Un dato específico genera más confianza que un elogio genérico.' },
+  { cat:'🎓 Autoridad', text:'Cuando recomendás algo con convicción y explicás por qué, el cliente percibe que estás de tu lado, no vendiéndole.' },
+  { cat:'😊 Simpatía', text:'La gente le compra más a quien le cae bien. Un tono cálido antes de sugerir algo duplica las chances de que acepte.' },
+  { cat:'😊 Simpatía', text:'Usá el nombre del cliente si lo sabés. Personalizar la interacción hace que la sugerencia se sienta como un consejo de amigo.' },
+  { cat:'😊 Simpatía', text:'Reí, conectá, sé genuino. Nadie le dice que no a alguien que le generó una buena vibra en 10 segundos.' },
+  { cat:'⏳ Escasez', text:'"Hoy es el último día que tenemos el cono especial a este precio." La urgencia activa el deseo de no perderse algo.' },
+  { cat:'⏳ Escasez', text:'"Quedan pocas unidades del café de hoy." La limitación real o percibida acelera la decisión.' },
+  { cat:'⏳ Escasez', text:'Combiná escasez con prueba social: "Se están yendo rápido hoy." Dos disparadores en una frase.' },
+  { cat:'🎮 Estrategia — Conos', text:'El cono es tu arma de volumen. Es accesible, el cliente casi nunca dice que no. Apuntá a vender 3 o más por turno como base.' },
+  { cat:'🎮 Estrategia — Conos', text:'La versión Oreo es la entrada más económica al cono. Si el cliente duda, ese es tu punto de entrada: bajo precio, alta aceptación.' },
+  { cat:'🎮 Estrategia — Conos', text:'Ofrecé el cono siempre al cierre del pedido, cuando el cliente ya decidió. Es el momento de menor resistencia.' },
+  { cat:'🎮 Estrategia — Combos', text:'El combo grande es tu producto ancla. Una vez que el cliente lo elige, la pileta y el café se vuelven sugerencias naturales.' },
+  { cat:'🎮 Estrategia — Combos', text:'Si el cliente pide 2 combos o más, la pileta de cheddar es casi obligatoria de sugerir. Es lógico para ellos y son 3 puntos para vos.' },
+  { cat:'🎮 Estrategia — Combos', text:'No esperes que pidan más. Preguntá siempre: "¿Lo acompañamos con algo más?" después del combo.' },
+  { cat:'🎮 Estrategia — Café', text:'El café vale 5 puntos. Con vender 2 cafés por turno ya sumás 10 puntos. Es la jugada de mayor retorno por esfuerzo.' },
+  { cat:'🎮 Estrategia — Café', text:'El café se ofrece mejor después de la comida, no durante. Timing: cuando el cliente ya comió o está por terminar.' },
+  { cat:'🎮 Estrategia — Café', text:'No todos van a querer café, pero si no lo ofrecés, ninguno lo va a pedir. La tasa de conversión sube solo con preguntar.' },
+  { cat:'🎮 Estrategia — Pileta', text:'La pileta se vende sola cuando hay 2 o más combos en el pedido. Es una sugerencia que tiene sentido para el cliente.' },
+  { cat:'🎮 Estrategia — Pileta', text:'3 puntos por pileta. Si vendés 3 piletas en un turno ya tenés 9 puntos solo con ese producto.' },
+  { cat:'🎮 Estrategia — Pileta', text:'Presentá la pileta como una mejora, no como un extra: "¿Le agregamos el cheddar para compartir?"' },
+];
+
 function showTip(idx) {
   const tip = TIPS[idx];
   document.getElementById('tip-cat').textContent  = tip.cat;
@@ -1275,14 +1367,13 @@ function nextTip() { currentTipIndex = (currentTipIndex + 1) % TIPS.length; show
 function prevTip() { currentTipIndex = (currentTipIndex - 1 + TIPS.length) % TIPS.length; showTip(currentTipIndex); }
 
 function renderTips() {
-  const el = document.getElementById('tips-list');
   const catColors = {
     '🤝 Reciprocidad':'#0F6E56','✅ Compromiso y coherencia':'#534AB7',
     '👥 Prueba social':'#0C447C','🎓 Autoridad':'#712B13',
     '😊 Simpatía':'#633806','⏳ Escasez':'#b91c1c','🎮 Estrategia — Conos':'#993C1D',
     '🎮 Estrategia — Combos':'#534AB7','🎮 Estrategia — Café':'#0F6E56','🎮 Estrategia — Pileta':'#BA7517'
   };
-  el.innerHTML = TIPS.map((tip, i) => `
+  document.getElementById('tips-list').innerHTML = TIPS.map((tip, i) => `
     <div class="tip-list-item" onclick="currentTipIndex=${i};showTip(${i});switchTab('tips');">
       <div class="tip-list-cat" style="color:${catColors[tip.cat]||'var(--accent)'};">${tip.cat}</div>
       <div class="tip-list-text">${tip.text}</div>
@@ -1294,53 +1385,62 @@ function renderTips() {
 ══════════════════════════════════ */
 function initPushNotifications() {
   if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') {
-    sendTipNotification();
-  } else if (Notification.permission === 'default') {
-    document.getElementById('push-banner').style.display = 'flex';
-  }
+  if (Notification.permission === 'granted') { sendTipNotification(); }
+  else if (Notification.permission === 'default') { document.getElementById('push-banner').style.display = 'flex'; }
 }
-
-function hidePushBanner() {
-  document.getElementById('push-banner').style.display = 'none';
-}
-
+function hidePushBanner() { document.getElementById('push-banner').style.display = 'none'; }
 async function requestPushPermission() {
   const permission = await Notification.requestPermission();
   hidePushBanner();
-  if (permission === 'granted') {
-    showToast('Notificaciones activadas');
-    sendTipNotification();
-  }
+  if (permission === 'granted') { showToast('Notificaciones activadas'); sendTipNotification(); }
 }
-
 function sendTipNotification() {
   const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
-  // Solo enviar una vez por sesión (verificar con sessionStorage)
   if (sessionStorage.getItem('tip-sent')) return;
   sessionStorage.setItem('tip-sent', '1');
   setTimeout(() => {
-    try {
-      new Notification('💡 Consejo de venta — SalesRank IVS', {
-        body: tip.text,
-        icon: '/icon-192.png',
-        badge: '/icon-192.png',
-        tag: 'ivs-tip'
-      });
-    } catch(e) {}
+    try { new Notification('💡 Consejo de venta — SalesRank IVS', { body: tip.text, icon: '/icon-192.png', badge: '/icon-192.png', tag: 'ivs-tip' }); } catch(e) {}
   }, 3000);
 }
 
 /* ══════════════════════════════════
-   CARGA DE VENTAS
+   CARGA DE VENTAS — con puntos dinámicos
 ══════════════════════════════════ */
+
+// Puntos efectivos para la fecha actualmente seleccionada en el formulario
+let effectiveProducts = [...PRODUCTS];
+
+function onFechaChange() {
+  const fecha = document.getElementById('inp-fecha').value || today();
+  effectiveProducts = getEffectivePoints(fecha);
+  renderProductRows();
+  updateCompBanner(fecha);
+}
+
+function updateCompBanner(fecha) {
+  const banner = document.getElementById('comp-active-banner');
+  const textEl = document.getElementById('comp-active-text');
+  updateActiveCompetition(fecha);
+  if (activeCompetition) {
+    textEl.textContent = `Competencia activa: ${activeCompetition.name} · hasta ${fmtDate(activeCompetition.end_date)}`;
+    banner.style.display = 'flex';
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
 function renderProductRows() {
-  document.getElementById('product-rows').innerHTML = PRODUCTS.map(p => `
-    <div class="product-row">
+  const fecha = document.getElementById('inp-fecha')?.value || today();
+  effectiveProducts = getEffectivePoints(fecha);
+  document.getElementById('product-rows').innerHTML = effectiveProducts.map(p => {
+    const ptsLabel = p.boosted
+      ? `<span class="pts-modified">⚡ ${p.pts} pts</span> <span style="font-size:11px;color:var(--text3);text-decoration:line-through;">${PRODUCTS.find(b=>b.id===p.id)?.pts} base</span>`
+      : `<span style="font-size:12px;color:var(--text2);">${p.pts} pts por ${p.unit}</span>`;
+    return `<div class="product-row">
       <div class="product-icon">${p.icon}</div>
       <div style="flex:1;">
         <div style="font-size:14px;font-weight:600;">${p.name}</div>
-        <div style="font-size:12px;color:var(--text2);">${p.pts} pts por ${p.unit}</div>
+        <div style="margin-top:2px;">${ptsLabel}</div>
       </div>
       <div class="qty-ctrl">
         <button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button>
@@ -1348,17 +1448,22 @@ function renderProductRows() {
                inputmode="numeric" oninput="onQtyInput('${p.id}')" onblur="onQtyBlur('${p.id}')" />
         <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   updateSummary();
+  updateCompBanner(fecha);
 }
 
 function changeQty(pid, d) { qtys[pid]=Math.max(0,(qtys[pid]||0)+d); document.getElementById('qty-'+pid).value=qtys[pid]; updateSummary(); }
-function onQtyInput(pid) { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; updateSummary(); }
-function onQtyBlur(pid)  { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; document.getElementById('qty-'+pid).value=qtys[pid]; }
+function onQtyInput(pid)   { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; updateSummary(); }
+function onQtyBlur(pid)    { const v=parseInt(document.getElementById('qty-'+pid).value); qtys[pid]=(!isNaN(v)&&v>=0)?v:0; document.getElementById('qty-'+pid).value=qtys[pid]; }
 
 function updateSummary() {
   let total=0; const parts=[];
-  PRODUCTS.forEach(p=>{const q=qtys[p.id]||0;if(q>0){const e=q*p.pts;total+=e;parts.push(p.icon+' ×'+q+' = '+fmt(e)+' pts');}});
+  effectiveProducts.forEach(p=>{
+    const q=qtys[p.id]||0;
+    if(q>0){const e=q*p.pts;total+=e;parts.push(p.icon+' ×'+q+' = '+fmt(e)+' pts');}
+  });
   document.getElementById('pts-total').textContent     = fmt(total);
   document.getElementById('pts-breakdown').textContent = parts.length?parts.join('  ·  '):'Ingresá unidades vendidas';
 }
@@ -1367,10 +1472,14 @@ async function submitLog() {
   const uid   = document.getElementById('sel-ivs').value;
   const fecha = document.getElementById('inp-fecha').value;
   const nota  = document.getElementById('inp-nota').value.trim();
-  const pts   = PRODUCTS.reduce((s,p)=>s+(qtys[p.id]||0)*p.pts,0);
   if (!uid)   { showToast('Seleccioná un vendedor'); return; }
   if (!fecha) { showToast('Ingresá la fecha del turno'); return; }
+
+  // Recalcular con los puntos efectivos de ESA fecha (no los de hoy)
+  const pEff = getEffectivePoints(fecha);
+  const pts  = pEff.reduce((s,p)=>s+(qtys[p.id]||0)*p.pts, 0);
   if (pts===0){ showToast('Ingresá al menos un producto'); return; }
+
   const row = {
     user_id: uid, registered_by: currentProfile.id, fecha, pts, nota,
     pileta_cheddar: qtys.pileta_cheddar||0, combo_grande: qtys.combo_grande||0,
@@ -1379,7 +1488,7 @@ async function submitLog() {
   const { data, error } = await sb.from('sales_logs').insert(row).select().single();
   if (error) { showToast('Error al guardar: '+error.message); return; }
   allLogs.unshift(data);
-  PRODUCTS.forEach(p=>{qtys[p.id]=0;document.getElementById('qty-'+p.id).value=0;});
+  PRODUCTS.forEach(p=>{qtys[p.id]=0; const el=document.getElementById('qty-'+p.id); if(el) el.value=0;});
   document.getElementById('inp-nota').value='';
   updateSummary();
   showToast('¡'+fmt(pts)+' puntos registrados!');
@@ -1408,7 +1517,7 @@ function fillEmployeeSelect() {
 }
 
 /* ══════════════════════════════════
-   HISTORIAL DE CARGA
+   HISTORIAL
 ══════════════════════════════════ */
 function fillHistorialVendorSelect() {
   const sel = document.getElementById('hist-vendor');
@@ -1421,20 +1530,16 @@ function renderHistorial() {
   const vendorId = document.getElementById('hist-vendor')?.value || '';
   const from = document.getElementById('hist-from')?.value || '';
   const to   = document.getElementById('hist-to')?.value || '';
-
   let logs = [...allLogs];
   if (vendorId) logs = logs.filter(l => l.user_id === vendorId);
   if (from) logs = logs.filter(l => l.fecha >= from);
   if (to)   logs = logs.filter(l => l.fecha <= to);
   logs.sort((a,b) => b.fecha.localeCompare(a.fecha));
-
   const totalPts = logs.reduce((s,l) => s + l.pts, 0);
   document.getElementById('hist-count').textContent = logs.length;
   document.getElementById('hist-pts').textContent    = fmt(totalPts);
-
   const el = document.getElementById('hist-list');
   if (!logs.length) { el.innerHTML = '<div class="empty-state"><i class="ti ti-file-search"></i>Sin registros para este filtro</div>'; return; }
-
   el.innerHTML = logs.map(l => {
     const prof  = allProfiles.find(p=>p.id===l.user_id);
     const reg   = allProfiles.find(p=>p.id===l.registered_by);
@@ -1451,10 +1556,207 @@ function renderHistorial() {
 }
 
 /* ══════════════════════════════════
+   ADMIN — PUNTOS BASE
+══════════════════════════════════ */
+function renderPtsBaseEditor() {
+  const el = document.getElementById('pts-base-editor');
+  if (!el) return;
+  el.innerHTML = PRODUCTS.map(p => `
+    <div class="pts-edit-row">
+      <div class="pts-edit-icon">${p.icon}</div>
+      <div style="flex:1;">
+        <div class="pts-edit-name">${p.name}</div>
+        <div class="pts-edit-label">por ${p.unit}</div>
+      </div>
+      <input class="qty-input pts-edit-input" type="number" id="base-pts-${p.id}"
+             value="${p.pts}" min="1" max="99" inputmode="numeric" />
+    </div>`).join('');
+}
+
+async function saveBasePoints() {
+  const updates = [];
+  for (const p of PRODUCTS) {
+    const el  = document.getElementById('base-pts-' + p.id);
+    const val = parseInt(el?.value);
+    if (!isNaN(val) && val > 0) {
+      updates.push({ id: p.id, base_points: val });
+    }
+  }
+  if (!updates.length) { showToast('Sin cambios para guardar'); return; }
+
+  for (const u of updates) {
+    const { error } = await sb.from('product_config')
+      .update({ base_points: u.base_points, updated_at: new Date().toISOString() })
+      .eq('id', u.id);
+    if (error) { showToast('Error al guardar: ' + error.message); return; }
+  }
+
+  // Actualizar en memoria
+  PRODUCTS = PRODUCTS.map(p => {
+    const u = updates.find(x => x.id === p.id);
+    return u ? { ...p, pts: u.base_points } : p;
+  });
+
+  showToast('Puntos base actualizados');
+  renderProductRows();
+  renderProductShare();
+}
+
+/* ══════════════════════════════════
+   ADMIN — COMPETENCIAS EXPRESS
+══════════════════════════════════ */
+function renderCompProductInputs() {
+  const el = document.getElementById('comp-product-inputs');
+  if (!el) return;
+  el.innerHTML = PRODUCTS.map(p => `
+    <div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);">
+      <input type="checkbox" id="comp-chk-${p.id}" style="width:auto;margin:0;cursor:pointer;accent-color:var(--success);" />
+      <span style="font-size:18px;">${p.icon}</span>
+      <label for="comp-chk-${p.id}" style="flex:1;font-size:13px;color:var(--text);cursor:pointer;">${p.name}</label>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <input type="number" id="comp-pts-${p.id}" value="${p.pts}" min="1" max="99"
+               style="width:60px;margin:0;text-align:center;font-size:14px;font-weight:700;color:var(--success);"
+               inputmode="numeric" />
+        <span style="font-size:11px;color:var(--text3);">pts</span>
+      </div>
+    </div>`).join('');
+}
+
+async function createCompetition() {
+  const name  = document.getElementById('comp-name').value.trim();
+  const start = document.getElementById('comp-start').value;
+  const end   = document.getElementById('comp-end').value;
+
+  if (!name)  { showToast('Ingresá un nombre para la competencia'); return; }
+  if (!start) { showToast('Seleccioná la fecha de inicio'); return; }
+  if (!end)   { showToast('Seleccioná la fecha de fin'); return; }
+  if (end < start) { showToast('La fecha de fin debe ser igual o posterior al inicio'); return; }
+
+  // Productos seleccionados
+  const selectedProducts = PRODUCTS
+    .filter(p => document.getElementById('comp-chk-' + p.id)?.checked)
+    .map(p => ({
+      product_id: p.id,
+      points: parseInt(document.getElementById('comp-pts-' + p.id)?.value) || p.pts
+    }));
+
+  if (!selectedProducts.length) { showToast('Seleccioná al menos un producto'); return; }
+
+  // Insertar competencia
+  const { data: comp, error: compErr } = await sb
+    .from('express_competitions')
+    .insert({ name, start_date: start, end_date: end, created_by: currentProfile.id })
+    .select()
+    .single();
+  if (compErr) { showToast('Error al crear competencia: ' + compErr.message); return; }
+
+  // Insertar productos de la competencia
+  const prods = selectedProducts.map(sp => ({ competition_id: comp.id, ...sp }));
+  const { error: prodsErr } = await sb.from('express_competition_products').insert(prods);
+  if (prodsErr) { showToast('Error al guardar productos: ' + prodsErr.message); return; }
+
+  showToast('¡Competencia creada!');
+
+  // Limpiar formulario
+  document.getElementById('comp-name').value  = '';
+  document.getElementById('comp-start').value = '';
+  document.getElementById('comp-end').value   = '';
+  PRODUCTS.forEach(p => {
+    const chk = document.getElementById('comp-chk-' + p.id);
+    if (chk) chk.checked = false;
+    const pts = document.getElementById('comp-pts-' + p.id);
+    if (pts) pts.value = p.pts;
+  });
+
+  // Recargar competencias
+  await loadCompetitions();
+  renderCompList();
+  renderProductRows(); // actualizar banner de carga
+  renderDashboard();
+}
+
+async function toggleCompetition(id, currentActive) {
+  const { error } = await sb
+    .from('express_competitions')
+    .update({ active: !currentActive })
+    .eq('id', id);
+  if (error) { showToast('Error: ' + error.message); return; }
+  await loadCompetitions();
+  renderCompList();
+  renderProductRows();
+  renderDashboard();
+  showToast(currentActive ? 'Competencia desactivada' : 'Competencia activada');
+}
+
+async function deleteCompetition(id) {
+  if (!confirm('¿Eliminar esta competencia? Los registros de ventas ya guardados no se modifican.')) return;
+  const { error } = await sb.from('express_competitions').delete().eq('id', id);
+  if (error) { showToast('Error al eliminar: ' + error.message); return; }
+  await loadCompetitions();
+  renderCompList();
+  renderProductRows();
+  renderDashboard();
+  showToast('Competencia eliminada');
+}
+
+function renderCompList() {
+  const el = document.getElementById('comp-list');
+  if (!el) return;
+  if (!competitions.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:1.5rem;"><i class="ti ti-bolt"></i>Sin competencias creadas</div>';
+    return;
+  }
+
+  const hoy = today();
+  el.innerHTML = competitions.map(c => {
+    const isActive   = c.active && hoy >= c.start_date && hoy <= c.end_date;
+    const isUpcoming = c.active && hoy < c.start_date;
+    const isEnded    = !c.active || hoy > c.end_date;
+
+    let statusBadge = '';
+    if (isActive)   statusBadge = '<span class="comp-badge-active">● Activa ahora</span>';
+    else if (isUpcoming) statusBadge = '<span class="comp-badge-upcoming">● Próxima</span>';
+    else statusBadge = '<span class="comp-badge-ended">Finalizada</span>';
+
+    const productLines = c.products.map(cp => {
+      const prod = PRODUCTS.find(p => p.id === cp.product_id);
+      const base = prod?.pts ?? '?';
+      return `<div class="comp-product-line">
+        <span>${prod?.icon || ''} ${prod?.name || cp.product_id}</span>
+        <span style="font-weight:700;color:var(--success);">⚡ ${cp.points} pts <span style="font-size:11px;color:var(--text3);font-weight:400;">(base: ${base})</span></span>
+      </div>`;
+    }).join('');
+
+    const toggleLabel = c.active ? 'Desactivar' : 'Activar';
+    const toggleIcon  = c.active ? 'ti-player-pause' : 'ti-player-play';
+
+    return `<div class="comp-card">
+      <div class="comp-card-header">
+        <div>
+          <div class="comp-card-title">${c.name}</div>
+          <div class="comp-card-dates">${fmtDate(c.start_date)} → ${fmtDate(c.end_date)}</div>
+        </div>
+        ${statusBadge}
+      </div>
+      <div class="comp-card-body">
+        ${productLines}
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn btn-sm ${c.active ? '' : 'btn-primary'}" onclick="toggleCompetition(${c.id}, ${c.active})">
+            <i class="ti ${toggleIcon}"></i> ${toggleLabel}
+          </button>
+          <button class="btn btn-sm btn-danger" onclick="deleteCompetition(${c.id})">
+            <i class="ti ti-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════
    FOTOS
 ══════════════════════════════════ */
 function triggerPhoto() { document.getElementById('photo-input').click(); }
-
 async function uploadPhoto(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -1474,7 +1776,6 @@ async function uploadPhoto(event) {
   showToast('Foto actualizada');
   event.target.value='';
 }
-
 function compressImage(file, maxPx) {
   return new Promise(resolve => {
     const reader = new FileReader();
@@ -1495,7 +1796,7 @@ function compressImage(file, maxPx) {
 }
 
 /* ══════════════════════════════════
-   ADMIN
+   ADMIN — USUARIOS / META
 ══════════════════════════════════ */
 async function createEmployee() {
   const name  = document.getElementById('new-name').value.trim();
@@ -1544,12 +1845,10 @@ function roleLabel(role) {
   if (role==='manager') return 'Gerente';
   return 'Vendedor';
 }
-
 function avatarHTML(profile, size) {
   if (profile.photo_url) return `<div class="avatar" style="width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;"></div>`;
   return `<div class="avatar ${profile.color}" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;">${profile.initials}</div>`;
 }
-
 function applyAvatar(el, profile, size) {
   if (profile.photo_url) {
     el.className='avatar'; el.style.cssText=`width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;`; el.textContent='';
@@ -1557,9 +1856,12 @@ function applyAvatar(el, profile, size) {
     el.className='avatar '+profile.color; el.style.cssText=`width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;`; el.textContent=profile.initials;
   }
 }
-
-function fmt(n)  { return n.toFixed(1).replace(/\.0$/,''); }
+function fmt(n)  { return Number(n).toFixed(1).replace(/\.0$/,''); }
 function today() { return new Date().toISOString().slice(0,10); }
+function fmtDate(str) {
+  if (!str) return '—';
+  return new Date(str+'T00:00:00').toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'numeric' });
+}
 function greeting() {
   const h=new Date().getHours();
   return h<12?'Buenos días,':h<18?'Buenas tardes,':'Buenas noches,';
@@ -1570,7 +1872,7 @@ function showToast(msg) {
 }
 
 /* ══════════════════════════════════
-   PWA — service worker
+   PWA
 ══════════════════════════════════ */
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
