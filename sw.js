@@ -3,7 +3,7 @@
    Maneja Web Push real (app cerrada incluida) + caché básica
    ══════════════════════════════════════════════════════ */
 
-const SW_VERSION = 'ivs-v2';
+const SW_VERSION = 'ivs-v3';
 
 self.addEventListener('install', (event) => {
   // Activar el nuevo SW inmediatamente sin esperar a cerrar pestañas
@@ -28,7 +28,7 @@ self.addEventListener('push', (event) => {
   const options = {
     body: data.body || '',
     icon: data.icon || '/icon-192.png',
-    badge: '/icon-192.png',
+    badge: '/badge.png',
     tag: data.tag || 'ivs-push',
     data: { url: data.url || '/' },
     vibrate: [100, 50, 100],
