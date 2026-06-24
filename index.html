@@ -2147,13 +2147,13 @@ async function createEmployee() {
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
 
   // El nuevo empleado hereda el location_id del local activo
-  const { error } = await sb.auth.signUp({ email, password: pass,
-    options: { data: {
-      username, full_name: name, role: 'employee',
-      initials, color, location_id: currentLocationId
-    }}
+  const { data: res, error } = await sb.functions.invoke('create-user', {
+    body: {
+      email, password: pass, full_name: name, role: 'employee',
+      username, initials, color, location_id: currentLocationId
+    }
   });
-  if (error){ showToast('Error: '+error.message); return; }
+  if (error || res?.error){ showToast('Error: ' + (res?.error || error.message)); return; }
   showToast('Vendedor creado');
   ['new-name','new-email','new-pass'].forEach(id=>document.getElementById(id).value='');
 
@@ -2174,13 +2174,13 @@ async function createShiftManager() {
   const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
 
-  const { error } = await sb.auth.signUp({ email, password: pass,
-    options: { data: {
-      username, full_name: name, role: 'manager',
-      initials, color, location_id: currentLocationId
-    }}
+  const { data: res, error } = await sb.functions.invoke('create-user', {
+    body: {
+      email, password: pass, full_name: name, role: 'manager',
+      username, initials, color, location_id: currentLocationId
+    }
   });
-  if (error){ showToast('Error: '+error.message); return; }
+  if (error || res?.error){ showToast('Error: ' + (res?.error || error.message)); return; }
   showToast('Gerente de turno creado');
   ['mgr2-name','mgr2-email','mgr2-pass'].forEach(id=>document.getElementById(id).value='');
 
@@ -2306,11 +2306,10 @@ async function createManager() {
   const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g, '');
 
-  const { error } = await sb.auth.signUp({
-    email, password: pass,
-    options: { data: { username, full_name: name, role, initials, color, location_id: locId } }
+  const { data: res, error } = await sb.functions.invoke('create-user', {
+    body: { email, password: pass, full_name: name, role, username, initials, color, location_id: locId }
   });
-  if (error) { showToast('Error: ' + error.message); return; }
+  if (error || res?.error) { showToast('Error: ' + (res?.error || error.message)); return; }
 
   showToast(roleLabel(role) + ' creado');
   ['mgr-name','mgr-email','mgr-pass'].forEach(id => document.getElementById(id).value = '');
