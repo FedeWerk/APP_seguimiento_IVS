@@ -694,6 +694,20 @@
           <!-- Lista de competencias -->
           <div id="comp-list"><div class="loader" style="padding:1.5rem;">Cargando…</div></div>
         </div>
+
+        <!-- ── CONSEJO AL EQUIPO (push) ── -->
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-bulb" style="margin-right:6px;color:var(--gold);"></i>Enviar consejo al equipo</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Mandá un consejo de venta como notificación a todos los dispositivos suscritos.</div>
+          <div id="admin-tip-preview" style="background:var(--gold-bg);border:1px solid rgba(186,117,23,0.2);border-radius:var(--radius-sm);padding:14px;">
+            <div id="admin-tip-cat" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;"></div>
+            <div id="admin-tip-text" style="font-size:13px;line-height:1.5;color:var(--text);"></div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:10px;">
+            <button class="btn btn-sm" style="flex:1;" onclick="shuffleAdminTip()"><i class="ti ti-refresh"></i> Otro consejo</button>
+            <button class="btn btn-sm btn-gold" style="flex:1;" onclick="sendTipPush()"><i class="ti ti-send"></i> Enviar al equipo</button>
+          </div>
+        </div>
       </div>
 
       <!-- Usuarios -->
@@ -946,6 +960,8 @@ function showApp() {
     renderPtsBaseEditor();
     renderCompProductInputs();
     renderCompList();
+    adminTipIndex = Math.floor(Math.random() * TIPS.length);
+    renderAdminTip();
   }
 
   initRangePicker();
@@ -986,14 +1002,8 @@ function renderDashboard() {
   const wb  = weekBounds();
   const el  = document.getElementById('dash-content');
 
-  // Banner de competencia activa
+  // Detectar competencia activa (para otras vistas que usan la global)
   updateActiveCompetition(hoy);
-  const compBanner = activeCompetition
-    ? `<div style="background:linear-gradient(135deg,#0F6E56,#085041);color:#fff;padding:10px 16px;font-size:12px;display:flex;align-items:center;gap:8px;margin-bottom:0;">
-        <i class="ti ti-bolt" style="font-size:16px;"></i>
-        <div><strong>Competencia activa:</strong> ${activeCompetition.name} · hasta ${fmtDate(activeCompetition.end_date)}</div>
-      </div>`
-    : '';
 
   let metricsHTML = '';
   if (isEmployee) {
@@ -1011,17 +1021,8 @@ function renderDashboard() {
         <div class="metric-card"><div class="metric-label">Posición</div><div class="metric-value">${pos>=0?'#'+(pos+1):'—'}</div></div>
         <div class="metric-card"><div class="metric-label">Esta semana</div><div class="metric-value">${fmt(weekPts)}</div></div>
       </div>`;
-  } else {
-    const employees = allProfiles.filter(pr => pr.role === 'employee');
-    const weekPts   = allLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to).reduce((s,l)=>s+l.pts,0);
-    const monthPts  = allLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
-    metricsHTML = `
-      <div class="metric-grid-3" style="padding:8px 16px 0;">
-        <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value">${employees.length}</div></div>
-        <div class="metric-card"><div class="metric-label">Pts equipo (sem)</div><div class="metric-value">${fmt(weekPts)}</div></div>
-        <div class="metric-card"><div class="metric-label">Pts equipo (mes)</div><div class="metric-value">${fmt(monthPts)}</div></div>
-      </div>`;
   }
+  // Managers/super: sin métricas de equipo en el inicio (las ven en Ranking y Análisis)
 
   const tiles = [];
   tiles.push({ tab:'ranking',  icon:'ti-trophy',      bg:'var(--gold-bg)',   color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
@@ -1040,14 +1041,81 @@ function renderDashboard() {
     </div>`).join('');
 
   el.innerHTML = `
-    ${compBanner}
     <div class="dash-hero">
       <div class="dash-hero-title">${greeting().replace(',', '')} 👋</div>
       <div class="dash-hero-sub">${isEmployee ? 'Tu resumen de venta sugestiva' : 'Resumen del equipo IVS'}</div>
     </div>
+    ${newsboardHTML()}
     ${metricsHTML}
     <div class="section-title">Accesos</div>
     <div class="dash-nav-grid">${tilesHTML}</div>`;
+}
+
+/* Tablero de novedades: competencias vigentes y próximas, con detalle.
+   Lo ven todos los roles. */
+function newsboardHTML() {
+  const hoy = today();
+  const vigentes = competitions
+    .filter(c => c.active && hoy >= c.start_date && hoy <= c.end_date)
+    .sort((a,b) => a.end_date.localeCompare(b.end_date));
+  const proximas = competitions
+    .filter(c => c.active && hoy < c.start_date)
+    .sort((a,b) => a.start_date.localeCompare(b.start_date));
+
+  if (!vigentes.length && !proximas.length) {
+    return `
+      <div class="section-title">Novedades</div>
+      <div style="padding:0 16px 4px;">
+        <div style="border:1px dashed var(--border2);border-radius:var(--radius);padding:20px;text-align:center;color:var(--text3);font-size:13px;">
+          <i class="ti ti-bolt" style="font-size:26px;display:block;margin-bottom:6px;opacity:.55;"></i>
+          No hay competencias activas en este momento
+        </div>
+      </div>`;
+  }
+
+  const card = (c, tipo) => {
+    const accent = tipo === 'vigente' ? '#0F6E56' : '#534AB7';
+    let chip;
+    if (tipo === 'vigente') {
+      const d = daysUntil(c.end_date);
+      const t = d <= 0 ? 'Último día' : d === 1 ? 'Termina mañana' : `Termina en ${d} días`;
+      chip = `<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--success-bg);color:var(--success);white-space:nowrap;">● Activa · ${t}</span>`;
+    } else {
+      const d = daysUntil(c.start_date);
+      const t = d === 0 ? 'Empieza hoy' : d === 1 ? 'Empieza mañana' : `Empieza en ${d} días`;
+      chip = `<span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:var(--accent-bg);color:var(--accent-dark);white-space:nowrap;">● Próxima · ${t}</span>`;
+    }
+    const prods = c.products.map(cp => {
+      const pr = PRODUCTS.find(p => p.id === cp.product_id);
+      return `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);font-size:13px;">
+        <span>${pr?.icon || ''} ${pr?.name || cp.product_id}</span>
+        <span style="font-weight:700;color:${accent};">⚡ ${cp.points} pts <span style="font-size:11px;color:var(--text3);font-weight:400;">(base ${pr?.pts ?? '?'})</span></span>
+      </div>`;
+    }).join('');
+    return `
+      <div style="border:1px solid var(--border);border-left:4px solid ${accent};border-radius:var(--radius);padding:14px 16px;margin-bottom:10px;background:var(--bg);">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px;">
+          <div style="font-size:15px;font-weight:700;">${c.name}</div>
+          ${chip}
+        </div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:8px;">${fmtDate(c.start_date)} → ${fmtDate(c.end_date)}</div>
+        ${prods}
+      </div>`;
+  };
+
+  return `
+    <div class="section-title">Novedades</div>
+    <div style="padding:0 16px 4px;">
+      ${vigentes.map(c => card(c, 'vigente')).join('')}
+      ${proximas.map(c => card(c, 'proxima')).join('')}
+    </div>`;
+}
+
+/* Días desde hoy hasta una fecha YYYY-MM-DD (negativo si ya pasó) */
+function daysUntil(dateStr) {
+  const d1 = new Date(today() + 'T00:00:00');
+  const d2 = new Date(dateStr + 'T00:00:00');
+  return Math.round((d2 - d1) / 86400000);
 }
 
 /* ══════════════════════════════════
@@ -1444,7 +1512,7 @@ function sendTipNotification() {
   if (sessionStorage.getItem('tip-sent')) return;
   sessionStorage.setItem('tip-sent', '1');
   setTimeout(() => {
-    try { new Notification('💡 Consejo de venta — SalesRank IVS', { body: tip.text, icon: '/icon-192.png', badge: '/icon-192.png', tag: 'ivs-tip' }); } catch(e) {}
+    try { new Notification('💡 Consejo de venta — SalesRank IVS', { body: tip.text, icon: '/icon-192.png', badge: '/badge.png', tag: 'ivs-tip' }); } catch(e) {}
   }, 3000);
 }
 
@@ -1475,6 +1543,35 @@ async function notifyCompetition(name, endDate) {
     }
   } catch (e) {
     console.warn('Error al notificar competencia:', e);
+  }
+}
+
+/* ── Consejo de venta por push (Admin / supermanager) ── */
+let adminTipIndex = 0;
+function renderAdminTip() {
+  const tip = TIPS[adminTipIndex];
+  const catEl = document.getElementById('admin-tip-cat');
+  const txtEl = document.getElementById('admin-tip-text');
+  if (catEl) catEl.textContent = tip.cat;
+  if (txtEl) txtEl.textContent = tip.text;
+}
+function shuffleAdminTip() {
+  let n; do { n = Math.floor(Math.random() * TIPS.length); } while (n === adminTipIndex && TIPS.length > 1);
+  adminTipIndex = n;
+  renderAdminTip();
+}
+async function sendTipPush() {
+  const tip = TIPS[adminTipIndex];
+  try {
+    const { data, error } = await sb.functions.invoke('send-push', {
+      body: { title: '💡 Consejo de venta', body: tip.text, url: '/', tag: 'tip-' + Date.now() },
+    });
+    if (error) { showToast('No se pudo enviar el consejo'); return; }
+    if (data && data.sent !== undefined) {
+      showToast(`Consejo enviado a ${data.sent} dispositivo${data.sent===1?'':'s'}`);
+    }
+  } catch (e) {
+    showToast('Error al enviar el consejo');
   }
 }
 
