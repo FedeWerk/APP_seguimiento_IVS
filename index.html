@@ -654,6 +654,16 @@
         <button class="btn" onclick="createEmployee()"><i class="ti ti-plus"></i> Crear vendedor</button>
       </div>
 
+      <!-- Crear gerente de turno (solo business_manager y supermanager) -->
+      <div class="card" id="admin-create-manager" style="display:none;">
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-user-star" style="margin-right:6px;color:var(--gold);"></i>Crear gerente de turno</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">Se crea en este local con rol de gerente.</div>
+        <label>Nombre completo</label><input type="text" id="mgr2-name" placeholder="Juan Pérez" />
+        <label>Email</label><input type="email" id="mgr2-email" placeholder="juan@empresa.com" />
+        <label>Contraseña temporal</label><input type="password" id="mgr2-pass" placeholder="••••••" />
+        <button class="btn" onclick="createShiftManager()"><i class="ti ti-plus"></i> Crear gerente de turno</button>
+      </div>
+
       <!-- Objetivo mensual -->
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-target" style="margin-right:6px;"></i>Objetivo mensual</div>
@@ -1088,6 +1098,10 @@ function showApp() {
   // Sección de puntos/competencias: business_manager y supermanager
   const superSection = document.getElementById('admin-pts-section');
   if (superSection) superSection.style.display = canEditPts() ? 'block' : 'none';
+
+  // Sección crear gerente de turno: business_manager y supermanager
+  const createMgrSection = document.getElementById('admin-create-manager');
+  if (createMgrSection) createMgrSection.style.display = canEditPts() ? 'block' : 'none';
 
   if (isManager()) {
     fillEmployeeSelect();
@@ -2144,6 +2158,32 @@ async function createEmployee() {
   ['new-name','new-email','new-pass'].forEach(id=>document.getElementById(id).value='');
 
   // Recargar solo perfiles del local activo
+  const { data } = await sb.from('profiles').select('*').eq('location_id', currentLocationId).order('full_name');
+  allProfiles = data || [];
+  renderUserList(); fillEmployeeSelect(); renderRanking(); renderDashboard();
+}
+
+/* Crear gerente de turno (manager) en el local activo — business_manager/supermanager */
+async function createShiftManager() {
+  const name  = document.getElementById('mgr2-name').value.trim();
+  const email = document.getElementById('mgr2-email').value.trim();
+  const pass  = document.getElementById('mgr2-pass').value;
+  if (!name||!email||!pass){ showToast('Completá todos los campos'); return; }
+  const parts    = name.split(' ');
+  const initials = (parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
+  const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
+
+  const { error } = await sb.auth.signUp({ email, password: pass,
+    options: { data: {
+      username, full_name: name, role: 'manager',
+      initials, color, location_id: currentLocationId
+    }}
+  });
+  if (error){ showToast('Error: '+error.message); return; }
+  showToast('Gerente de turno creado');
+  ['mgr2-name','mgr2-email','mgr2-pass'].forEach(id=>document.getElementById(id).value='');
+
   const { data } = await sb.from('profiles').select('*').eq('location_id', currentLocationId).order('full_name');
   allProfiles = data || [];
   renderUserList(); fillEmployeeSelect(); renderRanking(); renderDashboard();
