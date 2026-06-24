@@ -474,6 +474,7 @@
     <div class="tab" data-tab="cargar"    id="tab-btn-cargar"    onclick="switchTab('cargar',this)"    style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
     <div class="tab" data-tab="historial" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
     <div class="tab" data-tab="admin"     id="tab-btn-admin"     onclick="switchTab('admin',this)"     style="display:none;"><i class="ti ti-settings"></i>Admin</div>
+    <div class="tab" data-tab="locales"  id="tab-btn-locales"  onclick="switchTab('locales',this)"  style="display:none;"><i class="ti ti-building-store"></i>Locales</div>
   </div>
 
   <!-- ══ INICIO ══ -->
@@ -714,6 +715,48 @@
   </div>
 
 </div>
+
+
+  <!-- ══ LOCALES ══ -->
+  <div id="tab-locales" class="tab-content">
+    <div style="padding:16px;">
+      <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Gestión de locales</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Creá locales y asigná gerentes</div>
+
+      <!-- Crear local -->
+      <div class="card">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-building-store" style="margin-right:6px;color:var(--biz);"></i>Nuevo local</div>
+        <label>Nombre del local</label>
+        <input type="text" id="loc-name" placeholder="Ej: Villa Carlos Paz" />
+        <label>Código (siglas)</label>
+        <input type="text" id="loc-code" placeholder="Ej: VCP" style="text-transform:uppercase;" maxlength="10" />
+        <button class="btn btn-primary" onclick="createLocation()"><i class="ti ti-plus"></i> Crear local</button>
+      </div>
+
+      <!-- Crear gerente -->
+      <div class="card">
+        <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-user-star" style="margin-right:6px;color:var(--gold);"></i>Nuevo gerente</div>
+        <label>Nombre completo</label>
+        <input type="text" id="mgr-name" placeholder="Juan Pérez" />
+        <label>Email</label>
+        <input type="email" id="mgr-email" placeholder="juan@empresa.com" />
+        <label>Contraseña temporal</label>
+        <input type="password" id="mgr-pass" placeholder="••••••" />
+        <label>Rol</label>
+        <select id="mgr-role" style="margin-bottom:10px;">
+          <option value="business_manager">Gerente de Negocio</option>
+          <option value="manager">Gerente</option>
+        </select>
+        <label>Local asignado</label>
+        <select id="mgr-location" style="margin-bottom:10px;"></select>
+        <button class="btn btn-primary" onclick="createManager()"><i class="ti ti-plus"></i> Crear gerente</button>
+      </div>
+
+      <!-- Lista de locales -->
+      <div style="font-size:14px;font-weight:600;margin:4px 0 12px;">Locales activos</div>
+      <div id="locations-list"></div>
+    </div>
+  </div>
 
 <div class="toast" id="toast"></div>
 
@@ -970,6 +1013,10 @@ async function onSuperLocationChange() {
   renderPtsBaseEditor();
   renderCompProductInputs();
   renderCompList();
+  if (isSuper()) {
+    fillManagerLocationSelect();
+    renderLocationsList();
+  }
 }
 
 function renderLocationBadge() {
@@ -1035,6 +1082,7 @@ function showApp() {
   document.getElementById('tab-btn-cargar').style.display    = isManager() ? 'flex' : 'none';
   document.getElementById('tab-btn-historial').style.display = isManager() ? 'flex' : 'none';
   document.getElementById('tab-btn-admin').style.display     = isManager() ? 'flex' : 'none';
+  document.getElementById('tab-btn-locales').style.display   = isSuper()    ? 'flex' : 'none';
   document.getElementById('prof-weekly-section').style.display = isEmployee ? 'block' : 'none';
 
   // Sección de puntos/competencias: business_manager y supermanager
@@ -1057,6 +1105,11 @@ function showApp() {
     renderCompList();
     adminTipIndex = Math.floor(Math.random() * TIPS.length);
     renderAdminTip();
+  }
+
+  if (isSuper()) {
+    fillManagerLocationSelect();
+    renderLocationsList();
   }
 
   initRangePicker();
@@ -2148,6 +2201,129 @@ function greeting() {
 function showToast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg;
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
+}
+
+
+/* ══════════════════════════════════
+   LOCALES — GESTIÓN (solo supermanager)
+══════════════════════════════════ */
+
+const DEFAULT_PRODUCTS = [
+  { id:'pileta_cheddar', name:'Pileta de cheddar', base_points:3 },
+  { id:'combo_grande',   name:'Combos grandes',    base_points:2 },
+  { id:'cafe_espresso',  name:'Café espresso',     base_points:5 },
+  { id:'cono_especial',  name:'Conos especiales',  base_points:3 },
+];
+
+async function createLocation() {
+  const name = document.getElementById('loc-name').value.trim();
+  const code = document.getElementById('loc-code').value.trim().toUpperCase();
+  if (!name) { showToast('Ingresá el nombre del local'); return; }
+  if (!code) { showToast('Ingresá el código del local'); return; }
+
+  // Crear local
+  const { data: loc, error: locErr } = await sb
+    .from('locations')
+    .insert({ name, code })
+    .select()
+    .single();
+  if (locErr) { showToast('Error: ' + locErr.message); return; }
+
+  // Auto-insertar los 4 productos con puntos base por defecto
+  const prods = DEFAULT_PRODUCTS.map(p => ({ ...p, location_id: loc.id }));
+  const { error: prodErr } = await sb.from('product_config').insert(prods);
+  if (prodErr) { showToast('Local creado pero hubo un error al configurar productos: ' + prodErr.message); }
+
+  // Actualizar estado local
+  allLocations.push(loc);
+
+  // Actualizar selector de local del supermanager
+  const sel = document.getElementById('super-location-select');
+  if (sel) {
+    sel.innerHTML = allLocations.map(l =>
+      '<option value="' + l.id + '"' + (l.id === currentLocationId ? ' selected' : '') + '>' + l.name + ' (' + l.code + ')</option>'
+    ).join('');
+  }
+
+  document.getElementById('loc-name').value = '';
+  document.getElementById('loc-code').value = '';
+  showToast('Local "' + name + '" creado');
+  fillManagerLocationSelect();
+  renderLocationsList();
+}
+
+async function createManager() {
+  const name     = document.getElementById('mgr-name').value.trim();
+  const email    = document.getElementById('mgr-email').value.trim();
+  const pass     = document.getElementById('mgr-pass').value;
+  const role     = document.getElementById('mgr-role').value;
+  const locId    = document.getElementById('mgr-location').value;
+  if (!name || !email || !pass) { showToast('Completá todos los campos'); return; }
+  if (!locId) { showToast('Seleccioná un local'); return; }
+
+  const parts    = name.split(' ');
+  const initials = (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+  const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g, '');
+
+  const { error } = await sb.auth.signUp({
+    email, password: pass,
+    options: { data: { username, full_name: name, role, initials, color, location_id: locId } }
+  });
+  if (error) { showToast('Error: ' + error.message); return; }
+
+  showToast(roleLabel(role) + ' creado');
+  ['mgr-name','mgr-email','mgr-pass'].forEach(id => document.getElementById(id).value = '');
+  renderLocationsList();
+}
+
+function fillManagerLocationSelect() {
+  const sel = document.getElementById('mgr-location');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Seleccioná un local —</option>' +
+    allLocations.map(l => '<option value="' + l.id + '">' + l.name + ' (' + l.code + ')</option>').join('');
+}
+
+async function renderLocationsList() {
+  const el = document.getElementById('locations-list');
+  if (!el) return;
+  if (!allLocations.length) {
+    el.innerHTML = '<div class="empty-state"><i class="ti ti-building-store"></i>Sin locales creados</div>';
+    return;
+  }
+
+  // Cargar todos los perfiles de todos los locales para mostrar conteos
+  const { data: allProfs } = await sb.from('profiles').select('id, full_name, role, location_id, initials, color, photo_url');
+
+  el.innerHTML = allLocations.map(loc => {
+    const locProfs  = (allProfs || []).filter(p => p.location_id === loc.id);
+    const employees = locProfs.filter(p => p.role === 'employee');
+    const managers  = locProfs.filter(p => ['manager','business_manager'].includes(p.role));
+    const isActive  = loc.id === currentLocationId;
+
+    const mgrList = managers.map(m =>
+      '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;">' +
+        avatarHTML(m, 24) +
+        '<span style="font-size:12px;">' + m.full_name + '</span>' +
+        '<span style="font-size:10px;color:var(--text3);margin-left:auto;">' + roleLabel(m.role) + '</span>' +
+      '</div>'
+    ).join('');
+
+    return '<div class="card" style="margin-bottom:10px;border-left:3px solid ' + (isActive ? 'var(--accent)' : 'var(--border2)') + ';">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
+        '<div>' +
+          '<div style="font-size:15px;font-weight:700;">' + loc.name + '</div>' +
+          '<div style="font-size:11px;color:var(--text2);margin-top:1px;">Código: ' + loc.code + '</div>' +
+        '</div>' +
+        (isActive ? '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--accent-bg);color:var(--accent-dark);">Activo</span>' : '') +
+      '</div>' +
+      '<div style="display:flex;gap:16px;margin-bottom:' + (managers.length ? '10px' : '0') + ';">' +
+        '<div style="font-size:12px;color:var(--text2);"><b style="color:var(--text);">' + employees.length + '</b> vendedores</div>' +
+        '<div style="font-size:12px;color:var(--text2);"><b style="color:var(--text);">' + managers.length + '</b> gerentes</div>' +
+      '</div>' +
+      (mgrList ? '<div style="border-top:1px solid var(--border);padding-top:8px;">' + mgrList + '</div>' : '') +
+    '</div>';
+  }).join('');
 }
 
 /* ══════════════════════════════════
