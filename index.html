@@ -29,6 +29,7 @@
       --success: #0F6E56; --success-bg: #E1F5EE;
       --danger: #b91c1c; --danger-bg: #fee2e2;
       --gold: #BA7517; --gold-bg: #FEF3C7;
+      --biz: #0C447C; --biz-bg: #E6F1FB;
       --radius: 10px; --radius-sm: 6px;
     }
     @media (prefers-color-scheme: dark) {
@@ -36,7 +37,7 @@
         --bg: #1c1917; --bg2: #292524; --bg3: #3c3836;
         --text: #f5f5f4; --text2: #a8a29e; --text3: #78716c;
         --border: #292524; --border2: #3c3836;
-        --gold-bg: #292018;
+        --gold-bg: #292018; --biz-bg: #0c1f30;
       }
     }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
@@ -51,6 +52,11 @@
     }
     .app-header h1 { font-size: 15px; font-weight: 600; }
     .header-sub { font-size: 12px; color: var(--text2); }
+    .header-location {
+      font-size: 11px; color: var(--biz); font-weight: 600;
+      background: var(--biz-bg); padding: 2px 8px; border-radius: 20px;
+      display: inline-block; margin-top: 2px;
+    }
 
     /* ── Tabs ── */
     .tab-bar {
@@ -100,9 +106,7 @@
     .btn-primary:hover { background: var(--accent-dark); }
     .btn-danger { background: var(--danger-bg); color: var(--danger); border-color: var(--danger); }
     .btn-danger:hover { background: #fecaca; }
-    .btn-sm {
-      padding: 5px 12px; font-size: 12px; margin-top: 0; width: auto;
-    }
+    .btn-sm { padding: 5px 12px; font-size: 12px; margin-top: 0; width: auto; }
     .btn-gold { background: var(--gold-bg); color: var(--gold); border-color: rgba(186,117,23,0.3); }
     .btn-gold:hover { background: #fde68a; }
 
@@ -257,20 +261,19 @@
     .empty-state { text-align: center; padding: 2.5rem 1rem; color: var(--text3); font-size: 14px; }
     .empty-state i { font-size: 36px; display: block; margin-bottom: 8px; }
     .badge { font-size: 11px; padding: 3px 8px; border-radius: 20px; font-weight: 500; }
-    .badge-mgr { background: var(--accent-bg); color: var(--accent-dark); }
-    .badge-emp { background: var(--success-bg); color: var(--success); }
+    .badge-mgr   { background: var(--accent-bg); color: var(--accent-dark); }
+    .badge-emp   { background: var(--success-bg); color: var(--success); }
     .badge-super { background: var(--gold-bg); color: var(--gold); }
+    .badge-biz   { background: var(--biz-bg); color: var(--biz); }
 
     /* ── Tips / Consejos ── */
     .tip-card {
       background: var(--gold-bg); border: 1px solid rgba(186,117,23,0.2);
-      border-radius: var(--radius); padding: 16px; margin: 16px 16px 0;
-      position: relative;
+      border-radius: var(--radius); padding: 16px; margin: 16px 16px 0; position: relative;
     }
     .tip-category {
       font-size: 10px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 6px;
-      display: flex; align-items: center; gap: 6px;
+      color: var(--gold); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
     }
     .tip-text { font-size: 14px; line-height: 1.6; color: var(--text); }
     .tip-nav { display: flex; gap: 8px; margin-top: 12px; align-items: center; }
@@ -317,14 +320,8 @@
     }
 
     /* ── Competencias Express ── */
-    .comp-card {
-      border: 1px solid var(--border); border-radius: var(--radius);
-      margin-bottom: 10px; overflow: hidden;
-    }
-    .comp-card-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 14px; background: var(--bg2);
-    }
+    .comp-card { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
+    .comp-card-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--bg2); }
     .comp-card-title { font-size: 14px; font-weight: 600; }
     .comp-card-dates { font-size: 11px; color: var(--text2); margin-top: 2px; }
     .comp-card-body { padding: 10px 14px; }
@@ -333,44 +330,36 @@
       padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px;
     }
     .comp-product-line:last-child { border-bottom: none; }
-    .comp-badge-active {
-      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
-      background: var(--success-bg); color: var(--success); white-space: nowrap;
-    }
-    .comp-badge-upcoming {
-      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
-      background: var(--accent-bg); color: var(--accent-dark); white-space: nowrap;
-    }
-    .comp-badge-ended {
-      font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px;
-      background: var(--bg3); color: var(--text3); white-space: nowrap;
-    }
-    /* Banner competencia activa en carga */
+    .comp-badge-active { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--success-bg); color: var(--success); white-space: nowrap; }
+    .comp-badge-upcoming { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--accent-bg); color: var(--accent-dark); white-space: nowrap; }
+    .comp-badge-ended { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--bg3); color: var(--text3); white-space: nowrap; }
     .comp-active-banner {
       background: linear-gradient(135deg, #0F6E56 0%, #085041 100%);
       color: #fff; padding: 10px 16px; font-size: 12px;
       display: flex; align-items: center; gap: 8px; margin-bottom: 0;
     }
     .comp-active-banner i { font-size: 16px; flex-shrink: 0; }
-    /* Punto modificado en fila producto */
-    .pts-modified {
-      font-size: 11px; background: var(--success-bg); color: var(--success);
-      padding: 1px 6px; border-radius: 10px; font-weight: 700;
-    }
+    .pts-modified { font-size: 11px; background: var(--success-bg); color: var(--success); padding: 1px 6px; border-radius: 10px; font-weight: 700; }
 
     /* ── Puntos base editor ── */
-    .pts-edit-row {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 0; border-bottom: 1px solid var(--border);
-    }
+    .pts-edit-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
     .pts-edit-row:last-child { border-bottom: none; }
     .pts-edit-icon { font-size: 24px; flex-shrink: 0; }
     .pts-edit-name { flex: 1; font-size: 14px; font-weight: 500; }
-    .pts-edit-input {
-      width: 64px; text-align: center; font-size: 16px; font-weight: 700;
-      color: var(--accent); margin: 0; padding: 6px 8px;
-    }
+    .pts-edit-input { width: 64px; text-align: center; font-size: 16px; font-weight: 700; color: var(--accent); margin: 0; padding: 6px 8px; }
     .pts-edit-label { font-size: 11px; color: var(--text3); }
+
+    /* ── Selector de local (supermanager) ── */
+    .location-selector {
+      background: var(--biz-bg); border-bottom: 1px solid rgba(12,68,124,0.15);
+      padding: 8px 16px; display: flex; align-items: center; gap: 10px;
+    }
+    .location-selector i { color: var(--biz); font-size: 16px; }
+    .location-selector select {
+      margin: 0; font-size: 13px; padding: 5px 10px;
+      border-color: rgba(12,68,124,0.3); color: var(--biz); font-weight: 600;
+    }
+    .location-selector label { font-size: 12px; color: var(--biz); margin: 0; white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -456,10 +445,19 @@
     <button onclick="hidePushBanner()" style="background:none;border:none;cursor:pointer;color:var(--text3);font-size:18px;padding:0;"><i class="ti ti-x"></i></button>
   </div>
 
+  <!-- Selector de local — solo visible para supermanager -->
+  <div id="location-selector-bar" class="location-selector" style="display:none;">
+    <i class="ti ti-building-store"></i>
+    <label>Local:</label>
+    <select id="super-location-select" onchange="onSuperLocationChange()" style="flex:1;">
+    </select>
+  </div>
+
   <div class="app-header">
     <div>
       <div class="header-sub" id="hdr-greeting"></div>
       <h1 id="hdr-name">—</h1>
+      <div class="header-location" id="hdr-location" style="display:none;"></div>
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
       <span class="badge" id="hdr-badge"></span>
@@ -587,7 +585,6 @@
 
   <!-- ══ CARGAR ══ -->
   <div id="tab-cargar" class="tab-content">
-    <!-- Banner competencia activa (se muestra si hay una) -->
     <div id="comp-active-banner" style="display:none;" class="comp-active-banner">
       <i class="ti ti-bolt"></i>
       <div id="comp-active-text">Competencia express activa</div>
@@ -663,11 +660,11 @@
         <button class="btn" onclick="saveGoal()"><i class="ti ti-check"></i> Actualizar meta</button>
       </div>
 
-      <!-- ── PUNTOS BASE (solo supermanager) ── -->
+      <!-- ── PUNTOS BASE (supermanager y business_manager) ── -->
       <div id="admin-pts-section" style="display:none;">
         <div class="card">
           <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-coin" style="margin-right:6px;color:var(--gold);"></i>Puntos base por producto</div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Estos son los puntos que valen siempre, salvo que haya una Competencia Express activa para ese producto.</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Estos son los puntos que valen siempre en este local, salvo que haya una Competencia Express activa para ese producto.</div>
           <div id="pts-base-editor"></div>
           <button class="btn btn-primary" style="margin-top:12px;" onclick="saveBasePoints()"><i class="ti ti-device-floppy"></i> Guardar puntos base</button>
         </div>
@@ -711,7 +708,7 @@
       </div>
 
       <!-- Usuarios -->
-      <div style="font-size:14px;font-weight:600;margin:1rem 0 .75rem;">Usuarios del sistema</div>
+      <div style="font-size:14px;font-weight:600;margin:1rem 0 .75rem;">Usuarios del local</div>
       <div id="user-list"></div>
     </div>
   </div>
@@ -726,9 +723,6 @@
 ══════════════════════════════════ */
 const SUPABASE_URL = 'https://yxeagaoxosveblpfxvwq.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4ZWFnYW94b3N2ZWJscGZ4dndxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk1NzExNTIsImV4cCI6MjA5NTE0NzE1Mn0.5DEPtur08XeZIRhIkEHlGG4D8oV4c4KdfpM_7ww8IDg';
-
-// Clave PÚBLICA VAPID — no es secreta (identifica la app ante el servicio de push).
-// La privada vive solo como secret de la Edge Function, nunca acá.
 const VAPID_PUBLIC_KEY = 'BDAQ27IXPVkSqlHC4MyppekgpRBlrlC4ePaNMjmljOluiRYetlhu67VJaJTO58ScdaCwTuc8lgMhdZiXw25-JFc';
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
   auth: { lock: async (name, acquireTimeout, fn) => await fn() },
@@ -737,7 +731,7 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
 /* ══════════════════════════════════
    ESTADO GLOBAL
 ══════════════════════════════════ */
-// Productos: se cargan desde Supabase; estos son los defaults mientras carga
+// Defaults mientras carga desde Supabase
 let PRODUCTS = [
   { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3, unit:'pileta', color:'#BA7517' },
   { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2, unit:'combo',  color:'#534AB7' },
@@ -745,23 +739,34 @@ let PRODUCTS = [
   { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3, unit:'cono',   color:'#993C1D' },
 ];
 
-let competitions = [];       // todas las competencias (con .products cargados)
-let activeCompetition = null; // competencia vigente HOY (o en la fecha seleccionada)
+let competitions    = [];
+let activeCompetition = null;
 
 const COLORS = ['av-teal','av-coral','av-amber','av-pink','av-blue','av-purple'];
 const qtys = {};
 PRODUCTS.forEach(p => qtys[p.id] = 0);
 
-let currentUser    = null;
-let currentProfile = null;
-let allProfiles    = [];
-let allLogs        = [];
-let monthlyGoal    = 100;
-let period         = 'week';
-let currentTipIndex = 0;
+let currentUser      = null;
+let currentProfile   = null;
+let allProfiles      = [];   // perfiles del local activo
+let allLogs          = [];   // logs del local activo
+let allLocations     = [];   // todos los locales (cargados siempre)
+let currentLocationId = null; // local que se está visualizando (puede diferir del perfil en supermanager)
+let monthlyGoal      = 100;
+let period           = 'week';
+let currentTipIndex  = 0;
 
 let appInitialized = false;
 let isRecovering   = window.location.hash.includes('type=recovery');
+
+/* ══════════════════════════════════
+   HELPERS DE ROL
+══════════════════════════════════ */
+function isSuper()   { return currentProfile?.role === 'supermanager'; }
+function isBiz()     { return currentProfile?.role === 'business_manager'; }
+function isManager() { return ['manager','business_manager','supermanager'].includes(currentProfile?.role); }
+function canEditPts(){ return ['business_manager','supermanager'].includes(currentProfile?.role); }
+function canManageComps() { return ['business_manager','supermanager'].includes(currentProfile?.role); }
 
 /* ══════════════════════════════════
    INIT
@@ -851,39 +856,66 @@ function showAuthMsg(elId, msg, isError) {
    DATOS
 ══════════════════════════════════ */
 async function loadAppData() {
+  // 1. Perfil propio
   const { data: prof, error: profErr } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   if (profErr && profErr.code !== 'PGRST116') throw profErr;
   currentProfile = prof || null;
+  if (!currentProfile) return;
 
-  const { data: profs } = await sb.from('profiles').select('*').order('full_name');
-  allProfiles = profs || [];
+  // 2. Todos los locales
+  const { data: locs } = await sb.from('locations').select('*').order('name');
+  allLocations = locs || [];
 
-  const { data: logs } = await sb.from('sales_logs').select('*').order('fecha', { ascending: false });
-  allLogs = logs || [];
+  // 3. Local activo inicial
+  // supermanager: empieza con el primer local (puede cambiar desde el selector)
+  // todos los demás: su propio location_id
+  currentLocationId = isSuper()
+    ? (allLocations[0]?.id || null)
+    : currentProfile.location_id;
 
-  const { data: setting } = await sb.from('settings').select('value').eq('key','monthly_goal').single();
-  if (setting) monthlyGoal = parseInt(setting.value) || 100;
+  // 4. Cargar datos del local activo
+  await loadLocationData();
+}
 
-  // Cargar puntos base desde Supabase
+/* Carga perfiles, logs, product_config y competencias del local activo */
+async function loadLocationData() {
+  if (!currentLocationId) return;
+
+  const [profsRes, logsRes, settingRes] = await Promise.all([
+    sb.from('profiles').select('*').eq('location_id', currentLocationId).order('full_name'),
+    sb.from('sales_logs').select('*').eq('location_id', currentLocationId).order('fecha', { ascending: false }),
+    sb.from('settings').select('value').eq('key','monthly_goal').single(),
+  ]);
+
+  allProfiles = profsRes.data || [];
+  allLogs     = logsRes.data  || [];
+  if (settingRes.data) monthlyGoal = parseInt(settingRes.data.value) || 100;
+
+  // Asegurar que el propio perfil esté en allProfiles (supermanager puede no estar en ese local)
+  if (isSuper() && !allProfiles.find(p => p.id === currentProfile.id)) {
+    allProfiles = [currentProfile, ...allProfiles];
+  }
+
   await loadProductConfig();
-
-  // Cargar competencias
   await loadCompetitions();
 }
 
 async function loadProductConfig() {
-  const { data, error } = await sb.from('product_config').select('*');
-  if (error || !data || !data.length) return; // fallback a defaults
+  const { data, error } = await sb.from('product_config').select('*').eq('location_id', currentLocationId);
+  if (error || !data || !data.length) return;
   PRODUCTS = PRODUCTS.map(p => {
     const remote = data.find(d => d.id === p.id);
     return remote ? { ...p, pts: Number(remote.base_points), name: remote.name } : p;
   });
+  // Re-inicializar qtys para cualquier producto nuevo
+  PRODUCTS.forEach(p => { if (qtys[p.id] === undefined) qtys[p.id] = 0; });
 }
 
 async function loadCompetitions() {
   const { data: comps, error } = await sb
     .from('express_competitions')
     .select('*, express_competition_products(*)')
+    .eq('location_id', currentLocationId)
     .order('start_date', { ascending: false });
   if (error) { console.error('Error cargando competencias:', error); return; }
   competitions = (comps || []).map(c => ({
@@ -893,14 +925,12 @@ async function loadCompetitions() {
   updateActiveCompetition(today());
 }
 
-/* Dado una fecha (string YYYY-MM-DD), detecta la competencia activa */
 function updateActiveCompetition(fecha) {
   activeCompetition = competitions.find(c =>
     c.active && fecha >= c.start_date && fecha <= c.end_date
   ) || null;
 }
 
-/* Dado una fecha, devuelve los puntos efectivos para cada producto */
 function getEffectivePoints(fecha) {
   updateActiveCompetition(fecha);
   return PRODUCTS.map(p => {
@@ -910,6 +940,50 @@ function getEffectivePoints(fecha) {
       ? { ...p, pts: Number(override.points), boosted: true, compName: activeCompetition.name }
       : { ...p };
   });
+}
+
+/* ── Selector de local para supermanager ── */
+async function onSuperLocationChange() {
+  const sel = document.getElementById('super-location-select');
+  currentLocationId = sel.value;
+  // Actualizar badge de local en header
+  renderLocationBadge();
+  // Resetear productos a defaults antes de recargar
+  PRODUCTS = [
+    { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3, unit:'pileta', color:'#BA7517' },
+    { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2, unit:'combo',  color:'#534AB7' },
+    { id:'cafe_espresso',  name:'Café espresso',     icon:'☕', pts:5, unit:'café',   color:'#0F6E56' },
+    { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3, unit:'cono',   color:'#993C1D' },
+  ];
+  await loadLocationData();
+  // Re-renderizar todo con el nuevo local
+  renderDashboard();
+  renderRanking();
+  renderProfile();
+  renderAnalysis();
+  fillEmployeeSelect();
+  renderProductRows();
+  renderRecentLogs();
+  renderUserList();
+  fillHistorialVendorSelect();
+  renderHistorial();
+  renderPtsBaseEditor();
+  renderCompProductInputs();
+  renderCompList();
+}
+
+function renderLocationBadge() {
+  const loc = allLocations.find(l => l.id === currentLocationId);
+  const el  = document.getElementById('hdr-location');
+  if (loc && isSuper()) {
+    el.textContent = loc.name;
+    el.style.display = 'inline-block';
+  } else if (loc && isBiz()) {
+    el.textContent = loc.name;
+    el.style.display = 'inline-block';
+  } else {
+    el.style.display = 'none';
+  }
 }
 
 /* ══════════════════════════════════
@@ -927,36 +1001,57 @@ function showLoadError(msg) {
 
 function showApp() {
   showScreen('app');
-  const role = currentProfile.role;
-  const isManager      = role === 'manager' || role === 'supermanager';
-  const isSuperManager = role === 'supermanager';
-  const isEmployee     = role === 'employee';
+  const role       = currentProfile.role;
+  const isEmployee = role === 'employee';
 
   document.getElementById('hdr-greeting').textContent = greeting();
   document.getElementById('hdr-name').textContent     = currentProfile.full_name;
-  const badge = document.getElementById('hdr-badge');
-  if (isSuperManager) { badge.textContent = 'Super Gerente'; badge.className = 'badge badge-super'; }
-  else if (isManager) { badge.textContent = 'Gerente';       badge.className = 'badge badge-mgr'; }
-  else                { badge.textContent = 'Vendedor';      badge.className = 'badge badge-emp'; }
 
-  document.getElementById('tab-btn-analisis').style.display  = isSuperManager ? 'flex' : 'none';
-  document.getElementById('tab-btn-cargar').style.display    = isManager      ? 'flex' : 'none';
-  document.getElementById('tab-btn-historial').style.display = isManager      ? 'flex' : 'none';
-  document.getElementById('tab-btn-admin').style.display     = isManager      ? 'flex' : 'none';
+  const badge = document.getElementById('hdr-badge');
+  if (isSuper())      { badge.textContent = 'Super Gerente';   badge.className = 'badge badge-super'; }
+  else if (isBiz())   { badge.textContent = 'Gerente de Neg.'; badge.className = 'badge badge-biz'; }
+  else if (isManager()){ badge.textContent = 'Gerente';        badge.className = 'badge badge-mgr'; }
+  else                { badge.textContent = 'Vendedor';        badge.className = 'badge badge-emp'; }
+
+  // Selector de local — solo supermanager
+  const locBar = document.getElementById('location-selector-bar');
+  if (isSuper() && allLocations.length > 0) {
+    locBar.style.display = 'flex';
+    const sel = document.getElementById('super-location-select');
+    sel.innerHTML = allLocations.map(l =>
+      `<option value="${l.id}"${l.id === currentLocationId ? ' selected' : ''}>${l.name} (${l.code})</option>`
+    ).join('');
+  } else {
+    locBar.style.display = 'none';
+  }
+
+  // Badge de local en header
+  renderLocationBadge();
+
+  // Visibilidad de tabs
+  // supermanager y business_manager ven análisis
+  document.getElementById('tab-btn-analisis').style.display  = (isSuper() || isBiz()) ? 'flex' : 'none';
+  // manager, business_manager y supermanager ven cargar, historial, admin
+  document.getElementById('tab-btn-cargar').style.display    = isManager() ? 'flex' : 'none';
+  document.getElementById('tab-btn-historial').style.display = isManager() ? 'flex' : 'none';
+  document.getElementById('tab-btn-admin').style.display     = isManager() ? 'flex' : 'none';
   document.getElementById('prof-weekly-section').style.display = isEmployee ? 'block' : 'none';
 
-  // Sección de puntos/competencias: solo supermanager
+  // Sección de puntos/competencias: business_manager y supermanager
   const superSection = document.getElementById('admin-pts-section');
-  if (superSection) superSection.style.display = isSuperManager ? 'block' : 'none';
+  if (superSection) superSection.style.display = canEditPts() ? 'block' : 'none';
 
-  if (isManager) {
-    fillEmployeeSelect(); renderProductRows(); renderRecentLogs(); renderUserList();
+  if (isManager()) {
+    fillEmployeeSelect();
+    renderProductRows();
+    renderRecentLogs();
+    renderUserList();
     fillHistorialVendorSelect();
     document.getElementById('inp-goal').value  = monthlyGoal;
     document.getElementById('inp-fecha').value = today();
   }
 
-  if (isSuperManager) {
+  if (canEditPts()) {
     renderPtsBaseEditor();
     renderCompProductInputs();
     renderCompList();
@@ -973,7 +1068,7 @@ function showApp() {
   switchTab('inicio');
   renderRanking();
   renderProfile();
-  if (isSuperManager) renderAnalysis();
+  if (isSuper() || isBiz()) renderAnalysis();
 }
 
 function switchTab(tab, el) {
@@ -993,16 +1088,13 @@ function switchTab(tab, el) {
 ══════════════════════════════════ */
 function renderDashboard() {
   if (!currentProfile) return;
-  const p = currentProfile;
-  const role = p.role;
-  const isManager  = role === 'manager' || role === 'supermanager';
-  const isSuper    = role === 'supermanager';
+  const p        = currentProfile;
+  const role     = p.role;
   const isEmployee = role === 'employee';
   const hoy = today();
   const wb  = weekBounds();
   const el  = document.getElementById('dash-content');
 
-  // Detectar competencia activa (para otras vistas que usan la global)
   updateActiveCompetition(hoy);
 
   let metricsHTML = '';
@@ -1022,16 +1114,15 @@ function renderDashboard() {
         <div class="metric-card"><div class="metric-label">Esta semana</div><div class="metric-value">${fmt(weekPts)}</div></div>
       </div>`;
   }
-  // Managers/super: sin métricas de equipo en el inicio (las ven en Ranking y Análisis)
 
   const tiles = [];
   tiles.push({ tab:'ranking',  icon:'ti-trophy',      bg:'var(--gold-bg)',   color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
-  if (isManager) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)',  color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
-  if (isManager) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)', color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
-  if (isSuper)   tiles.push({ tab:'analisis',  icon:'ti-chart-bar',   bg:'#E6F1FB',           color:'#0C447C',        title:'Análisis',        desc:'Evolución del equipo' });
+  if (isManager()) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)',  color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
+  if (isManager()) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)', color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
+  if (isSuper() || isBiz()) tiles.push({ tab:'analisis', icon:'ti-chart-bar', bg:'#E6F1FB', color:'#0C447C', title:'Análisis', desc:'Evolución del equipo' });
   tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE',        color:'#085041',     title:'Mi perfil', desc:'Tus puntos y productos' });
   tiles.push({ tab:'tips',   icon:'ti-bulb',         bg:'var(--gold-bg)', color:'var(--gold)', title:'Consejos',  desc:'Técnicas de venta' });
-  if (isManager) tiles.push({ tab:'admin', icon:'ti-settings', bg:'var(--bg2)', color:'var(--text2)', title:'Admin', desc:'Usuarios y metas' });
+  if (isManager()) tiles.push({ tab:'admin', icon:'ti-settings', bg:'var(--bg2)', color:'var(--text2)', title:'Admin', desc:'Usuarios y metas' });
 
   const tilesHTML = tiles.map(t => `
     <div class="dash-tile" onclick="switchTab('${t.tab}')">
@@ -1040,10 +1131,15 @@ function renderDashboard() {
       <div class="dash-tile-desc">${t.desc}</div>
     </div>`).join('');
 
+  const locLabel = allLocations.find(l => l.id === currentLocationId)?.name || '';
+  const subTitle = isEmployee
+    ? 'Tu resumen de venta sugestiva'
+    : `Equipo IVS${locLabel ? ' · ' + locLabel : ''}`;
+
   el.innerHTML = `
     <div class="dash-hero">
       <div class="dash-hero-title">${greeting().replace(',', '')} 👋</div>
-      <div class="dash-hero-sub">${isEmployee ? 'Tu resumen de venta sugestiva' : 'Resumen del equipo IVS'}</div>
+      <div class="dash-hero-sub">${subTitle}</div>
     </div>
     ${newsboardHTML()}
     ${metricsHTML}
@@ -1051,8 +1147,6 @@ function renderDashboard() {
     <div class="dash-nav-grid">${tilesHTML}</div>`;
 }
 
-/* Tablero de novedades: competencias vigentes y próximas, con detalle.
-   Lo ven todos los roles. */
 function newsboardHTML() {
   const hoy = today();
   const vigentes = competitions
@@ -1111,7 +1205,6 @@ function newsboardHTML() {
     </div>`;
 }
 
-/* Días desde hoy hasta una fecha YYYY-MM-DD (negativo si ya pasó) */
 function daysUntil(dateStr) {
   const d1 = new Date(today() + 'T00:00:00');
   const d2 = new Date(dateStr + 'T00:00:00');
@@ -1458,7 +1551,7 @@ function renderTips() {
 function initPushNotifications() {
   if (!('Notification' in window)) return;
   if (Notification.permission === 'granted') {
-    subscribeToPush();      // asegura que el dispositivo esté suscrito y al día
+    subscribeToPush();
     sendTipNotification();
   } else if (Notification.permission === 'default') {
     document.getElementById('push-banner').style.display = 'flex';
@@ -1476,7 +1569,6 @@ async function requestPushPermission() {
   }
 }
 
-/* Suscribe ESTE dispositivo a Web Push y guarda la suscripción en Supabase */
 async function subscribeToPush() {
   if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
     console.warn('Push no soportado en este dispositivo');
@@ -1493,10 +1585,11 @@ async function subscribeToPush() {
     }
     const j = sub.toJSON();
     const { error } = await sb.from('push_subscriptions').upsert({
-      user_id:  currentProfile.id,
-      endpoint: sub.endpoint,
-      p256dh:   j.keys.p256dh,
-      auth:     j.keys.auth,
+      user_id:     currentProfile.id,
+      location_id: currentProfile.location_id,
+      endpoint:    sub.endpoint,
+      p256dh:      j.keys.p256dh,
+      auth:        j.keys.auth,
     }, { onConflict: 'endpoint' });
     if (error) { console.error('Error guardando suscripción:', error); return false; }
     return true;
@@ -1506,7 +1599,6 @@ async function subscribeToPush() {
   }
 }
 
-/* Consejo local del arranque (solo mientras la app está abierta) */
 function sendTipNotification() {
   const tip = TIPS[Math.floor(Math.random() * TIPS.length)];
   if (sessionStorage.getItem('tip-sent')) return;
@@ -1516,7 +1608,6 @@ function sendTipNotification() {
   }, 3000);
 }
 
-/* Convierte la clave VAPID base64-url a Uint8Array (formato que pide el navegador) */
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
   const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -1526,7 +1617,6 @@ function urlBase64ToUint8Array(base64String) {
   return arr;
 }
 
-/* Invoca la Edge Function que manda el push a todo el equipo */
 async function notifyCompetition(name, endDate) {
   try {
     const { data, error } = await sb.functions.invoke('send-push', {
@@ -1535,6 +1625,7 @@ async function notifyCompetition(name, endDate) {
         body: `${name} — ¡puntos especiales hasta ${fmtDate(endDate)}! Entrá y empezá a sumar.`,
         url: '/',
         tag: 'comp-' + Date.now(),
+        location_id: currentLocationId,
       },
     });
     if (error) { console.warn('No se pudo notificar:', error); showToast('No se pudo enviar el aviso'); return; }
@@ -1546,7 +1637,6 @@ async function notifyCompetition(name, endDate) {
   }
 }
 
-/* ── Consejo de venta por push (Admin / supermanager) ── */
 let adminTipIndex = 0;
 function renderAdminTip() {
   const tip = TIPS[adminTipIndex];
@@ -1564,7 +1654,13 @@ async function sendTipPush() {
   const tip = TIPS[adminTipIndex];
   try {
     const { data, error } = await sb.functions.invoke('send-push', {
-      body: { title: '💡 Consejo de venta', body: tip.text, url: '/', tag: 'tip-' + Date.now() },
+      body: {
+        title: '💡 Consejo de venta',
+        body: tip.text,
+        url: '/',
+        tag: 'tip-' + Date.now(),
+        location_id: currentLocationId,
+      },
     });
     if (error) { showToast('No se pudo enviar el consejo'); return; }
     if (data && data.sent !== undefined) {
@@ -1576,10 +1672,8 @@ async function sendTipPush() {
 }
 
 /* ══════════════════════════════════
-   CARGA DE VENTAS — con puntos dinámicos
+   CARGA DE VENTAS
 ══════════════════════════════════ */
-
-// Puntos efectivos para la fecha actualmente seleccionada en el formulario
 let effectiveProducts = [...PRODUCTS];
 
 function onFechaChange() {
@@ -1647,13 +1741,13 @@ async function submitLog() {
   if (!uid)   { showToast('Seleccioná un vendedor'); return; }
   if (!fecha) { showToast('Ingresá la fecha del turno'); return; }
 
-  // Recalcular con los puntos efectivos de ESA fecha (no los de hoy)
   const pEff = getEffectivePoints(fecha);
   const pts  = pEff.reduce((s,p)=>s+(qtys[p.id]||0)*p.pts, 0);
   if (pts===0){ showToast('Ingresá al menos un producto'); return; }
 
   const row = {
     user_id: uid, registered_by: currentProfile.id, fecha, pts, nota,
+    location_id: currentLocationId,
     pileta_cheddar: qtys.pileta_cheddar||0, combo_grande: qtys.combo_grande||0,
     cafe_espresso:  qtys.cafe_espresso||0,  cono_especial: qtys.cono_especial||0,
   };
@@ -1759,11 +1853,11 @@ async function saveBasePoints() {
   for (const u of updates) {
     const { error } = await sb.from('product_config')
       .update({ base_points: u.base_points, updated_at: new Date().toISOString() })
-      .eq('id', u.id);
+      .eq('id', u.id)
+      .eq('location_id', currentLocationId);
     if (error) { showToast('Error al guardar: ' + error.message); return; }
   }
 
-  // Actualizar en memoria
   PRODUCTS = PRODUCTS.map(p => {
     const u = updates.find(x => x.id === p.id);
     return u ? { ...p, pts: u.base_points } : p;
@@ -1804,7 +1898,6 @@ async function createCompetition() {
   if (!end)   { showToast('Seleccioná la fecha de fin'); return; }
   if (end < start) { showToast('La fecha de fin debe ser igual o posterior al inicio'); return; }
 
-  // Productos seleccionados
   const selectedProducts = PRODUCTS
     .filter(p => document.getElementById('comp-chk-' + p.id)?.checked)
     .map(p => ({
@@ -1814,25 +1907,27 @@ async function createCompetition() {
 
   if (!selectedProducts.length) { showToast('Seleccioná al menos un producto'); return; }
 
-  // Insertar competencia
+  // Insertar competencia con location_id
   const { data: comp, error: compErr } = await sb
     .from('express_competitions')
-    .insert({ name, start_date: start, end_date: end, created_by: currentProfile.id })
+    .insert({
+      name,
+      start_date:  start,
+      end_date:    end,
+      created_by:  currentProfile.id,
+      location_id: currentLocationId,
+    })
     .select()
     .single();
   if (compErr) { showToast('Error al crear competencia: ' + compErr.message); return; }
 
-  // Insertar productos de la competencia
   const prods = selectedProducts.map(sp => ({ competition_id: comp.id, ...sp }));
   const { error: prodsErr } = await sb.from('express_competition_products').insert(prods);
   if (prodsErr) { showToast('Error al guardar productos: ' + prodsErr.message); return; }
 
   showToast('¡Competencia creada!');
-
-  // Avisar al equipo por push (si hay dispositivos suscritos)
   notifyCompetition(name, end);
 
-  // Limpiar formulario
   document.getElementById('comp-name').value  = '';
   document.getElementById('comp-start').value = '';
   document.getElementById('comp-end').value   = '';
@@ -1843,10 +1938,9 @@ async function createCompetition() {
     if (pts) pts.value = p.pts;
   });
 
-  // Recargar competencias
   await loadCompetitions();
   renderCompList();
-  renderProductRows(); // actualizar banner de carga
+  renderProductRows();
   renderDashboard();
 }
 
@@ -1886,12 +1980,11 @@ function renderCompList() {
   el.innerHTML = competitions.map(c => {
     const isActive   = c.active && hoy >= c.start_date && hoy <= c.end_date;
     const isUpcoming = c.active && hoy < c.start_date;
-    const isEnded    = !c.active || hoy > c.end_date;
 
     let statusBadge = '';
-    if (isActive)   statusBadge = '<span class="comp-badge-active">● Activa ahora</span>';
+    if (isActive)        statusBadge = '<span class="comp-badge-active">● Activa ahora</span>';
     else if (isUpcoming) statusBadge = '<span class="comp-badge-upcoming">● Próxima</span>';
-    else statusBadge = '<span class="comp-badge-ended">Finalizada</span>';
+    else                 statusBadge = '<span class="comp-badge-ended">Finalizada</span>';
 
     const productLines = c.products.map(cp => {
       const prod = PRODUCTS.find(p => p.id === cp.product_id);
@@ -1985,13 +2078,20 @@ async function createEmployee() {
   const initials = (parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
   const color    = COLORS[allProfiles.length % COLORS.length];
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
+
+  // El nuevo empleado hereda el location_id del local activo
   const { error } = await sb.auth.signUp({ email, password: pass,
-    options: { data: { username, full_name: name, role: 'employee', initials, color } }
+    options: { data: {
+      username, full_name: name, role: 'employee',
+      initials, color, location_id: currentLocationId
+    }}
   });
   if (error){ showToast('Error: '+error.message); return; }
   showToast('Vendedor creado');
   ['new-name','new-email','new-pass'].forEach(id=>document.getElementById(id).value='');
-  const { data } = await sb.from('profiles').select('*').order('full_name');
+
+  // Recargar solo perfiles del local activo
+  const { data } = await sb.from('profiles').select('*').eq('location_id', currentLocationId).order('full_name');
   allProfiles = data || [];
   renderUserList(); fillEmployeeSelect(); renderRanking(); renderDashboard();
 }
@@ -2019,8 +2119,9 @@ function renderUserList() {
    HELPERS
 ══════════════════════════════════ */
 function roleLabel(role) {
-  if (role==='supermanager') return 'Super Gerente';
-  if (role==='manager') return 'Gerente';
+  if (role==='supermanager')     return 'Super Gerente';
+  if (role==='business_manager') return 'Gerente de Negocio';
+  if (role==='manager')          return 'Gerente';
   return 'Vendedor';
 }
 function avatarHTML(profile, size) {
