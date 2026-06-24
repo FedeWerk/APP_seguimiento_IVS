@@ -920,11 +920,14 @@ async function loadAppData() {
   allLocations = locs || [];
 
   // 3. Local activo inicial
-  // supermanager: empieza con el primer local (puede cambiar desde el selector)
+  // supermanager: arranca en VCP por defecto (o el primero si no existe VCP)
   // todos los demás: su propio location_id
-  currentLocationId = isSuper()
-    ? (allLocations[0]?.id || null)
-    : currentProfile.location_id;
+  if (isSuper()) {
+    const vcp = allLocations.find(l => l.code === 'VCP');
+    currentLocationId = vcp?.id || allLocations[0]?.id || null;
+  } else {
+    currentLocationId = currentProfile.location_id;
+  }
 
   // 4. Cargar datos del local activo
   await loadLocationData();
