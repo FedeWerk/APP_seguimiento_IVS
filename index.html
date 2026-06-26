@@ -319,20 +319,20 @@
       border: none; background: var(--accent); color: white; cursor: pointer; white-space: nowrap;
     }
 
-    /* ── Competencias Express ── */
-    .comp-card { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 10px; overflow: hidden; }
-    .comp-card-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--bg2); }
-    .comp-card-title { font-size: 14px; font-weight: 600; }
+    /* ── Competencias ── */
+    .comp-card { border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 12px; overflow: hidden; }
+    .comp-card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; background: var(--bg2); }
+    .comp-card-title { font-size: 15px; font-weight: 700; }
     .comp-card-dates { font-size: 11px; color: var(--text2); margin-top: 2px; }
-    .comp-card-body { padding: 10px 14px; }
+    .comp-card-body { padding: 12px 16px; }
     .comp-product-line {
       display: flex; align-items: center; justify-content: space-between;
       padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px;
     }
     .comp-product-line:last-child { border-bottom: none; }
-    .comp-badge-active { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--success-bg); color: var(--success); white-space: nowrap; }
-    .comp-badge-upcoming { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--accent-bg); color: var(--accent-dark); white-space: nowrap; }
-    .comp-badge-ended { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 20px; background: var(--bg3); color: var(--text3); white-space: nowrap; }
+    .comp-badge-active   { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--success-bg); color: var(--success); white-space: nowrap; }
+    .comp-badge-upcoming { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--accent-bg); color: var(--accent-dark); white-space: nowrap; }
+    .comp-badge-ended    { font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; background: var(--bg3); color: var(--text3); white-space: nowrap; }
     .comp-active-banner {
       background: linear-gradient(135deg, #0F6E56 0%, #085041 100%);
       color: #fff; padding: 10px 16px; font-size: 12px;
@@ -340,6 +340,29 @@
     }
     .comp-active-banner i { font-size: 16px; flex-shrink: 0; }
     .pts-modified { font-size: 11px; background: var(--success-bg); color: var(--success); padding: 1px 6px; border-radius: 10px; font-weight: 700; }
+
+    /* ── Comp ranking ── */
+    .comp-rank-section {
+      background: var(--bg); border-top: 1px solid var(--border); margin-top: 10px;
+    }
+    .comp-rank-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 16px; border-bottom: 1px solid var(--border);
+    }
+    .comp-rank-row:last-child { border-bottom: none; }
+    .comp-hist-card {
+      border: 1px solid var(--border); border-radius: var(--radius);
+      margin-bottom: 10px; overflow: hidden; opacity: 0.85;
+    }
+    .comp-hist-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 16px; background: var(--bg2);
+    }
+    .comp-winner-chip {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--gold); font-weight: 600;
+      margin-top: 6px;
+    }
 
     /* ── Puntos base editor ── */
     .pts-edit-row { display: flex; align-items: center; gap: 10px; padding: 10px 0; border-bottom: 1px solid var(--border); }
@@ -360,6 +383,22 @@
       border-color: rgba(12,68,124,0.3); color: var(--biz); font-weight: 600;
     }
     .location-selector label { font-size: 12px; color: var(--biz); margin: 0; white-space: nowrap; }
+
+    /* ── Comp tabs internos ── */
+    .comp-sub-tabs {
+      display: flex; border-bottom: 1px solid var(--border);
+      background: var(--bg2); overflow-x: auto; scrollbar-width: none;
+    }
+    .comp-sub-tabs::-webkit-scrollbar { display: none; }
+    .comp-sub-tab {
+      padding: 10px 16px; font-size: 12px; font-weight: 600; color: var(--text2);
+      cursor: pointer; border-bottom: 2px solid transparent; white-space: nowrap;
+      font-family: var(--font); background: none; border-top: none; border-left: none; border-right: none;
+      transition: color .15s;
+    }
+    .comp-sub-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+    .comp-sub-panel { display: none; }
+    .comp-sub-panel.active { display: block; }
   </style>
 </head>
 <body>
@@ -449,8 +488,7 @@
   <div id="location-selector-bar" class="location-selector" style="display:none;">
     <i class="ti ti-building-store"></i>
     <label>Local:</label>
-    <select id="super-location-select" onchange="onSuperLocationChange()" style="flex:1;">
-    </select>
+    <select id="super-location-select" onchange="onSuperLocationChange()" style="flex:1;"></select>
   </div>
 
   <div class="app-header">
@@ -466,15 +504,16 @@
   </div>
 
   <div class="tab-bar" id="tab-bar">
-    <div class="tab active" data-tab="inicio"    onclick="switchTab('inicio',this)"><i class="ti ti-home"></i>Inicio</div>
-    <div class="tab" data-tab="ranking"           onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
-    <div class="tab" data-tab="perfil"            onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
-    <div class="tab" data-tab="tips"              onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
-    <div class="tab" data-tab="analisis"  id="tab-btn-analisis"  onclick="switchTab('analisis',this)"  style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
-    <div class="tab" data-tab="cargar"    id="tab-btn-cargar"    onclick="switchTab('cargar',this)"    style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
-    <div class="tab" data-tab="historial" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
-    <div class="tab" data-tab="admin"     id="tab-btn-admin"     onclick="switchTab('admin',this)"     style="display:none;"><i class="ti ti-settings"></i>Admin</div>
-    <div class="tab" data-tab="locales"  id="tab-btn-locales"  onclick="switchTab('locales',this)"  style="display:none;"><i class="ti ti-building-store"></i>Locales</div>
+    <div class="tab active" data-tab="inicio"       onclick="switchTab('inicio',this)"><i class="ti ti-home"></i>Inicio</div>
+    <div class="tab"        data-tab="ranking"       onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
+    <div class="tab"        data-tab="perfil"        onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
+    <div class="tab"        data-tab="tips"          onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
+    <div class="tab"        data-tab="competencias"  onclick="switchTab('competencias',this)"><i class="ti ti-bolt"></i>Competencias</div>
+    <div class="tab" id="tab-btn-analisis"  onclick="switchTab('analisis',this)"  style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
+    <div class="tab" id="tab-btn-cargar"    onclick="switchTab('cargar',this)"    style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
+    <div class="tab" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
+    <div class="tab" id="tab-btn-admin"     onclick="switchTab('admin',this)"     style="display:none;"><i class="ti ti-settings"></i>Admin</div>
+    <div class="tab" id="tab-btn-locales"   onclick="switchTab('locales',this)"   style="display:none;"><i class="ti ti-building-store"></i>Locales</div>
   </div>
 
   <!-- ══ INICIO ══ -->
@@ -560,6 +599,65 @@
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);" id="tips-list"></div>
   </div>
 
+  <!-- ══ COMPETENCIAS ══ -->
+  <div id="tab-competencias" class="tab-content">
+
+    <!-- Sub-tabs -->
+    <div class="comp-sub-tabs">
+      <button class="comp-sub-tab active" onclick="switchCompTab('activas',this)"><i class="ti ti-bolt" style="font-size:13px;margin-right:4px;"></i>Activas</button>
+      <button class="comp-sub-tab" onclick="switchCompTab('historial',this)"><i class="ti ti-history" style="font-size:13px;margin-right:4px;"></i>Historial</button>
+      <button class="comp-sub-tab" id="comp-sub-tab-admin" onclick="switchCompTab('admin',this)" style="display:none;"><i class="ti ti-settings" style="font-size:13px;margin-right:4px;"></i>Gestión</button>
+    </div>
+
+    <!-- Panel: Activas -->
+    <div id="comp-panel-activas" class="comp-sub-panel active">
+      <div id="comp-active-banner" style="display:none;" class="comp-active-banner">
+        <i class="ti ti-bolt"></i>
+        <div id="comp-active-text">Competencia express activa</div>
+      </div>
+      <div style="padding:16px 16px 8px;">
+        <div style="font-size:16px;font-weight:700;">Competencias activas</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px;">Competencias en curso y próximas</div>
+      </div>
+      <div id="comp-activas-list"><div class="loader">Cargando…</div></div>
+    </div>
+
+    <!-- Panel: Historial -->
+    <div id="comp-panel-historial" class="comp-sub-panel">
+      <div style="padding:16px 16px 8px;">
+        <div style="font-size:16px;font-weight:700;">Historial de competencias</div>
+        <div style="font-size:13px;color:var(--text2);margin-top:2px;">Resultados de competencias pasadas</div>
+      </div>
+      <div id="comp-historial-list"><div class="loader">Cargando…</div></div>
+    </div>
+
+    <!-- Panel: Admin (solo managers+) -->
+    <div id="comp-panel-admin" class="comp-sub-panel">
+      <div style="padding:16px;">
+
+        <!-- Nueva competencia -->
+        <div class="card">
+          <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-bolt" style="margin-right:6px;color:var(--success);"></i>Nueva competencia</div>
+          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Durante una competencia, los productos seleccionados valen los puntos especiales. Los registros guardados en ese período conservan esos puntos aunque la competencia termine.</div>
+          <label>Nombre</label>
+          <input type="text" id="comp-name" placeholder="Ej: Semana del café" />
+          <div style="display:flex;gap:10px;">
+            <div style="flex:1;"><label>Fecha inicio</label><input type="date" id="comp-start" /></div>
+            <div style="flex:1;"><label>Fecha fin</label><input type="date" id="comp-end" /></div>
+          </div>
+          <div style="font-size:13px;font-weight:600;margin:10px 0 8px;color:var(--text2);">Productos con puntos especiales</div>
+          <div id="comp-product-inputs"></div>
+          <button class="btn btn-primary" onclick="createCompetition()"><i class="ti ti-bolt"></i> Crear competencia</button>
+        </div>
+
+        <!-- Lista de gestión -->
+        <div style="font-size:14px;font-weight:600;margin:4px 0 12px;">Todas las competencias</div>
+        <div id="comp-manage-list"><div class="loader" style="padding:1.5rem;">Cargando…</div></div>
+      </div>
+    </div>
+
+  </div>
+
   <!-- ══ ANÁLISIS ══ -->
   <div id="tab-analisis" class="tab-content">
     <div style="padding:16px 16px 0;">
@@ -586,10 +684,6 @@
 
   <!-- ══ CARGAR ══ -->
   <div id="tab-cargar" class="tab-content">
-    <div id="comp-active-banner" style="display:none;" class="comp-active-banner">
-      <i class="ti ti-bolt"></i>
-      <div id="comp-active-text">Competencia express activa</div>
-    </div>
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Registrar venta sugestiva</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:14px;">Ingresá las unidades vendidas por turno</div>
@@ -599,6 +693,10 @@
       </select>
       <label>Fecha del turno</label>
       <input type="date" id="inp-fecha" style="margin-bottom:14px;" onchange="onFechaChange()" />
+    </div>
+    <div id="cargar-comp-banner" style="display:none;" class="comp-active-banner">
+      <i class="ti ti-bolt"></i>
+      <div id="cargar-comp-text">Competencia express activa</div>
     </div>
     <div style="border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--bg);margin-bottom:12px;" id="product-rows"></div>
     <div class="pts-summary">
@@ -654,7 +752,7 @@
         <button class="btn" onclick="createEmployee()"><i class="ti ti-plus"></i> Crear vendedor</button>
       </div>
 
-      <!-- Crear gerente de turno (solo business_manager y supermanager) -->
+      <!-- Crear gerente de turno -->
       <div class="card" id="admin-create-manager" style="display:none;">
         <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-user-star" style="margin-right:6px;color:var(--gold);"></i>Crear gerente de turno</div>
         <div style="font-size:12px;color:var(--text2);margin-bottom:12px;">Se crea en este local con rol de gerente.</div>
@@ -671,7 +769,7 @@
         <button class="btn" onclick="saveGoal()"><i class="ti ti-check"></i> Actualizar meta</button>
       </div>
 
-      <!-- ── PUNTOS BASE (supermanager y business_manager) ── -->
+      <!-- Puntos base (supermanager y business_manager) -->
       <div id="admin-pts-section" style="display:none;">
         <div class="card">
           <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-coin" style="margin-right:6px;color:var(--gold);"></i>Puntos base por producto</div>
@@ -680,30 +778,7 @@
           <button class="btn btn-primary" style="margin-top:12px;" onclick="saveBasePoints()"><i class="ti ti-device-floppy"></i> Guardar puntos base</button>
         </div>
 
-        <!-- ── COMPETENCIAS EXPRESS ── -->
-        <div class="card">
-          <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-bolt" style="margin-right:6px;color:var(--success);"></i>Competencias Express</div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Durante una competencia, los productos seleccionados valen los puntos especiales. Los registros guardados en ese período conservan esos puntos aunque la competencia termine.</div>
-
-          <!-- Nueva competencia -->
-          <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:14px;margin-bottom:12px;">
-            <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:var(--text2);">Nueva competencia</div>
-            <label>Nombre</label>
-            <input type="text" id="comp-name" placeholder="Ej: Semana del café" />
-            <div style="display:flex;gap:10px;">
-              <div style="flex:1;"><label>Fecha inicio</label><input type="date" id="comp-start" /></div>
-              <div style="flex:1;"><label>Fecha fin</label><input type="date" id="comp-end" /></div>
-            </div>
-            <div style="font-size:13px;font-weight:600;margin:10px 0 8px;color:var(--text2);">Productos con puntos especiales</div>
-            <div id="comp-product-inputs"></div>
-            <button class="btn btn-primary" onclick="createCompetition()"><i class="ti ti-bolt"></i> Crear competencia</button>
-          </div>
-
-          <!-- Lista de competencias -->
-          <div id="comp-list"><div class="loader" style="padding:1.5rem;">Cargando…</div></div>
-        </div>
-
-        <!-- ── CONSEJO AL EQUIPO (push) ── -->
+        <!-- Consejo push -->
         <div class="card">
           <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-bulb" style="margin-right:6px;color:var(--gold);"></i>Enviar consejo al equipo</div>
           <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Mandá un consejo de venta como notificación a todos los dispositivos suscritos.</div>
@@ -726,14 +801,12 @@
 
 </div>
 
-
   <!-- ══ LOCALES ══ -->
   <div id="tab-locales" class="tab-content">
     <div style="padding:16px;">
       <div style="font-size:16px;font-weight:600;margin-bottom:4px;">Gestión de locales</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:16px;">Creá locales y asigná gerentes</div>
 
-      <!-- Crear local -->
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-building-store" style="margin-right:6px;color:var(--biz);"></i>Nuevo local</div>
         <label>Nombre del local</label>
@@ -743,7 +816,6 @@
         <button class="btn btn-primary" onclick="createLocation()"><i class="ti ti-plus"></i> Crear local</button>
       </div>
 
-      <!-- Crear gerente -->
       <div class="card">
         <div style="font-size:14px;font-weight:600;margin-bottom:12px;"><i class="ti ti-user-star" style="margin-right:6px;color:var(--gold);"></i>Nuevo gerente</div>
         <label>Nombre completo</label>
@@ -762,14 +834,12 @@
         <button class="btn btn-primary" onclick="createManager()"><i class="ti ti-plus"></i> Crear gerente</button>
       </div>
 
-      <!-- Lista de locales -->
       <div style="font-size:14px;font-weight:600;margin:4px 0 12px;">Locales activos</div>
       <div id="locations-list"></div>
     </div>
   </div>
 
 <div class="toast" id="toast"></div>
-
 <script>
 /* ══════════════════════════════════
    SUPABASE
@@ -784,7 +854,6 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
 /* ══════════════════════════════════
    ESTADO GLOBAL
 ══════════════════════════════════ */
-// Defaults mientras carga desde Supabase
 let PRODUCTS = [
   { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3, unit:'pileta', color:'#BA7517' },
   { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2, unit:'combo',  color:'#534AB7' },
@@ -792,22 +861,22 @@ let PRODUCTS = [
   { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3, unit:'cono',   color:'#993C1D' },
 ];
 
-let competitions    = [];
+let competitions      = [];
 let activeCompetition = null;
 
 const COLORS = ['av-teal','av-coral','av-amber','av-pink','av-blue','av-purple'];
 const qtys = {};
 PRODUCTS.forEach(p => qtys[p.id] = 0);
 
-let currentUser      = null;
-let currentProfile   = null;
-let allProfiles      = [];   // perfiles del local activo
-let allLogs          = [];   // logs del local activo
-let allLocations     = [];   // todos los locales (cargados siempre)
-let currentLocationId = null; // local que se está visualizando (puede diferir del perfil en supermanager)
-let monthlyGoal      = 100;
-let period           = 'week';
-let currentTipIndex  = 0;
+let currentUser       = null;
+let currentProfile    = null;
+let allProfiles       = [];
+let allLogs           = [];
+let allLocations      = [];
+let currentLocationId = null;
+let monthlyGoal       = 100;
+let period            = 'week';
+let currentTipIndex   = 0;
 
 let appInitialized = false;
 let isRecovering   = window.location.hash.includes('type=recovery');
@@ -815,11 +884,10 @@ let isRecovering   = window.location.hash.includes('type=recovery');
 /* ══════════════════════════════════
    HELPERS DE ROL
 ══════════════════════════════════ */
-function isSuper()   { return currentProfile?.role === 'supermanager'; }
-function isBiz()     { return currentProfile?.role === 'business_manager'; }
-function isManager() { return ['manager','business_manager','supermanager'].includes(currentProfile?.role); }
-function canEditPts(){ return ['business_manager','supermanager'].includes(currentProfile?.role); }
-function canManageComps() { return ['business_manager','supermanager'].includes(currentProfile?.role); }
+function isSuper()    { return currentProfile?.role === 'supermanager'; }
+function isBiz()      { return currentProfile?.role === 'business_manager'; }
+function isManager()  { return ['manager','business_manager','supermanager'].includes(currentProfile?.role); }
+function canEditPts() { return ['business_manager','supermanager'].includes(currentProfile?.role); }
 
 /* ══════════════════════════════════
    INIT
@@ -909,19 +977,14 @@ function showAuthMsg(elId, msg, isError) {
    DATOS
 ══════════════════════════════════ */
 async function loadAppData() {
-  // 1. Perfil propio
   const { data: prof, error: profErr } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
   if (profErr && profErr.code !== 'PGRST116') throw profErr;
   currentProfile = prof || null;
   if (!currentProfile) return;
 
-  // 2. Todos los locales
   const { data: locs } = await sb.from('locations').select('*').order('name');
   allLocations = locs || [];
 
-  // 3. Local activo inicial
-  // supermanager: arranca en VCP por defecto (o el primero si no existe VCP)
-  // todos los demás: su propio location_id
   if (isSuper()) {
     const vcp = allLocations.find(l => l.code === 'VCP');
     currentLocationId = vcp?.id || allLocations[0]?.id || null;
@@ -929,11 +992,9 @@ async function loadAppData() {
     currentLocationId = currentProfile.location_id;
   }
 
-  // 4. Cargar datos del local activo
   await loadLocationData();
 }
 
-/* Carga perfiles, logs, product_config y competencias del local activo */
 async function loadLocationData() {
   if (!currentLocationId) return;
 
@@ -947,7 +1008,6 @@ async function loadLocationData() {
   allLogs     = logsRes.data  || [];
   if (settingRes.data) monthlyGoal = parseInt(settingRes.data.value) || 100;
 
-  // Asegurar que el propio perfil esté en allProfiles (supermanager puede no estar en ese local)
   if (isSuper() && !allProfiles.find(p => p.id === currentProfile.id)) {
     allProfiles = [currentProfile, ...allProfiles];
   }
@@ -963,7 +1023,6 @@ async function loadProductConfig() {
     const remote = data.find(d => d.id === p.id);
     return remote ? { ...p, pts: Number(remote.base_points), name: remote.name } : p;
   });
-  // Re-inicializar qtys para cualquier producto nuevo
   PRODUCTS.forEach(p => { if (qtys[p.id] === undefined) qtys[p.id] = 0; });
 }
 
@@ -998,13 +1057,10 @@ function getEffectivePoints(fecha) {
   });
 }
 
-/* ── Selector de local para supermanager ── */
 async function onSuperLocationChange() {
   const sel = document.getElementById('super-location-select');
   currentLocationId = sel.value;
-  // Actualizar badge de local en header
   renderLocationBadge();
-  // Resetear productos a defaults antes de recargar
   PRODUCTS = [
     { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3, unit:'pileta', color:'#BA7517' },
     { id:'combo_grande',   name:'Combos grandes',    icon:'🍔', pts:2, unit:'combo',  color:'#534AB7' },
@@ -1012,33 +1068,17 @@ async function onSuperLocationChange() {
     { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3, unit:'cono',   color:'#993C1D' },
   ];
   await loadLocationData();
-  // Re-renderizar todo con el nuevo local
-  renderDashboard();
-  renderRanking();
-  renderProfile();
-  renderAnalysis();
-  fillEmployeeSelect();
-  renderProductRows();
-  renderRecentLogs();
-  renderUserList();
-  fillHistorialVendorSelect();
-  renderHistorial();
-  renderPtsBaseEditor();
-  renderCompProductInputs();
-  renderCompList();
-  if (isSuper()) {
-    fillManagerLocationSelect();
-    renderLocationsList();
-  }
+  renderDashboard(); renderRanking(); renderProfile(); renderAnalysis();
+  fillEmployeeSelect(); renderProductRows(); renderRecentLogs();
+  renderUserList(); fillHistorialVendorSelect(); renderHistorial();
+  renderPtsBaseEditor(); renderCompetencias();
+  if (isSuper()) { fillManagerLocationSelect(); renderLocationsList(); }
 }
 
 function renderLocationBadge() {
   const loc = allLocations.find(l => l.id === currentLocationId);
   const el  = document.getElementById('hdr-location');
-  if (loc && isSuper()) {
-    el.textContent = loc.name;
-    el.style.display = 'inline-block';
-  } else if (loc && isBiz()) {
+  if (loc && (isSuper() || isBiz())) {
     el.textContent = loc.name;
     el.style.display = 'inline-block';
   } else {
@@ -1061,19 +1101,18 @@ function showLoadError(msg) {
 
 function showApp() {
   showScreen('app');
-  const role       = currentProfile.role;
+  const role     = currentProfile.role;
   const isEmployee = role === 'employee';
 
   document.getElementById('hdr-greeting').textContent = greeting();
   document.getElementById('hdr-name').textContent     = currentProfile.full_name;
 
   const badge = document.getElementById('hdr-badge');
-  if (isSuper())      { badge.textContent = 'Super Gerente';   badge.className = 'badge badge-super'; }
-  else if (isBiz())   { badge.textContent = 'Gerente de Neg.'; badge.className = 'badge badge-biz'; }
-  else if (isManager()){ badge.textContent = 'Gerente';        badge.className = 'badge badge-mgr'; }
-  else                { badge.textContent = 'Vendedor';        badge.className = 'badge badge-emp'; }
+  if (isSuper())       { badge.textContent = 'Super Gerente';   badge.className = 'badge badge-super'; }
+  else if (isBiz())    { badge.textContent = 'Gerente de Neg.'; badge.className = 'badge badge-biz'; }
+  else if (isManager()){ badge.textContent = 'Gerente';         badge.className = 'badge badge-mgr'; }
+  else                 { badge.textContent = 'Vendedor';        badge.className = 'badge badge-emp'; }
 
-  // Selector de local — solo supermanager
   const locBar = document.getElementById('location-selector-bar');
   if (isSuper() && allLocations.length > 0) {
     locBar.style.display = 'flex';
@@ -1085,32 +1124,27 @@ function showApp() {
     locBar.style.display = 'none';
   }
 
-  // Badge de local en header
   renderLocationBadge();
 
-  // Visibilidad de tabs
-  // supermanager y business_manager ven análisis
   document.getElementById('tab-btn-analisis').style.display  = (isSuper() || isBiz()) ? 'flex' : 'none';
-  // manager, business_manager y supermanager ven cargar, historial, admin
   document.getElementById('tab-btn-cargar').style.display    = isManager() ? 'flex' : 'none';
   document.getElementById('tab-btn-historial').style.display = isManager() ? 'flex' : 'none';
   document.getElementById('tab-btn-admin').style.display     = isManager() ? 'flex' : 'none';
-  document.getElementById('tab-btn-locales').style.display   = isSuper()    ? 'flex' : 'none';
+  document.getElementById('tab-btn-locales').style.display   = isSuper()   ? 'flex' : 'none';
   document.getElementById('prof-weekly-section').style.display = isEmployee ? 'block' : 'none';
 
-  // Sección de puntos/competencias: business_manager y supermanager
+  // Tab admin de competencias (sub-tab) solo para managers+
+  const compAdminTab = document.getElementById('comp-sub-tab-admin');
+  if (compAdminTab) compAdminTab.style.display = isManager() ? 'inline-flex' : 'none';
+
   const superSection = document.getElementById('admin-pts-section');
   if (superSection) superSection.style.display = canEditPts() ? 'block' : 'none';
 
-  // Sección crear gerente de turno: business_manager y supermanager
   const createMgrSection = document.getElementById('admin-create-manager');
   if (createMgrSection) createMgrSection.style.display = canEditPts() ? 'block' : 'none';
 
   if (isManager()) {
-    fillEmployeeSelect();
-    renderProductRows();
-    renderRecentLogs();
-    renderUserList();
+    fillEmployeeSelect(); renderProductRows(); renderRecentLogs(); renderUserList();
     fillHistorialVendorSelect();
     document.getElementById('inp-goal').value  = monthlyGoal;
     document.getElementById('inp-fecha').value = today();
@@ -1119,15 +1153,11 @@ function showApp() {
   if (canEditPts()) {
     renderPtsBaseEditor();
     renderCompProductInputs();
-    renderCompList();
     adminTipIndex = Math.floor(Math.random() * TIPS.length);
     renderAdminTip();
   }
 
-  if (isSuper()) {
-    fillManagerLocationSelect();
-    renderLocationsList();
-  }
+  if (isSuper()) { fillManagerLocationSelect(); renderLocationsList(); }
 
   initRangePicker();
   renderTips();
@@ -1138,6 +1168,7 @@ function showApp() {
   switchTab('inicio');
   renderRanking();
   renderProfile();
+  renderCompetencias();
   if (isSuper() || isBiz()) renderAnalysis();
 }
 
@@ -1146,11 +1177,24 @@ function switchTab(tab, el) {
   const btn = el || document.querySelector('.tab[data-tab="' + tab + '"]');
   if (btn) btn.classList.add('active');
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + tab).classList.add('active');
+  const panel = document.getElementById('tab-' + tab);
+  if (panel) panel.classList.add('active');
   window.scrollTo(0, 0);
-  if (tab === 'inicio')    renderDashboard();
-  if (tab === 'analisis')  renderAnalysis();
-  if (tab === 'historial') renderHistorial();
+  if (tab === 'inicio')       renderDashboard();
+  if (tab === 'analisis')     renderAnalysis();
+  if (tab === 'historial')    renderHistorial();
+  if (tab === 'competencias') renderCompetencias();
+}
+
+/* Sub-tabs de competencias */
+function switchCompTab(tab, el) {
+  document.querySelectorAll('.comp-sub-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  document.querySelectorAll('.comp-sub-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('comp-panel-' + tab).classList.add('active');
+  if (tab === 'activas')   renderCompActivas();
+  if (tab === 'historial') renderCompHistorial();
+  if (tab === 'admin')     renderCompManage();
 }
 
 /* ══════════════════════════════════
@@ -1158,9 +1202,8 @@ function switchTab(tab, el) {
 ══════════════════════════════════ */
 function renderDashboard() {
   if (!currentProfile) return;
-  const p        = currentProfile;
-  const role     = p.role;
-  const isEmployee = role === 'employee';
+  const p = currentProfile;
+  const isEmployee = p.role === 'employee';
   const hoy = today();
   const wb  = weekBounds();
   const el  = document.getElementById('dash-content');
@@ -1173,9 +1216,7 @@ function renderDashboard() {
     const monthPts = myLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7)).reduce((s,l)=>s+l.pts,0);
     const weekPts  = myLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to).reduce((s,l)=>s+l.pts,0);
     const employees = allProfiles.filter(pr => pr.role === 'employee');
-    const ranked = employees
-      .map(e => ({ id:e.id, pts: allLogs.filter(l=>l.user_id===e.id).reduce((s,l)=>s+l.pts,0) }))
-      .sort((a,b)=>b.pts-a.pts);
+    const ranked = employees.map(e => ({ id:e.id, pts: allLogs.filter(l=>l.user_id===e.id).reduce((s,l)=>s+l.pts,0) })).sort((a,b)=>b.pts-a.pts);
     const pos = ranked.findIndex(e => e.id === p.id);
     metricsHTML = `
       <div class="metric-grid-3" style="padding:8px 16px 0;">
@@ -1186,12 +1227,13 @@ function renderDashboard() {
   }
 
   const tiles = [];
-  tiles.push({ tab:'ranking',  icon:'ti-trophy',      bg:'var(--gold-bg)',   color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
-  if (isManager()) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)',  color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
-  if (isManager()) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)', color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
+  tiles.push({ tab:'ranking',       icon:'ti-trophy',      bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
+  tiles.push({ tab:'competencias',  icon:'ti-bolt',        bg:'var(--success-bg)', color:'var(--success)', title:'Competencias',    desc:'Activas y resultados' });
+  if (isManager()) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)', color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
+  if (isManager()) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)',color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
   if (isSuper() || isBiz()) tiles.push({ tab:'analisis', icon:'ti-chart-bar', bg:'#E6F1FB', color:'#0C447C', title:'Análisis', desc:'Evolución del equipo' });
-  tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE',        color:'#085041',     title:'Mi perfil', desc:'Tus puntos y productos' });
-  tiles.push({ tab:'tips',   icon:'ti-bulb',         bg:'var(--gold-bg)', color:'var(--gold)', title:'Consejos',  desc:'Técnicas de venta' });
+  tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE', color:'#085041', title:'Mi perfil', desc:'Tus puntos y productos' });
+  tiles.push({ tab:'tips',   icon:'ti-bulb', bg:'var(--gold-bg)', color:'var(--gold)', title:'Consejos', desc:'Técnicas de venta' });
   if (isManager()) tiles.push({ tab:'admin', icon:'ti-settings', bg:'var(--bg2)', color:'var(--text2)', title:'Admin', desc:'Usuarios y metas' });
 
   const tilesHTML = tiles.map(t => `
@@ -1202,9 +1244,7 @@ function renderDashboard() {
     </div>`).join('');
 
   const locLabel = allLocations.find(l => l.id === currentLocationId)?.name || '';
-  const subTitle = isEmployee
-    ? 'Tu resumen de venta sugestiva'
-    : `Equipo IVS${locLabel ? ' · ' + locLabel : ''}`;
+  const subTitle = isEmployee ? 'Tu resumen de venta sugestiva' : `Equipo IVS${locLabel ? ' · ' + locLabel : ''}`;
 
   el.innerHTML = `
     <div class="dash-hero">
@@ -1219,12 +1259,8 @@ function renderDashboard() {
 
 function newsboardHTML() {
   const hoy = today();
-  const vigentes = competitions
-    .filter(c => c.active && hoy >= c.start_date && hoy <= c.end_date)
-    .sort((a,b) => a.end_date.localeCompare(b.end_date));
-  const proximas = competitions
-    .filter(c => c.active && hoy < c.start_date)
-    .sort((a,b) => a.start_date.localeCompare(b.start_date));
+  const vigentes = competitions.filter(c => c.active && hoy >= c.start_date && hoy <= c.end_date).sort((a,b) => a.end_date.localeCompare(b.end_date));
+  const proximas = competitions.filter(c => c.active && hoy < c.start_date).sort((a,b) => a.start_date.localeCompare(b.start_date));
 
   if (!vigentes.length && !proximas.length) {
     return `
@@ -1285,7 +1321,7 @@ function daysUntil(dateStr) {
    PERÍODO / FILTROS
 ══════════════════════════════════ */
 function initRangePicker() {
-  const now = new Date();
+  const now  = new Date();
   const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
   const lunes = new Date(now);
   lunes.setDate(now.getDate() - diff);
@@ -1300,7 +1336,7 @@ function setPeriod(p, el) {
   renderRanking();
 }
 function weekBounds() {
-  const now = new Date();
+  const now  = new Date();
   const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
   const lunes = new Date(now); lunes.setHours(0,0,0,0); lunes.setDate(now.getDate() - diff);
   const domingo = new Date(lunes); domingo.setDate(lunes.getDate() + 6);
@@ -1420,13 +1456,13 @@ function renderProfile() {
    SEMANA CHART
 ══════════════════════════════════ */
 function renderWeekChart(elId, logs, color) {
-  const el = document.getElementById(elId);
+  const el   = document.getElementById(elId);
   const days = ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'];
-  const b = weekBounds();
+  const b    = weekBounds();
   const dayPts = Array(7).fill(0);
   logs.forEach(l => {
     if (l.fecha >= b.from && l.fecha <= b.to) {
-      const d = new Date(l.fecha+'T00:00:00');
+      const d   = new Date(l.fecha+'T00:00:00');
       const idx = (d.getDay() + 6) % 7;
       dayPts[idx] += l.pts;
     }
@@ -1460,7 +1496,7 @@ function renderAnalysis() {
 }
 
 function getWeekStart(offsetWeeks) {
-  const now = new Date();
+  const now  = new Date();
   const diff = now.getDay() === 0 ? 6 : now.getDay() - 1;
   const lunes = new Date(now);
   lunes.setHours(0,0,0,0);
@@ -1498,7 +1534,7 @@ function renderProductShare() {
     qty: allLogs.reduce((s,l)=>s+(l[p.id]||0),0),
     pts: allLogs.reduce((s,l)=>s+(l[p.id]||0)*p.pts,0)
   }));
-  const maxQty = Math.max(...totals.map(p=>p.qty), 1);
+  const maxQty   = Math.max(...totals.map(p=>p.qty), 1);
   const totalPts = totals.reduce((s,p)=>s+p.pts,0);
   el.innerHTML = totals.sort((a,b)=>b.qty-a.qty).map(p => `
     <div class="stat-bar-row">
@@ -1542,8 +1578,7 @@ function renderGrowth() {
     const myLogs = allLogs.filter(l=>l.user_id===e.id);
     const curr = myLogs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+l.pts,0);
     const prev = myLogs.filter(l=>l.fecha>=lastWeek&&l.fecha<=lwStr).reduce((s,l)=>s+l.pts,0);
-    const delta = curr - prev;
-    return { name: e.full_name, curr, prev, delta };
+    return { name: e.full_name, curr, prev, delta: curr - prev };
   }).sort((a,b)=>b.delta-a.delta);
   el.innerHTML = data.map(d => {
     const color = d.delta > 0 ? 'var(--success)' : d.delta < 0 ? 'var(--danger)' : 'var(--text3)';
@@ -1616,16 +1651,248 @@ function renderTips() {
 }
 
 /* ══════════════════════════════════
+   COMPETENCIAS — MÓDULO COMPLETO
+══════════════════════════════════ */
+function renderCompetencias() {
+  renderCompActivas();
+  // Historial y admin se renderizan al cambiar de sub-tab para no sobrecargar
+}
+
+/* Calcula pts de un empleado dentro del período de una competencia, solo de los productos de esa comp */
+function getCompPts(userId, comp) {
+  return allLogs
+    .filter(l => l.user_id === userId && l.fecha >= comp.start_date && l.fecha <= comp.end_date)
+    .reduce((sum, l) => {
+      // Suma solo los productos que participan en la competencia, usando los pts guardados en el log
+      const compProductIds = comp.products.map(cp => cp.product_id);
+      return sum + PRODUCTS.reduce((s, p) => {
+        if (!compProductIds.includes(p.id)) return s;
+        const qty = l[p.id] || 0;
+        // Buscar el override de pts de esa competencia para ese producto
+        const override = comp.products.find(cp => cp.product_id === p.id);
+        const pts = override ? override.points : p.pts;
+        return s + qty * pts;
+      }, 0);
+    }, 0);
+}
+
+function renderCompActivas() {
+  const hoy = today();
+  const activas  = competitions.filter(c => c.active && hoy >= c.start_date && hoy <= c.end_date);
+  const proximas = competitions.filter(c => c.active && hoy < c.start_date);
+
+  // Banner en tab cargar
+  const banner = document.getElementById('cargar-comp-banner');
+  const textEl = document.getElementById('cargar-comp-text');
+  if (banner && activas.length) {
+    textEl.textContent = `Competencia activa: ${activas[0].name} · hasta ${fmtDate(activas[0].end_date)}`;
+    banner.style.display = 'flex';
+  } else if (banner) {
+    banner.style.display = 'none';
+  }
+
+  const el = document.getElementById('comp-activas-list');
+  if (!activas.length && !proximas.length) {
+    el.innerHTML = `
+      <div class="empty-state" style="padding:3rem 1rem;">
+        <i class="ti ti-bolt"></i>
+        <div>No hay competencias activas en este momento</div>
+        ${isManager() ? '<div style="margin-top:12px;"><button class="btn btn-sm btn-primary" onclick="switchCompTab(\'admin\',document.querySelector(\'.comp-sub-tab:last-child\'))"><i class="ti ti-plus"></i> Crear competencia</button></div>' : ''}
+      </div>`;
+    return;
+  }
+
+  const employees = allProfiles.filter(p => p.role === 'employee');
+
+  const compCard = (c, tipo) => {
+    const accent = tipo === 'activa' ? '#0F6E56' : '#534AB7';
+    const chipBg = tipo === 'activa' ? 'var(--success-bg)' : 'var(--accent-bg)';
+    const chipColor = tipo === 'activa' ? 'var(--success)' : 'var(--accent-dark)';
+    const d = tipo === 'activa' ? daysUntil(c.end_date) : daysUntil(c.start_date);
+    let chipText;
+    if (tipo === 'activa') chipText = d <= 0 ? 'Último día' : d === 1 ? 'Termina mañana' : `Termina en ${d} días`;
+    else chipText = d === 0 ? 'Empieza hoy' : d === 1 ? 'Empieza mañana' : `Empieza en ${d} días`;
+
+    const prods = c.products.map(cp => {
+      const pr = PRODUCTS.find(p => p.id === cp.product_id);
+      return `<div class="comp-product-line">
+        <span>${pr?.icon || ''} ${pr?.name || cp.product_id}</span>
+        <span style="font-weight:700;color:${accent};">⚡ ${cp.points} pts <span style="font-size:11px;color:var(--text3);font-weight:400;">(base ${pr?.pts ?? '?'})</span></span>
+      </div>`;
+    }).join('');
+
+    // Ranking de empleados en esta competencia (solo si está activa)
+    let rankingHTML = '';
+    if (tipo === 'activa') {
+      const ranked = employees
+        .map(e => ({ ...e, pts: getCompPts(e.id, c) }))
+        .sort((a,b) => b.pts - a.pts);
+      const maxPts = ranked[0]?.pts || 1;
+      if (ranked.some(e => e.pts > 0)) {
+        rankingHTML = `
+          <div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:10px;">Ranking de la competencia</div>
+            ${ranked.map((e,i) => {
+              const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+              const isMe  = e.id === currentProfile.id;
+              return `<div class="comp-rank-row">
+                <div style="min-width:22px;font-size:13px;color:var(--text3);font-weight:600;${i<3?'font-size:15px;':''}text-align:center;">${medal}</div>
+                ${avatarHTML(e, 30)}
+                <div style="flex:1;">
+                  <div style="font-size:13px;font-weight:500;">${e.full_name}${isMe?'<span class="me-chip">yo</span>':''}</div>
+                  <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.pts/maxPts*100)}%;background:${accent};"></div></div>
+                </div>
+                <div style="font-size:14px;font-weight:700;color:${accent};min-width:50px;text-align:right;">${fmt(e.pts)}<span style="font-size:10px;font-weight:400;color:var(--text3);"> pts</span></div>
+              </div>`;
+            }).join('')}
+          </div>`;
+      } else {
+        rankingHTML = `<div style="margin-top:14px;border-top:1px solid var(--border);padding-top:12px;font-size:13px;color:var(--text3);text-align:center;">Aún no hay ventas registradas en esta competencia</div>`;
+      }
+    }
+
+    return `
+      <div class="comp-card" style="margin:0 16px 14px;border-left:4px solid ${accent};">
+        <div class="comp-card-header">
+          <div>
+            <div class="comp-card-title">${c.name}</div>
+            <div class="comp-card-dates">${fmtDate(c.start_date)} → ${fmtDate(c.end_date)}</div>
+          </div>
+          <span style="font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;background:${chipBg};color:${chipColor};">● ${chipText}</span>
+        </div>
+        <div class="comp-card-body">
+          <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--text2);margin-bottom:8px;">Productos con puntos especiales</div>
+          ${prods}
+          ${rankingHTML}
+          ${isManager() ? `
+            <div style="display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;">
+              <button class="btn btn-sm btn-gold" onclick="notifyCompetition(${JSON.stringify(c.name)}, '${c.end_date}')"><i class="ti ti-bell"></i> Avisar al equipo</button>
+            </div>` : ''}
+        </div>
+      </div>`;
+  };
+
+  el.innerHTML = `<div style="padding-top:8px;">
+    ${activas.map(c => compCard(c, 'activa')).join('')}
+    ${proximas.length ? `<div class="section-title">Próximas</div>${proximas.map(c => compCard(c, 'proxima')).join('')}` : ''}
+  </div>`;
+}
+
+function renderCompHistorial() {
+  const hoy = today();
+  const pasadas = competitions
+    .filter(c => c.end_date < hoy || !c.active)
+    .sort((a,b) => b.end_date.localeCompare(a.end_date));
+
+  const el = document.getElementById('comp-historial-list');
+  if (!pasadas.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:3rem 1rem;"><i class="ti ti-history"></i>Sin competencias finalizadas</div>';
+    return;
+  }
+
+  const employees = allProfiles.filter(p => p.role === 'employee');
+
+  el.innerHTML = `<div style="padding:8px 16px 16px;">` + pasadas.map(c => {
+    const ranked = employees
+      .map(e => ({ ...e, pts: getCompPts(e.id, c) }))
+      .sort((a,b) => b.pts - a.pts)
+      .filter(e => e.pts > 0);
+
+    const winner = ranked[0];
+    const totalPts = ranked.reduce((s,e) => s + e.pts, 0);
+
+    const prods = c.products.map(cp => {
+      const pr = PRODUCTS.find(p => p.id === cp.product_id);
+      return `<span class="log-chip">${pr?.icon || ''} ${pr?.name || cp.product_id} ⚡${cp.points}pts</span>`;
+    }).join('');
+
+    return `
+      <div class="comp-hist-card">
+        <div class="comp-hist-header">
+          <div>
+            <div style="font-size:14px;font-weight:700;">${c.name}</div>
+            <div style="font-size:11px;color:var(--text2);margin-top:2px;">${fmtDate(c.start_date)} → ${fmtDate(c.end_date)}</div>
+            <div class="log-chips" style="margin-top:6px;">${prods}</div>
+          </div>
+          <span class="comp-badge-ended">${c.active ? 'Finalizada' : 'Desactivada'}</span>
+        </div>
+        <div style="padding:12px 16px;">
+          ${winner ? `
+            <div class="comp-winner-chip">🏆 Ganador: <strong>${winner.name}</strong> con ${fmt(winner.pts)} pts</div>
+            ${ranked.length > 1 ? `
+              <div style="margin-top:10px;border-top:1px solid var(--border);padding-top:10px;">
+                ${ranked.slice(0,5).map((e,i) => `
+                  <div style="display:flex;align-items:center;gap:8px;padding:4px 0;">
+                    <div style="font-size:13px;min-width:20px;text-align:center;">${i===0?'🥇':i===1?'🥈':i===2?'🥉':'·'}</div>
+                    ${avatarHTML(e, 26)}
+                    <div style="flex:1;font-size:13px;">${e.full_name}</div>
+                    <div style="font-size:13px;font-weight:600;color:var(--gold);">${fmt(e.pts)} pts</div>
+                  </div>`).join('')}
+              </div>` : ''}
+            <div style="font-size:11px;color:var(--text3);margin-top:8px;">Total del equipo en esta comp: ${fmt(totalPts)} pts</div>
+          ` : '<div style="font-size:13px;color:var(--text3);">Sin registros en esta competencia</div>'}
+        </div>
+      </div>`;
+  }).join('') + '</div>';
+}
+
+function renderCompManage() {
+  renderCompProductInputs();
+  const el = document.getElementById('comp-manage-list');
+  if (!competitions.length) {
+    el.innerHTML = '<div class="empty-state" style="padding:2rem;"><i class="ti ti-bolt"></i>Sin competencias</div>';
+    return;
+  }
+  const hoy = today();
+  el.innerHTML = competitions.map(c => {
+    const isActive   = c.active && hoy >= c.start_date && hoy <= c.end_date;
+    const isUpcoming = c.active && hoy < c.start_date;
+    let badge;
+    if (isActive)        badge = '<span class="comp-badge-active">● Activa ahora</span>';
+    else if (isUpcoming) badge = '<span class="comp-badge-upcoming">● Próxima</span>';
+    else                 badge = '<span class="comp-badge-ended">Finalizada</span>';
+
+    const productLines = c.products.map(cp => {
+      const prod = PRODUCTS.find(p => p.id === cp.product_id);
+      return `<div class="comp-product-line">
+        <span>${prod?.icon || ''} ${prod?.name || cp.product_id}</span>
+        <span style="font-weight:700;color:var(--success);">⚡ ${cp.points} pts <span style="font-size:11px;color:var(--text3);font-weight:400;">(base: ${prod?.pts ?? '?'})</span></span>
+      </div>`;
+    }).join('');
+
+    return `<div class="comp-card">
+      <div class="comp-card-header">
+        <div>
+          <div class="comp-card-title">${c.name}</div>
+          <div class="comp-card-dates">${fmtDate(c.start_date)} → ${fmtDate(c.end_date)}</div>
+        </div>
+        ${badge}
+      </div>
+      <div class="comp-card-body">
+        ${productLines}
+        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-gold" onclick="notifyCompetition(${JSON.stringify(c.name)}, '${c.end_date}')">
+            <i class="ti ti-bell"></i> Avisar
+          </button>
+          <button class="btn btn-sm ${c.active ? '' : 'btn-primary'}" onclick="toggleCompetition(${c.id}, ${c.active})">
+            <i class="ti ti-${c.active ? 'player-pause' : 'player-play'}"></i> ${c.active ? 'Desactivar' : 'Activar'}
+          </button>
+          <button class="btn btn-sm btn-danger" onclick="deleteCompetition(${c.id})">
+            <i class="ti ti-trash"></i> Eliminar
+          </button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════
    PUSH NOTIFICATIONS
 ══════════════════════════════════ */
 function initPushNotifications() {
   if (!('Notification' in window)) return;
-  if (Notification.permission === 'granted') {
-    subscribeToPush();
-    sendTipNotification();
-  } else if (Notification.permission === 'default') {
-    document.getElementById('push-banner').style.display = 'flex';
-  }
+  if (Notification.permission === 'granted') { subscribeToPush(); sendTipNotification(); }
+  else if (Notification.permission === 'default') { document.getElementById('push-banner').style.display = 'flex'; }
 }
 function hidePushBanner() { document.getElementById('push-banner').style.display = 'none'; }
 
@@ -1640,33 +1907,21 @@ async function requestPushPermission() {
 }
 
 async function subscribeToPush() {
-  if (!('serviceWorker' in navigator) || !('PushManager' in window)) {
-    console.warn('Push no soportado en este dispositivo');
-    return false;
-  }
+  if (!('serviceWorker' in navigator) || !('PushManager' in window)) { console.warn('Push no soportado'); return false; }
   try {
     const registration = await navigator.serviceWorker.ready;
     let sub = await registration.pushManager.getSubscription();
     if (!sub) {
-      sub = await registration.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
-      });
+      sub = await registration.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY) });
     }
     const j = sub.toJSON();
     const { error } = await sb.from('push_subscriptions').upsert({
-      user_id:     currentProfile.id,
-      location_id: currentProfile.location_id,
-      endpoint:    sub.endpoint,
-      p256dh:      j.keys.p256dh,
-      auth:        j.keys.auth,
+      user_id: currentProfile.id, location_id: currentProfile.location_id,
+      endpoint: sub.endpoint, p256dh: j.keys.p256dh, auth: j.keys.auth,
     }, { onConflict: 'endpoint' });
     if (error) { console.error('Error guardando suscripción:', error); return false; }
     return true;
-  } catch (e) {
-    console.error('Error suscribiendo a push:', e);
-    return false;
-  }
+  } catch (e) { console.error('Error suscribiendo:', e); return false; }
 }
 
 function sendTipNotification() {
@@ -1680,7 +1935,7 @@ function sendTipNotification() {
 
 function urlBase64ToUint8Array(base64String) {
   const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+  const base64  = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
   const raw = atob(base64);
   const arr = new Uint8Array(raw.length);
   for (let i = 0; i < raw.length; ++i) arr[i] = raw.charCodeAt(i);
@@ -1690,21 +1945,11 @@ function urlBase64ToUint8Array(base64String) {
 async function notifyCompetition(name, endDate) {
   try {
     const { data, error } = await sb.functions.invoke('send-push', {
-      body: {
-        title: '⚡ Nueva Competencia Express',
-        body: `${name} — ¡puntos especiales hasta ${fmtDate(endDate)}! Entrá y empezá a sumar.`,
-        url: '/',
-        tag: 'comp-' + Date.now(),
-        location_id: currentLocationId,
-      },
+      body: { title: '⚡ Nueva Competencia Express', body: `${name} — ¡puntos especiales hasta ${fmtDate(endDate)}! Entrá y empezá a sumar.`, url: '/', tag: 'comp-' + Date.now(), location_id: currentLocationId },
     });
-    if (error) { console.warn('No se pudo notificar:', error); showToast('No se pudo enviar el aviso'); return; }
-    if (data && data.sent !== undefined) {
-      showToast(`Aviso enviado a ${data.sent} dispositivo${data.sent===1?'':'s'}`);
-    }
-  } catch (e) {
-    console.warn('Error al notificar competencia:', e);
-  }
+    if (error) { showToast('No se pudo notificar'); return; }
+    if (data?.sent !== undefined) showToast(`Aviso enviado a ${data.sent} dispositivo${data.sent===1?'':'s'}`);
+  } catch (e) { console.warn('Error al notificar:', e); }
 }
 
 let adminTipIndex = 0;
@@ -1717,28 +1962,17 @@ function renderAdminTip() {
 }
 function shuffleAdminTip() {
   let n; do { n = Math.floor(Math.random() * TIPS.length); } while (n === adminTipIndex && TIPS.length > 1);
-  adminTipIndex = n;
-  renderAdminTip();
+  adminTipIndex = n; renderAdminTip();
 }
 async function sendTipPush() {
   const tip = TIPS[adminTipIndex];
   try {
     const { data, error } = await sb.functions.invoke('send-push', {
-      body: {
-        title: '💡 Consejo de venta',
-        body: tip.text,
-        url: '/',
-        tag: 'tip-' + Date.now(),
-        location_id: currentLocationId,
-      },
+      body: { title: '💡 Consejo de venta', body: tip.text, url: '/', tag: 'tip-' + Date.now(), location_id: currentLocationId },
     });
     if (error) { showToast('No se pudo enviar el consejo'); return; }
-    if (data && data.sent !== undefined) {
-      showToast(`Consejo enviado a ${data.sent} dispositivo${data.sent===1?'':'s'}`);
-    }
-  } catch (e) {
-    showToast('Error al enviar el consejo');
-  }
+    if (data?.sent !== undefined) showToast(`Consejo enviado a ${data.sent} dispositivo${data.sent===1?'':'s'}`);
+  } catch (e) { showToast('Error al enviar el consejo'); }
 }
 
 /* ══════════════════════════════════
@@ -1750,17 +1984,17 @@ function onFechaChange() {
   const fecha = document.getElementById('inp-fecha').value || today();
   effectiveProducts = getEffectivePoints(fecha);
   renderProductRows();
-  updateCompBanner(fecha);
+  updateCargarCompBanner(fecha);
 }
 
-function updateCompBanner(fecha) {
-  const banner = document.getElementById('comp-active-banner');
-  const textEl = document.getElementById('comp-active-text');
+function updateCargarCompBanner(fecha) {
+  const banner = document.getElementById('cargar-comp-banner');
+  const textEl = document.getElementById('cargar-comp-text');
   updateActiveCompetition(fecha);
-  if (activeCompetition) {
+  if (banner && activeCompetition) {
     textEl.textContent = `Competencia activa: ${activeCompetition.name} · hasta ${fmtDate(activeCompetition.end_date)}`;
     banner.style.display = 'flex';
-  } else {
+  } else if (banner) {
     banner.style.display = 'none';
   }
 }
@@ -1787,7 +2021,7 @@ function renderProductRows() {
     </div>`;
   }).join('');
   updateSummary();
-  updateCompBanner(fecha);
+  updateCargarCompBanner(fecha);
 }
 
 function changeQty(pid, d) { qtys[pid]=Math.max(0,(qtys[pid]||0)+d); document.getElementById('qty-'+pid).value=qtys[pid]; updateSummary(); }
@@ -1796,10 +2030,7 @@ function onQtyBlur(pid)    { const v=parseInt(document.getElementById('qty-'+pid
 
 function updateSummary() {
   let total=0; const parts=[];
-  effectiveProducts.forEach(p=>{
-    const q=qtys[p.id]||0;
-    if(q>0){const e=q*p.pts;total+=e;parts.push(p.icon+' ×'+q+' = '+fmt(e)+' pts');}
-  });
+  effectiveProducts.forEach(p=>{ const q=qtys[p.id]||0; if(q>0){const e=q*p.pts;total+=e;parts.push(p.icon+' ×'+q+' = '+fmt(e)+' pts');} });
   document.getElementById('pts-total').textContent     = fmt(total);
   document.getElementById('pts-breakdown').textContent = parts.length?parts.join('  ·  '):'Ingresá unidades vendidas';
 }
@@ -1810,11 +2041,9 @@ async function submitLog() {
   const nota  = document.getElementById('inp-nota').value.trim();
   if (!uid)   { showToast('Seleccioná un vendedor'); return; }
   if (!fecha) { showToast('Ingresá la fecha del turno'); return; }
-
   const pEff = getEffectivePoints(fecha);
   const pts  = pEff.reduce((s,p)=>s+(qtys[p.id]||0)*p.pts, 0);
   if (pts===0){ showToast('Ingresá al menos un producto'); return; }
-
   const row = {
     user_id: uid, registered_by: currentProfile.id, fecha, pts, nota,
     location_id: currentLocationId,
@@ -1873,7 +2102,7 @@ function renderHistorial() {
   logs.sort((a,b) => b.fecha.localeCompare(a.fecha));
   const totalPts = logs.reduce((s,l) => s + l.pts, 0);
   document.getElementById('hist-count').textContent = logs.length;
-  document.getElementById('hist-pts').textContent    = fmt(totalPts);
+  document.getElementById('hist-pts').textContent   = fmt(totalPts);
   const el = document.getElementById('hist-list');
   if (!logs.length) { el.innerHTML = '<div class="empty-state"><i class="ti ti-file-search"></i>Sin registros para este filtro</div>'; return; }
   el.innerHTML = logs.map(l => {
@@ -1914,32 +2143,23 @@ async function saveBasePoints() {
   for (const p of PRODUCTS) {
     const el  = document.getElementById('base-pts-' + p.id);
     const val = parseInt(el?.value);
-    if (!isNaN(val) && val > 0) {
-      updates.push({ id: p.id, base_points: val });
-    }
+    if (!isNaN(val) && val > 0) updates.push({ id: p.id, base_points: val });
   }
   if (!updates.length) { showToast('Sin cambios para guardar'); return; }
-
   for (const u of updates) {
     const { error } = await sb.from('product_config')
       .update({ base_points: u.base_points, updated_at: new Date().toISOString() })
-      .eq('id', u.id)
-      .eq('location_id', currentLocationId);
+      .eq('id', u.id).eq('location_id', currentLocationId);
     if (error) { showToast('Error al guardar: ' + error.message); return; }
   }
-
-  PRODUCTS = PRODUCTS.map(p => {
-    const u = updates.find(x => x.id === p.id);
-    return u ? { ...p, pts: u.base_points } : p;
-  });
-
+  PRODUCTS = PRODUCTS.map(p => { const u = updates.find(x => x.id === p.id); return u ? { ...p, pts: u.base_points } : p; });
   showToast('Puntos base actualizados');
   renderProductRows();
   renderProductShare();
 }
 
 /* ══════════════════════════════════
-   ADMIN — COMPETENCIAS EXPRESS
+   ADMIN — COMPETENCIAS (crear/gestionar)
 ══════════════════════════════════ */
 function renderCompProductInputs() {
   const el = document.getElementById('comp-product-inputs');
@@ -1962,7 +2182,6 @@ async function createCompetition() {
   const name  = document.getElementById('comp-name').value.trim();
   const start = document.getElementById('comp-start').value;
   const end   = document.getElementById('comp-end').value;
-
   if (!name)  { showToast('Ingresá un nombre para la competencia'); return; }
   if (!start) { showToast('Seleccioná la fecha de inicio'); return; }
   if (!end)   { showToast('Seleccioná la fecha de fin'); return; }
@@ -1970,25 +2189,12 @@ async function createCompetition() {
 
   const selectedProducts = PRODUCTS
     .filter(p => document.getElementById('comp-chk-' + p.id)?.checked)
-    .map(p => ({
-      product_id: p.id,
-      points: parseInt(document.getElementById('comp-pts-' + p.id)?.value) || p.pts
-    }));
-
+    .map(p => ({ product_id: p.id, points: parseInt(document.getElementById('comp-pts-' + p.id)?.value) || p.pts }));
   if (!selectedProducts.length) { showToast('Seleccioná al menos un producto'); return; }
 
-  // Insertar competencia con location_id
-  const { data: comp, error: compErr } = await sb
-    .from('express_competitions')
-    .insert({
-      name,
-      start_date:  start,
-      end_date:    end,
-      created_by:  currentProfile.id,
-      location_id: currentLocationId,
-    })
-    .select()
-    .single();
+  const { data: comp, error: compErr } = await sb.from('express_competitions')
+    .insert({ name, start_date: start, end_date: end, created_by: currentProfile.id, location_id: currentLocationId })
+    .select().single();
   if (compErr) { showToast('Error al crear competencia: ' + compErr.message); return; }
 
   const prods = selectedProducts.map(sp => ({ competition_id: comp.id, ...sp }));
@@ -2002,26 +2208,23 @@ async function createCompetition() {
   document.getElementById('comp-start').value = '';
   document.getElementById('comp-end').value   = '';
   PRODUCTS.forEach(p => {
-    const chk = document.getElementById('comp-chk-' + p.id);
-    if (chk) chk.checked = false;
-    const pts = document.getElementById('comp-pts-' + p.id);
-    if (pts) pts.value = p.pts;
+    const chk = document.getElementById('comp-chk-' + p.id); if (chk) chk.checked = false;
+    const pts = document.getElementById('comp-pts-' + p.id); if (pts) pts.value = p.pts;
   });
 
   await loadCompetitions();
-  renderCompList();
+  renderCompetencias();
   renderProductRows();
   renderDashboard();
+  // Cambiar al sub-tab de activas para ver el resultado
+  switchCompTab('activas', document.querySelector('.comp-sub-tab'));
 }
 
 async function toggleCompetition(id, currentActive) {
-  const { error } = await sb
-    .from('express_competitions')
-    .update({ active: !currentActive })
-    .eq('id', id);
+  const { error } = await sb.from('express_competitions').update({ active: !currentActive }).eq('id', id);
   if (error) { showToast('Error: ' + error.message); return; }
   await loadCompetitions();
-  renderCompList();
+  renderCompetencias();
   renderProductRows();
   renderDashboard();
   showToast(currentActive ? 'Competencia desactivada' : 'Competencia activada');
@@ -2032,66 +2235,11 @@ async function deleteCompetition(id) {
   const { error } = await sb.from('express_competitions').delete().eq('id', id);
   if (error) { showToast('Error al eliminar: ' + error.message); return; }
   await loadCompetitions();
-  renderCompList();
+  renderCompManage();
+  renderCompActivas();
   renderProductRows();
   renderDashboard();
   showToast('Competencia eliminada');
-}
-
-function renderCompList() {
-  const el = document.getElementById('comp-list');
-  if (!el) return;
-  if (!competitions.length) {
-    el.innerHTML = '<div class="empty-state" style="padding:1.5rem;"><i class="ti ti-bolt"></i>Sin competencias creadas</div>';
-    return;
-  }
-
-  const hoy = today();
-  el.innerHTML = competitions.map(c => {
-    const isActive   = c.active && hoy >= c.start_date && hoy <= c.end_date;
-    const isUpcoming = c.active && hoy < c.start_date;
-
-    let statusBadge = '';
-    if (isActive)        statusBadge = '<span class="comp-badge-active">● Activa ahora</span>';
-    else if (isUpcoming) statusBadge = '<span class="comp-badge-upcoming">● Próxima</span>';
-    else                 statusBadge = '<span class="comp-badge-ended">Finalizada</span>';
-
-    const productLines = c.products.map(cp => {
-      const prod = PRODUCTS.find(p => p.id === cp.product_id);
-      const base = prod?.pts ?? '?';
-      return `<div class="comp-product-line">
-        <span>${prod?.icon || ''} ${prod?.name || cp.product_id}</span>
-        <span style="font-weight:700;color:var(--success);">⚡ ${cp.points} pts <span style="font-size:11px;color:var(--text3);font-weight:400;">(base: ${base})</span></span>
-      </div>`;
-    }).join('');
-
-    const toggleLabel = c.active ? 'Desactivar' : 'Activar';
-    const toggleIcon  = c.active ? 'ti-player-pause' : 'ti-player-play';
-
-    return `<div class="comp-card">
-      <div class="comp-card-header">
-        <div>
-          <div class="comp-card-title">${c.name}</div>
-          <div class="comp-card-dates">${fmtDate(c.start_date)} → ${fmtDate(c.end_date)}</div>
-        </div>
-        ${statusBadge}
-      </div>
-      <div class="comp-card-body">
-        ${productLines}
-        <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-          <button class="btn btn-sm btn-gold" onclick="notifyCompetition(${JSON.stringify(c.name)}, '${c.end_date}')">
-            <i class="ti ti-bell"></i> Avisar
-          </button>
-          <button class="btn btn-sm ${c.active ? '' : 'btn-primary'}" onclick="toggleCompetition(${c.id}, ${c.active})">
-            <i class="ti ${toggleIcon}"></i> ${toggleLabel}
-          </button>
-          <button class="btn btn-sm btn-danger" onclick="deleteCompetition(${c.id})">
-            <i class="ti ti-trash"></i> Eliminar
-          </button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
 }
 
 /* ══════════════════════════════════
@@ -2148,25 +2296,17 @@ async function createEmployee() {
   const initials = (parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
   const color    = COLORS[allProfiles.length % COLORS.length];
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
-
-  // El nuevo empleado hereda el location_id del local activo
   const { data: res, error } = await sb.functions.invoke('create-user', {
-    body: {
-      email, password: pass, full_name: name, role: 'employee',
-      username, initials, color, location_id: currentLocationId
-    }
+    body: { email, password: pass, full_name: name, role: 'employee', username, initials, color, location_id: currentLocationId }
   });
   if (error || res?.error){ showToast('Error: ' + (res?.error || error.message)); return; }
   showToast('Vendedor creado');
   ['new-name','new-email','new-pass'].forEach(id=>document.getElementById(id).value='');
-
-  // Recargar solo perfiles del local activo
   const { data } = await sb.from('profiles').select('*').eq('location_id', currentLocationId).order('full_name');
   allProfiles = data || [];
   renderUserList(); fillEmployeeSelect(); renderRanking(); renderDashboard();
 }
 
-/* Crear gerente de turno (manager) en el local activo — business_manager/supermanager */
 async function createShiftManager() {
   const name  = document.getElementById('mgr2-name').value.trim();
   const email = document.getElementById('mgr2-email').value.trim();
@@ -2176,17 +2316,12 @@ async function createShiftManager() {
   const initials = (parts[0][0]+(parts[1]?.[0]||'')).toUpperCase();
   const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
   const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g,'');
-
   const { data: res, error } = await sb.functions.invoke('create-user', {
-    body: {
-      email, password: pass, full_name: name, role: 'manager',
-      username, initials, color, location_id: currentLocationId
-    }
+    body: { email, password: pass, full_name: name, role: 'manager', username, initials, color, location_id: currentLocationId }
   });
   if (error || res?.error){ showToast('Error: ' + (res?.error || error.message)); return; }
   showToast('Gerente de turno creado');
   ['mgr2-name','mgr2-email','mgr2-pass'].forEach(id=>document.getElementById(id).value='');
-
   const { data } = await sb.from('profiles').select('*').eq('location_id', currentLocationId).order('full_name');
   allProfiles = data || [];
   renderUserList(); fillEmployeeSelect(); renderRanking(); renderDashboard();
@@ -2209,6 +2344,91 @@ function renderUserList() {
         <div style="font-size:12px;color:var(--text2);">${p.username} · ${roleLabel(p.role)}</div>
       </div>
     </div>`).join('');
+}
+
+/* ══════════════════════════════════
+   LOCALES — GESTIÓN (solo supermanager)
+══════════════════════════════════ */
+const DEFAULT_PRODUCTS = [
+  { id:'pileta_cheddar', name:'Pileta de cheddar', base_points:3 },
+  { id:'combo_grande',   name:'Combos grandes',    base_points:2 },
+  { id:'cafe_espresso',  name:'Café espresso',     base_points:5 },
+  { id:'cono_especial',  name:'Conos especiales',  base_points:3 },
+];
+
+async function createLocation() {
+  const name = document.getElementById('loc-name').value.trim();
+  const code = document.getElementById('loc-code').value.trim().toUpperCase();
+  if (!name) { showToast('Ingresá el nombre del local'); return; }
+  if (!code) { showToast('Ingresá el código del local'); return; }
+  const { data: loc, error: locErr } = await sb.from('locations').insert({ name, code }).select().single();
+  if (locErr) { showToast('Error: ' + locErr.message); return; }
+  const prods = DEFAULT_PRODUCTS.map(p => ({ ...p, location_id: loc.id }));
+  const { error: prodErr } = await sb.from('product_config').insert(prods);
+  if (prodErr) { showToast('Local creado pero hubo un error al configurar productos: ' + prodErr.message); }
+  allLocations.push(loc);
+  const sel = document.getElementById('super-location-select');
+  if (sel) sel.innerHTML = allLocations.map(l => `<option value="${l.id}"${l.id === currentLocationId ? ' selected' : ''}>${l.name} (${l.code})</option>`).join('');
+  document.getElementById('loc-name').value = '';
+  document.getElementById('loc-code').value = '';
+  showToast('Local "' + name + '" creado');
+  fillManagerLocationSelect();
+  renderLocationsList();
+}
+
+async function createManager() {
+  const name  = document.getElementById('mgr-name').value.trim();
+  const email = document.getElementById('mgr-email').value.trim();
+  const pass  = document.getElementById('mgr-pass').value;
+  const role  = document.getElementById('mgr-role').value;
+  const locId = document.getElementById('mgr-location').value;
+  if (!name || !email || !pass) { showToast('Completá todos los campos'); return; }
+  if (!locId) { showToast('Seleccioná un local'); return; }
+  const parts    = name.split(' ');
+  const initials = (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
+  const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
+  const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g, '');
+  const { data: res, error } = await sb.functions.invoke('create-user', {
+    body: { email, password: pass, full_name: name, role, username, initials, color, location_id: locId }
+  });
+  if (error || res?.error) { showToast('Error: ' + (res?.error || error.message)); return; }
+  showToast(roleLabel(role) + ' creado');
+  ['mgr-name','mgr-email','mgr-pass'].forEach(id => document.getElementById(id).value = '');
+  renderLocationsList();
+}
+
+function fillManagerLocationSelect() {
+  const sel = document.getElementById('mgr-location');
+  if (!sel) return;
+  sel.innerHTML = '<option value="">— Seleccioná un local —</option>' +
+    allLocations.map(l => `<option value="${l.id}">${l.name} (${l.code})</option>`).join('');
+}
+
+async function renderLocationsList() {
+  const el = document.getElementById('locations-list');
+  if (!el) return;
+  if (!allLocations.length) { el.innerHTML = '<div class="empty-state"><i class="ti ti-building-store"></i>Sin locales creados</div>'; return; }
+  const { data: allProfs } = await sb.from('profiles').select('id, full_name, role, location_id, initials, color, photo_url');
+  el.innerHTML = allLocations.map(loc => {
+    const locProfs  = (allProfs || []).filter(p => p.location_id === loc.id);
+    const employees = locProfs.filter(p => p.role === 'employee');
+    const managers  = locProfs.filter(p => ['manager','business_manager'].includes(p.role));
+    const isActive  = loc.id === currentLocationId;
+    const mgrList = managers.map(m =>
+      `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;">${avatarHTML(m, 24)}<span style="font-size:12px;">${m.full_name}</span><span style="font-size:10px;color:var(--text3);margin-left:auto;">${roleLabel(m.role)}</span></div>`
+    ).join('');
+    return `<div class="card" style="margin-bottom:10px;border-left:3px solid ${isActive ? 'var(--accent)' : 'var(--border2)'};">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+        <div><div style="font-size:15px;font-weight:700;">${loc.name}</div><div style="font-size:11px;color:var(--text2);margin-top:1px;">Código: ${loc.code}</div></div>
+        ${isActive ? '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--accent-bg);color:var(--accent-dark);">Activo</span>' : ''}
+      </div>
+      <div style="display:flex;gap:16px;margin-bottom:${managers.length ? '10px' : '0'};">
+        <div style="font-size:12px;color:var(--text2);"><b style="color:var(--text);">${employees.length}</b> vendedores</div>
+        <div style="font-size:12px;color:var(--text2);"><b style="color:var(--text);">${managers.length}</b> gerentes</div>
+      </div>
+      ${mgrList ? `<div style="border-top:1px solid var(--border);padding-top:8px;">${mgrList}</div>` : ''}
+    </div>`;
+  }).join('');
 }
 
 /* ══════════════════════════════════
@@ -2244,128 +2464,6 @@ function greeting() {
 function showToast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg;
   t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
-}
-
-
-/* ══════════════════════════════════
-   LOCALES — GESTIÓN (solo supermanager)
-══════════════════════════════════ */
-
-const DEFAULT_PRODUCTS = [
-  { id:'pileta_cheddar', name:'Pileta de cheddar', base_points:3 },
-  { id:'combo_grande',   name:'Combos grandes',    base_points:2 },
-  { id:'cafe_espresso',  name:'Café espresso',     base_points:5 },
-  { id:'cono_especial',  name:'Conos especiales',  base_points:3 },
-];
-
-async function createLocation() {
-  const name = document.getElementById('loc-name').value.trim();
-  const code = document.getElementById('loc-code').value.trim().toUpperCase();
-  if (!name) { showToast('Ingresá el nombre del local'); return; }
-  if (!code) { showToast('Ingresá el código del local'); return; }
-
-  // Crear local
-  const { data: loc, error: locErr } = await sb
-    .from('locations')
-    .insert({ name, code })
-    .select()
-    .single();
-  if (locErr) { showToast('Error: ' + locErr.message); return; }
-
-  // Auto-insertar los 4 productos con puntos base por defecto
-  const prods = DEFAULT_PRODUCTS.map(p => ({ ...p, location_id: loc.id }));
-  const { error: prodErr } = await sb.from('product_config').insert(prods);
-  if (prodErr) { showToast('Local creado pero hubo un error al configurar productos: ' + prodErr.message); }
-
-  // Actualizar estado local
-  allLocations.push(loc);
-
-  // Actualizar selector de local del supermanager
-  const sel = document.getElementById('super-location-select');
-  if (sel) {
-    sel.innerHTML = allLocations.map(l =>
-      '<option value="' + l.id + '"' + (l.id === currentLocationId ? ' selected' : '') + '>' + l.name + ' (' + l.code + ')</option>'
-    ).join('');
-  }
-
-  document.getElementById('loc-name').value = '';
-  document.getElementById('loc-code').value = '';
-  showToast('Local "' + name + '" creado');
-  fillManagerLocationSelect();
-  renderLocationsList();
-}
-
-async function createManager() {
-  const name     = document.getElementById('mgr-name').value.trim();
-  const email    = document.getElementById('mgr-email').value.trim();
-  const pass     = document.getElementById('mgr-pass').value;
-  const role     = document.getElementById('mgr-role').value;
-  const locId    = document.getElementById('mgr-location').value;
-  if (!name || !email || !pass) { showToast('Completá todos los campos'); return; }
-  if (!locId) { showToast('Seleccioná un local'); return; }
-
-  const parts    = name.split(' ');
-  const initials = (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase();
-  const color    = COLORS[Math.floor(Math.random() * COLORS.length)];
-  const username = email.split('@')[0].toLowerCase().replace(/[^a-z0-9.]/g, '');
-
-  const { data: res, error } = await sb.functions.invoke('create-user', {
-    body: { email, password: pass, full_name: name, role, username, initials, color, location_id: locId }
-  });
-  if (error || res?.error) { showToast('Error: ' + (res?.error || error.message)); return; }
-
-  showToast(roleLabel(role) + ' creado');
-  ['mgr-name','mgr-email','mgr-pass'].forEach(id => document.getElementById(id).value = '');
-  renderLocationsList();
-}
-
-function fillManagerLocationSelect() {
-  const sel = document.getElementById('mgr-location');
-  if (!sel) return;
-  sel.innerHTML = '<option value="">— Seleccioná un local —</option>' +
-    allLocations.map(l => '<option value="' + l.id + '">' + l.name + ' (' + l.code + ')</option>').join('');
-}
-
-async function renderLocationsList() {
-  const el = document.getElementById('locations-list');
-  if (!el) return;
-  if (!allLocations.length) {
-    el.innerHTML = '<div class="empty-state"><i class="ti ti-building-store"></i>Sin locales creados</div>';
-    return;
-  }
-
-  // Cargar todos los perfiles de todos los locales para mostrar conteos
-  const { data: allProfs } = await sb.from('profiles').select('id, full_name, role, location_id, initials, color, photo_url');
-
-  el.innerHTML = allLocations.map(loc => {
-    const locProfs  = (allProfs || []).filter(p => p.location_id === loc.id);
-    const employees = locProfs.filter(p => p.role === 'employee');
-    const managers  = locProfs.filter(p => ['manager','business_manager'].includes(p.role));
-    const isActive  = loc.id === currentLocationId;
-
-    const mgrList = managers.map(m =>
-      '<div style="display:flex;align-items:center;gap:8px;padding:4px 0;">' +
-        avatarHTML(m, 24) +
-        '<span style="font-size:12px;">' + m.full_name + '</span>' +
-        '<span style="font-size:10px;color:var(--text3);margin-left:auto;">' + roleLabel(m.role) + '</span>' +
-      '</div>'
-    ).join('');
-
-    return '<div class="card" style="margin-bottom:10px;border-left:3px solid ' + (isActive ? 'var(--accent)' : 'var(--border2)') + ';">' +
-      '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">' +
-        '<div>' +
-          '<div style="font-size:15px;font-weight:700;">' + loc.name + '</div>' +
-          '<div style="font-size:11px;color:var(--text2);margin-top:1px;">Código: ' + loc.code + '</div>' +
-        '</div>' +
-        (isActive ? '<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--accent-bg);color:var(--accent-dark);">Activo</span>' : '') +
-      '</div>' +
-      '<div style="display:flex;gap:16px;margin-bottom:' + (managers.length ? '10px' : '0') + ';">' +
-        '<div style="font-size:12px;color:var(--text2);"><b style="color:var(--text);">' + employees.length + '</b> vendedores</div>' +
-        '<div style="font-size:12px;color:var(--text2);"><b style="color:var(--text);">' + managers.length + '</b> gerentes</div>' +
-      '</div>' +
-      (mgrList ? '<div style="border-top:1px solid var(--border);padding-top:8px;">' + mgrList + '</div>' : '') +
-    '</div>';
-  }).join('');
 }
 
 /* ══════════════════════════════════
