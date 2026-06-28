@@ -1433,7 +1433,7 @@ function renderRanking() {
   const total  = ranked.reduce((s,e) => s+e.pts, 0);
   document.getElementById('m-total').textContent = employees.length;
   document.getElementById('m-pts').textContent   = fmt(total);
-  const max = total || 1;
+  const max = ranked[0]?.pts || 1;
   document.getElementById('ranking-list').innerHTML = ranked.map((e,i) => {
     const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
     const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
