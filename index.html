@@ -506,14 +506,14 @@
   <div class="tab-bar" id="tab-bar">
     <div class="tab active" data-tab="inicio"       onclick="switchTab('inicio',this)"><i class="ti ti-home"></i>Inicio</div>
     <div class="tab"        data-tab="ranking"       onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
-    <div class="tab"        data-tab="perfil"        onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
+    <div class="tab" id="tab-btn-cargar"    onclick="switchTab('cargar',this)"    style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
     <div class="tab"        data-tab="tips"          onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
     <div class="tab"        data-tab="competencias"  onclick="switchTab('competencias',this)"><i class="ti ti-bolt"></i>Competencias</div>
     <div class="tab" id="tab-btn-analisis"  onclick="switchTab('analisis',this)"  style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
-    <div class="tab" id="tab-btn-cargar"    onclick="switchTab('cargar',this)"    style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
     <div class="tab" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
     <div class="tab" id="tab-btn-admin"     onclick="switchTab('admin',this)"     style="display:none;"><i class="ti ti-settings"></i>Admin</div>
     <div class="tab" id="tab-btn-locales"   onclick="switchTab('locales',this)"   style="display:none;"><i class="ti ti-building-store"></i>Locales</div>
+    <div class="tab"        data-tab="perfil"        onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
   </div>
 
   <!-- ══ INICIO ══ -->
@@ -1227,14 +1227,15 @@ function renderDashboard() {
   }
 
   const tiles = [];
-  tiles.push({ tab:'ranking',       icon:'ti-trophy',      bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
-  tiles.push({ tab:'competencias',  icon:'ti-bolt',        bg:'var(--success-bg)', color:'var(--success)', title:'Competencias',    desc:'Activas y resultados' });
+  tiles.push({ tab:'ranking',      icon:'ti-trophy',      bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
   if (isManager()) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)', color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
-  if (isManager()) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)',color:'var(--success)', title:'Historial',       desc:'Qué se cargó y cuándo' });
+  tiles.push({ tab:'tips',         icon:'ti-bulb',        bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Consejos',        desc:'Técnicas de venta' });
+  tiles.push({ tab:'competencias', icon:'ti-bolt',        bg:'var(--success-bg)', color:'var(--success)', title:'Competencias',   desc:'Activas y resultados' });
   if (isSuper() || isBiz()) tiles.push({ tab:'analisis', icon:'ti-chart-bar', bg:'#E6F1FB', color:'#0C447C', title:'Análisis', desc:'Evolución del equipo' });
+  if (isManager()) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)',color:'var(--success)', title:'Historial',      desc:'Qué se cargó y cuándo' });
+  if (isManager()) tiles.push({ tab:'admin',     icon:'ti-settings',    bg:'var(--bg2)',       color:'var(--text2)',   title:'Admin',          desc:'Usuarios y metas' });
+  if (isSuper())   tiles.push({ tab:'locales',   icon:'ti-building-store', bg:'var(--bg2)',    color:'var(--text2)',   title:'Locales',        desc:'Gestión de locales' });
   tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE', color:'#085041', title:'Mi perfil', desc:'Tus puntos y productos' });
-  tiles.push({ tab:'tips',   icon:'ti-bulb', bg:'var(--gold-bg)', color:'var(--gold)', title:'Consejos', desc:'Técnicas de venta' });
-  if (isManager()) tiles.push({ tab:'admin', icon:'ti-settings', bg:'var(--bg2)', color:'var(--text2)', title:'Admin', desc:'Usuarios y metas' });
 
   const tilesHTML = tiles.map(t => `
     <div class="dash-tile" onclick="switchTab('${t.tab}')">
