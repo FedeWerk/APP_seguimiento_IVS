@@ -33,12 +33,24 @@
       --radius: 10px; --radius-sm: 6px;
     }
     @media (prefers-color-scheme: dark) {
-      :root {
+      :root:not([data-theme="light"]) {
         --bg: #1c1917; --bg2: #292524; --bg3: #3c3836;
         --text: #f5f5f4; --text2: #a8a29e; --text3: #78716c;
         --border: #292524; --border2: #3c3836;
         --gold-bg: #292018; --biz-bg: #0c1f30;
       }
+    }
+    [data-theme="dark"] {
+      --bg: #1c1917; --bg2: #292524; --bg3: #3c3836;
+      --text: #f5f5f4; --text2: #a8a29e; --text3: #78716c;
+      --border: #292524; --border2: #3c3836;
+      --gold-bg: #292018; --biz-bg: #0c1f30;
+    }
+    [data-theme="light"] {
+      --bg: #ffffff; --bg2: #f5f5f4; --bg3: #e7e5e4;
+      --text: #1c1917; --text2: #78716c; --text3: #a8a29e;
+      --border: #e7e5e4; --border2: #d6d3d1;
+      --gold-bg: #FEF3C7; --biz-bg: #E6F1FB;
     }
     body { font-family: var(--font); background: var(--bg); color: var(--text); }
     .screen { display: none; }
@@ -499,6 +511,7 @@
     </div>
     <div style="display:flex;align-items:center;gap:8px;">
       <span class="badge" id="hdr-badge"></span>
+      <button id="theme-toggle" onclick="toggleTheme()" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;padding:0;" aria-label="Cambiar tema"><i class="ti ti-sun"></i></button>
       <button onclick="doLogout()" style="background:none;border:none;cursor:pointer;color:var(--text2);font-size:20px;padding:0;" aria-label="Cerrar sesión"><i class="ti ti-logout"></i></button>
     </div>
   </div>
@@ -841,6 +854,34 @@
 
 <div class="toast" id="toast"></div>
 <script>
+/* ══════════════════════════════════
+   TEMA CLARO / OSCURO
+══════════════════════════════════ */
+(function() {
+  const saved = localStorage.getItem('theme');
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+})();
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const isDark = current === 'dark' || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const next = isDark ? 'light' : 'dark';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  const icon = document.querySelector('#theme-toggle i');
+  if (icon) icon.className = next === 'dark' ? 'ti ti-moon' : 'ti ti-sun';
+}
+
+function syncThemeIcon() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const isDark = current === 'dark' || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
+  const icon = document.querySelector('#theme-toggle i');
+  if (icon) icon.className = isDark ? 'ti ti-moon' : 'ti ti-sun';
+}
+document.addEventListener('DOMContentLoaded', syncThemeIcon);
+
 /* ══════════════════════════════════
    SUPABASE
 ══════════════════════════════════ */
@@ -2432,41 +2473,4 @@ async function renderLocationsList() {
   }).join('');
 }
 
-/* ══════════════════════════════════
-   HELPERS
-══════════════════════════════════ */
-function roleLabel(role) {
-  if (role==='supermanager')     return 'Super Gerente';
-  if (role==='business_manager') return 'Gerente de Negocio';
-  if (role==='manager')          return 'Gerente';
-  return 'Vendedor';
-}
-function avatarHTML(profile, size) {
-  if (profile.photo_url) return `<div class="avatar" style="width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;"></div>`;
-  return `<div class="avatar ${profile.color}" style="width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;">${profile.initials}</div>`;
-}
-function applyAvatar(el, profile, size) {
-  if (profile.photo_url) {
-    el.className='avatar'; el.style.cssText=`width:${size}px;height:${size}px;background-image:url('${profile.photo_url}');background-size:cover;background-position:center;`; el.textContent='';
-  } else {
-    el.className='avatar '+profile.color; el.style.cssText=`width:${size}px;height:${size}px;font-size:${Math.round(size*.38)}px;`; el.textContent=profile.initials;
-  }
-}
-function fmt(n)  { return Number(n).toFixed(1).replace(/\.0$/,''); }
-function today() { return new Date().toISOString().slice(0,10); }
-function fmtDate(str) {
-  if (!str) return '—';
-  return new Date(str+'T00:00:00').toLocaleDateString('es-AR', { day:'2-digit', month:'short', year:'numeric' });
-}
-function greeting() {
-  const h=new Date().getHours();
-  return h<12?'Buenos días,':h<18?'Buenas tardes,':'Buenas noches,';
-}
-function showToast(msg) {
-  const t=document.getElementById('toast'); t.textContent=msg;
-  t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2800);
-}
-
-/* ══════════════════════════════════
-   PWA
-═══════════════════════════════�
+/* ═════════════════════════════�
