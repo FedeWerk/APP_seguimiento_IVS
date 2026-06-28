@@ -1433,7 +1433,7 @@ function renderRanking() {
   const total  = ranked.reduce((s,e) => s+e.pts, 0);
   document.getElementById('m-total').textContent = employees.length;
   document.getElementById('m-pts').textContent   = fmt(total);
-  const max = ranked[0]?.pts || 1;
+  const max = total || 1;
   document.getElementById('ranking-list').innerHTML = ranked.map((e,i) => {
     const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
     const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
@@ -1532,7 +1532,7 @@ function renderWeekChart(elId, logs, color) {
     <div class="week-col">
       <div class="week-val">${pts > 0 ? fmt(pts) : ''}</div>
       <div class="week-bar-wrap">
-        <div class="week-bar" style="height:${Math.round(pts/max*100)}%;background:${color};opacity:${pts>0?1:0.15};"></div>
+        <div class="week-bar" style="height:${Math.round(pts/max*60)}px;background:${color};opacity:${pts>0?1:0.15};"></div>
       </div>
       <div class="week-label">${days[i]}</div>
     </div>`).join('');
@@ -1581,7 +1581,7 @@ function renderLastWeeksChart() {
     <div class="week-col">
       <div class="week-val">${w.pts > 0 ? fmt(w.pts) : ''}</div>
       <div class="week-bar-wrap">
-        <div class="week-bar" style="height:${Math.round(w.pts/max*100)}%;background:${i===5?'var(--accent)':'var(--accent-bg)'};border:${i===5?'none':'1px solid var(--accent)'};"></div>
+        <div class="week-bar" style="height:${Math.round(w.pts/max*60)}px;background:${i===5?'var(--accent)':'var(--accent-bg)'};border:${i===5?'none':'1px solid var(--accent)'};"></div>
       </div>
       <div class="week-label">${w.label}</div>
     </div>`).join('');
@@ -1599,7 +1599,7 @@ function renderProductShare() {
   el.innerHTML = totals.sort((a,b)=>b.qty-a.qty).map(p => `
     <div class="stat-bar-row">
       <div class="stat-bar-label"><span style="font-size:16px;">${p.icon}</span> ${p.name}</div>
-      <div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:${Math.round(p.qty/maxQty*100)}%;background:${p.color};"></div></div>
+      <div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:${totalPts>0?Math.round(p.pts/totalPts*100):0}%;background:${p.color};"></div></div>
       <div class="stat-bar-val" style="color:${p.color};">${p.qty}</div>
       <div style="font-size:11px;color:var(--text3);min-width:36px;text-align:right;">${totalPts>0?Math.round(p.pts/totalPts*100):0}%</div>
     </div>`).join('');
