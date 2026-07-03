@@ -155,6 +155,7 @@
     .rank-name { flex: 1; font-size: 14px; font-weight: 500; }
     .rank-pts { text-align: right; font-size: 15px; font-weight: 600; }
     .rank-pts small { font-size: 11px; color: var(--text3); font-weight: 400; display: block; }
+    .rank-store-icon { width: 36px; height: 36px; border-radius: 50%; background: var(--biz-bg); color: var(--biz); display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
     .bar-bg { height: 3px; background: var(--bg3); border-radius: 2px; margin-top: 3px; overflow: hidden; }
     .bar-fill { height: 100%; border-radius: 2px; transition: width .4s; }
     .me-chip { font-size: 10px; padding: 1px 6px; border-radius: 20px; background: var(--success-bg); color: var(--success); margin-left: 6px; }
@@ -539,13 +540,13 @@
     <div class="tab active" data-tab="inicio"       onclick="switchTab('inicio',this)"><i class="ti ti-home"></i>Inicio</div>
     <div class="tab"        data-tab="ranking"       onclick="switchTab('ranking',this)"><i class="ti ti-trophy"></i>Ranking</div>
     <div class="tab" id="tab-btn-cargar"    onclick="switchTab('cargar',this)"    style="display:none;"><i class="ti ti-circle-plus"></i>Cargar</div>
-    <div class="tab"        data-tab="tips"          onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
-    <div class="tab"        data-tab="competencias"  onclick="switchTab('competencias',this)"><i class="ti ti-bolt"></i>Competencias</div>
+    <div class="tab" id="tab-btn-tips"          data-tab="tips"          onclick="switchTab('tips',this)"><i class="ti ti-bulb"></i>Consejos</div>
+    <div class="tab" id="tab-btn-competencias"  data-tab="competencias"  onclick="switchTab('competencias',this)"><i class="ti ti-bolt"></i>Competencias</div>
     <div class="tab" id="tab-btn-analisis"  onclick="switchTab('analisis',this)"  style="display:none;"><i class="ti ti-chart-bar"></i>Análisis</div>
     <div class="tab" id="tab-btn-historial" onclick="switchTab('historial',this)" style="display:none;"><i class="ti ti-file-search"></i>Historial</div>
     <div class="tab" id="tab-btn-admin"     onclick="switchTab('admin',this)"     style="display:none;"><i class="ti ti-settings"></i>Admin</div>
     <div class="tab" id="tab-btn-locales"   onclick="switchTab('locales',this)"   style="display:none;"><i class="ti ti-building-store"></i>Locales</div>
-    <div class="tab"        data-tab="perfil"        onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
+    <div class="tab" id="tab-btn-perfil"        data-tab="perfil"        onclick="switchTab('perfil',this)"><i class="ti ti-user-circle"></i>Mi perfil</div>
   </div>
 
   <!-- ══ INICIO ══ -->
@@ -555,9 +556,13 @@
 
   <!-- ══ RANKING ══ -->
   <div id="tab-ranking" class="tab-content">
+    <div id="ranking-area-toggle" class="comp-sub-tabs" style="display:none;">
+      <button class="comp-sub-tab active" onclick="switchRankingView('vendedores',this)"><i class="ti ti-users" style="font-size:13px;margin-right:4px;"></i>Vendedores</button>
+      <button class="comp-sub-tab" onclick="switchRankingView('locales',this)"><i class="ti ti-building-store" style="font-size:13px;margin-right:4px;"></i>Locales</button>
+    </div>
     <div class="metric-grid">
-      <div class="metric-card"><div class="metric-label">Vendedores</div><div class="metric-value" id="m-total">—</div></div>
-      <div class="metric-card"><div class="metric-label">Pts del equipo</div><div class="metric-value" id="m-pts">—</div></div>
+      <div class="metric-card"><div class="metric-label" id="m-total-label">Vendedores</div><div class="metric-value" id="m-total">—</div></div>
+      <div class="metric-card"><div class="metric-label" id="m-pts-label">Pts del equipo</div><div class="metric-value" id="m-pts">—</div></div>
     </div>
     <div class="section-title">Período</div>
     <div class="period-row">
@@ -569,6 +574,12 @@
     <div class="range-picker" id="range-picker">
       <div class="rfield"><label>Desde</label><input type="date" id="range-from" onchange="renderRanking()" /></div>
       <div class="rfield"><label>Hasta</label><input type="date" id="range-to" onchange="renderRanking()" /></div>
+    </div>
+    <div id="ranking-locales-metric-wrap" style="display:none;padding:0 16px 4px;">
+      <select id="ranking-locales-metric" onchange="rankingLocalesMetric=this.value; renderRanking();">
+        <option value="pts">Ordenar por puntos</option>
+        <option value="items">Ordenar por items vendidos</option>
+      </select>
     </div>
     <div class="section-title">Clasificación</div>
     <div class="rank-list" id="ranking-list"><div class="loader">Cargando…</div></div>
@@ -709,7 +720,7 @@
   <div id="tab-analisis" class="tab-content">
     <div style="padding:16px 16px 0;">
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Panel de análisis</div>
-      <div style="font-size:13px;color:var(--text2);margin-bottom:12px;">Evolución y participación del equipo IVS</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:12px;" id="an-subtitle">Evolución y participación del equipo IVS</div>
     </div>
     <div class="metric-grid-3">
       <div class="metric-card"><div class="metric-label">Pts esta semana</div><div class="metric-value" id="an-week-pts">—</div></div>
@@ -723,7 +734,7 @@
     </div>
     <div class="section-title">Participación por producto</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-product-share"></div>
-    <div class="section-title">Mejores vendedores por producto</div>
+    <div class="section-title" id="an-product-ranking-title">Mejores vendedores por producto</div>
     <div style="padding:0 16px 16px;" id="an-product-ranking"></div>
     <div class="section-title">Crecimiento semana a semana</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-growth"></div>
@@ -992,6 +1003,12 @@ let monthlyGoal       = 100;
 let period            = 'week';
 let currentTipIndex   = 0;
 
+/* Area: agrupa a todos los locales en una vista agregada (solo Super Gerente) */
+const AREA_ID = '__area__';
+function isAreaView() { return currentLocationId === AREA_ID; }
+let rankingView          = 'vendedores'; // 'vendedores' | 'locales'
+let rankingLocalesMetric = 'pts';        // 'pts' | 'items'
+
 let appInitialized = false;
 let isRecovering   = window.location.hash.includes('type=recovery');
 
@@ -1158,6 +1175,23 @@ async function loadAppData() {
 async function loadLocationData() {
   if (!currentLocationId) return;
 
+  if (isAreaView()) {
+    // Area: converge todos los locales, sin filtrar por location_id (evita mandar
+    // el id ficticio de Area como uuid a Supabase).
+    const [profsRes, logsRes, settingRes] = await Promise.all([
+      sb.from('profiles').select('*').order('full_name'),
+      sb.from('sales_logs').select('*').order('fecha', { ascending: false }),
+      sb.from('settings').select('value').eq('key','monthly_goal').single(),
+    ]);
+    allProfiles  = profsRes.data || [];
+    allLogs      = logsRes.data  || [];
+    if (settingRes.data) monthlyGoal = parseInt(settingRes.data.value) || 100;
+    allPOS       = [];
+    competitions = [];
+    activeCompetition = null;
+    return;
+  }
+
   const [profsRes, logsRes, settingRes, posRes] = await Promise.all([
     sb.from('profiles').select('*').eq('location_id', currentLocationId).order('full_name'),
     sb.from('sales_logs').select('*').eq('location_id', currentLocationId).order('fecha', { ascending: false }),
@@ -1222,6 +1256,7 @@ function getEffectivePoints(fecha) {
 async function onSuperLocationChange() {
   const sel = document.getElementById('super-location-select');
   currentLocationId = sel.value;
+  if (!isAreaView()) rankingView = 'vendedores'; // fuera de Area, el toggle de locales no aplica
   renderLocationBadge();
   PRODUCTS = [
     { id:'pileta_cheddar', name:'Pileta de cheddar', icon:'🧀', pts:3, unit:'pileta', color:'#BA7517' },
@@ -1230,17 +1265,38 @@ async function onSuperLocationChange() {
     { id:'cono_especial',  name:'Conos especiales',  icon:'🍦', pts:3, unit:'cono',   color:'#993C1D' },
   ];
   await loadLocationData();
+  updateTabVisibility();
   renderDashboard(); renderRanking(); renderProfile(); renderAnalysis();
-  fillEmployeeSelect(); fillPOSSelect(); renderPOSList(); renderRecentLogs();
-  renderUserList(); fillHistorialVendorSelect(); renderHistorial();
-  renderPtsBaseEditor(); renderCompetencias();
+  if (isManager() && !isAreaView()) {
+    fillEmployeeSelect(); fillPOSSelect(); renderPOSList(); renderRecentLogs();
+    renderUserList(); fillHistorialVendorSelect(); renderHistorial();
+    renderPtsBaseEditor();
+  }
+  renderCompetencias();
   if (isSuper()) { fillManagerLocationSelect(); renderLocationsList(); }
-  loadPrevAccumulated();
+  if (isManager() && !isAreaView()) loadPrevAccumulated();
+}
+
+function buildSuperLocationOptions() {
+  const areaOpt = `<option value="${AREA_ID}"${currentLocationId === AREA_ID ? ' selected' : ''}>🏢 Area (todos los locales)</option>`;
+  const locOpts = allLocations.map(l =>
+    `<option value="${l.id}"${l.id === currentLocationId ? ' selected' : ''}>${l.name} (${l.code})</option>`
+  ).join('');
+  return areaOpt + locOpts;
 }
 
 function renderLocationBadge() {
+  const el = document.getElementById('hdr-location');
+  if (isAreaView()) {
+    if (isSuper()) {
+      el.innerHTML = '<i class="ti ti-building-store" style="margin-right:4px;"></i>Area · Todos los locales';
+      el.style.display = 'inline-block';
+    } else {
+      el.style.display = 'none';
+    }
+    return;
+  }
   const loc = allLocations.find(l => l.id === currentLocationId);
-  const el  = document.getElementById('hdr-location');
   if (loc && (isSuper() || isBiz())) {
     el.textContent = loc.name;
     el.style.display = 'inline-block';
@@ -1262,6 +1318,37 @@ function showLoadError(msg) {
   showScreen('error');
 }
 
+/* Muestra/oculta tabs según rol y si se está viendo la Area (vista agregada). */
+function updateTabVisibility() {
+  const areaView = isAreaView();
+  document.getElementById('tab-btn-analisis').style.display     = (isSuper() || isBiz()) ? 'flex' : 'none';
+  document.getElementById('tab-btn-cargar').style.display       = (isManager() && !areaView) ? 'flex' : 'none';
+  document.getElementById('tab-btn-tips').style.display         = !areaView ? 'flex' : 'none';
+  document.getElementById('tab-btn-competencias').style.display = !areaView ? 'flex' : 'none';
+  document.getElementById('tab-btn-historial').style.display    = (isManager() && !areaView) ? 'flex' : 'none';
+  document.getElementById('tab-btn-admin').style.display        = (isManager() && !areaView) ? 'flex' : 'none';
+  document.getElementById('tab-btn-locales').style.display      = isSuper()   ? 'flex' : 'none';
+  document.getElementById('tab-btn-perfil').style.display       = !areaView ? 'flex' : 'none';
+
+  // Tab admin de competencias (sub-tab) solo para managers+ (no aplica en vista Area)
+  const compAdminTab = document.getElementById('comp-sub-tab-admin');
+  if (compAdminTab) compAdminTab.style.display = (isManager() && !areaView) ? 'inline-flex' : 'none';
+
+  const superSection = document.getElementById('admin-pts-section');
+  if (superSection) superSection.style.display = (canEditPts() && !areaView) ? 'block' : 'none';
+
+  const tipsSendSection = document.getElementById('tips-send-section');
+  if (tipsSendSection) tipsSendSection.style.display = (canEditPts() && !areaView) ? 'block' : 'none';
+
+  const createMgrSection = document.getElementById('admin-create-manager');
+  if (createMgrSection) createMgrSection.style.display = (canEditPts() && !areaView) ? 'block' : 'none';
+
+  // Si el tab activo quedó oculto (ej: se pasó de un local a la Area estando en "Cargar"),
+  // volvemos a Inicio para no dejar un panel invisible activo.
+  const activeTabBtn = document.querySelector('.tab.active');
+  if (activeTabBtn && activeTabBtn.offsetParent === null) switchTab('inicio');
+}
+
 function showApp() {
   showScreen('app');
   const role     = currentProfile.role;
@@ -1279,37 +1366,16 @@ function showApp() {
   const locBar = document.getElementById('location-selector-bar');
   if (isSuper() && allLocations.length > 0) {
     locBar.style.display = 'flex';
-    const sel = document.getElementById('super-location-select');
-    sel.innerHTML = allLocations.map(l =>
-      `<option value="${l.id}"${l.id === currentLocationId ? ' selected' : ''}>${l.name} (${l.code})</option>`
-    ).join('');
+    document.getElementById('super-location-select').innerHTML = buildSuperLocationOptions();
   } else {
     locBar.style.display = 'none';
   }
 
   renderLocationBadge();
-
-  document.getElementById('tab-btn-analisis').style.display  = (isSuper() || isBiz()) ? 'flex' : 'none';
-  document.getElementById('tab-btn-cargar').style.display    = isManager() ? 'flex' : 'none';
-  document.getElementById('tab-btn-historial').style.display = isManager() ? 'flex' : 'none';
-  document.getElementById('tab-btn-admin').style.display     = isManager() ? 'flex' : 'none';
-  document.getElementById('tab-btn-locales').style.display   = isSuper()   ? 'flex' : 'none';
+  updateTabVisibility();
   document.getElementById('prof-weekly-section').style.display = isEmployee ? 'block' : 'none';
 
-  // Tab admin de competencias (sub-tab) solo para managers+
-  const compAdminTab = document.getElementById('comp-sub-tab-admin');
-  if (compAdminTab) compAdminTab.style.display = isManager() ? 'inline-flex' : 'none';
-
-  const superSection = document.getElementById('admin-pts-section');
-  if (superSection) superSection.style.display = canEditPts() ? 'block' : 'none';
-
-  const tipsSendSection = document.getElementById('tips-send-section');
-  if (tipsSendSection) tipsSendSection.style.display = canEditPts() ? 'block' : 'none';
-
-  const createMgrSection = document.getElementById('admin-create-manager');
-  if (createMgrSection) createMgrSection.style.display = canEditPts() ? 'block' : 'none';
-
-  if (isManager()) {
+  if (isManager() && !isAreaView()) {
     fillEmployeeSelect(); fillPOSSelect(); renderPOSList(); renderRecentLogs(); renderUserList();
     fillHistorialVendorSelect();
     document.getElementById('inp-goal').value  = monthlyGoal;
@@ -1317,7 +1383,7 @@ function showApp() {
     loadPrevAccumulated();
   }
 
-  if (canEditPts()) {
+  if (canEditPts() && !isAreaView()) {
     renderPtsBaseEditor();
     renderCompProductInputs();
     adminTipIndex = Math.floor(Math.random() * TIPS.length);
@@ -1394,16 +1460,17 @@ function renderDashboard() {
       </div>`;
   }
 
+  const areaView = isAreaView();
   const tiles = [];
-  tiles.push({ tab:'ranking',      icon:'ti-trophy',      bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Ranking',         desc:'Clasificación del equipo' });
-  if (isManager()) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)', color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
-  tiles.push({ tab:'tips',         icon:'ti-bulb',        bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Consejos',        desc:'Técnicas de venta' });
-  tiles.push({ tab:'competencias', icon:'ti-bolt',        bg:'var(--success-bg)', color:'var(--success)', title:'Competencias',   desc:'Activas y resultados' });
-  if (isSuper() || isBiz()) tiles.push({ tab:'analisis', icon:'ti-chart-bar', bg:'#E6F1FB', color:'#0C447C', title:'Análisis', desc:'Evolución del equipo' });
-  if (isManager()) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)',color:'var(--success)', title:'Historial',      desc:'Qué se cargó y cuándo' });
-  if (isManager()) tiles.push({ tab:'admin',     icon:'ti-settings',    bg:'var(--bg2)',       color:'var(--text2)',   title:'Admin',          desc:'Usuarios y metas' });
+  tiles.push({ tab:'ranking',      icon:'ti-trophy',      bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Ranking',         desc: areaView ? 'Vendedores y locales' : 'Clasificación del equipo' });
+  if (isManager() && !areaView) tiles.push({ tab:'cargar',    icon:'ti-circle-plus', bg:'var(--accent-bg)', color:'var(--accent)',  title:'Registrar venta', desc:'Cargar ventas del turno' });
+  if (!areaView) tiles.push({ tab:'tips',         icon:'ti-bulb',        bg:'var(--gold-bg)',    color:'var(--gold)',    title:'Consejos',        desc:'Técnicas de venta' });
+  if (!areaView) tiles.push({ tab:'competencias', icon:'ti-bolt',        bg:'var(--success-bg)', color:'var(--success)', title:'Competencias',   desc:'Activas y resultados' });
+  if (isSuper() || isBiz()) tiles.push({ tab:'analisis', icon:'ti-chart-bar', bg:'#E6F1FB', color:'#0C447C', title:'Análisis', desc: areaView ? 'Evolución por local' : 'Evolución del equipo' });
+  if (isManager() && !areaView) tiles.push({ tab:'historial', icon:'ti-file-search', bg:'var(--success-bg)',color:'var(--success)', title:'Historial',      desc:'Qué se cargó y cuándo' });
+  if (isManager() && !areaView) tiles.push({ tab:'admin',     icon:'ti-settings',    bg:'var(--bg2)',       color:'var(--text2)',   title:'Admin',          desc:'Usuarios y metas' });
   if (isSuper())   tiles.push({ tab:'locales',   icon:'ti-building-store', bg:'var(--bg2)',    color:'var(--text2)',   title:'Locales',        desc:'Gestión de locales' });
-  tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE', color:'#085041', title:'Mi perfil', desc:'Tus puntos y productos' });
+  if (!areaView) tiles.push({ tab:'perfil', icon:'ti-user-circle', bg:'#E1F5EE', color:'#085041', title:'Mi perfil', desc:'Tus puntos y productos' });
 
   const tilesHTML = tiles.map(t => `
     <div class="dash-tile" onclick="switchTab('${t.tab}')">
@@ -1412,7 +1479,7 @@ function renderDashboard() {
       <div class="dash-tile-desc">${t.desc}</div>
     </div>`).join('');
 
-  const locLabel = allLocations.find(l => l.id === currentLocationId)?.name || '';
+  const locLabel = areaView ? 'Area · Todos los locales' : (allLocations.find(l => l.id === currentLocationId)?.name || '');
   const subTitle = isEmployee ? 'Tu resumen de venta sugestiva' : `Equipo IVS${locLabel ? ' · ' + locLabel : ''}`;
 
   el.innerHTML = `
@@ -1536,7 +1603,66 @@ function getPoints(uid) {
 /* ══════════════════════════════════
    RANKING
 ══════════════════════════════════ */
+function switchRankingView(view, el) {
+  rankingView = view;
+  document.querySelectorAll('#ranking-area-toggle .comp-sub-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderRanking();
+}
+
+/* Agrega los logs (ya filtrados por período) por local. Se usa en el ranking de locales de la vista Area. */
+function getLocationStats() {
+  const logs = filteredLogs();
+  return allLocations.map(loc => {
+    const locLogs = logs.filter(l => l.location_id === loc.id);
+    const pts     = locLogs.reduce((s,l) => s + l.pts, 0);
+    const items   = locLogs.reduce((s,l) => s + PRODUCTS.reduce((s2,p) => s2 + (Number(l[p.id]) || 0), 0), 0);
+    const employeeCount = allProfiles.filter(p => p.location_id === loc.id && p.role === 'employee').length;
+    return { id: loc.id, name: loc.name, code: loc.code, pts, items, employeeCount };
+  });
+}
+
 function renderRanking() {
+  const areaView = isAreaView();
+  const toggleWrap = document.getElementById('ranking-area-toggle');
+  if (toggleWrap) toggleWrap.style.display = areaView ? 'flex' : 'none';
+  if (!areaView) rankingView = 'vendedores';
+  const metricWrap = document.getElementById('ranking-locales-metric-wrap');
+  if (metricWrap) metricWrap.style.display = (areaView && rankingView === 'locales') ? 'flex' : 'none';
+
+  const totalLabel = document.getElementById('m-total-label');
+  const ptsLabel   = document.getElementById('m-pts-label');
+
+  if (areaView && rankingView === 'locales') {
+    if (totalLabel) totalLabel.textContent = 'Locales';
+    if (ptsLabel)   ptsLabel.textContent   = rankingLocalesMetric === 'pts' ? 'Pts totales' : 'Items totales';
+    const stats = getLocationStats().sort((a,b) => b[rankingLocalesMetric] - a[rankingLocalesMetric]);
+    const total = stats.reduce((s,l) => s + l[rankingLocalesMetric], 0);
+    document.getElementById('m-total').textContent = stats.length;
+    document.getElementById('m-pts').textContent   = fmt(total);
+    const max = stats[0]?.[rankingLocalesMetric] || 1;
+    const unit = rankingLocalesMetric === 'pts' ? 'pts' : 'items';
+    document.getElementById('ranking-list').innerHTML = stats.map((l,i) => {
+      const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
+      const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
+      const color = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
+      const val   = l[rankingLocalesMetric];
+      return `<div class="rank-row">
+        <div class="rank-num ${cls}">${medal}</div>
+        <div class="rank-store-icon"><i class="ti ti-building-store"></i></div>
+        <div style="flex:1;">
+          <div class="rank-name">${l.name} <span style="font-size:10px;color:var(--text3);font-weight:400;">· ${l.employeeCount} vend.</span></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(val/max*100)}%;background:${color}"></div></div>
+        </div>
+        <div class="rank-pts">${fmt(val)}<small>${unit}</small></div>
+      </div>`;
+    }).join('') || '<div class="empty-state"><i class="ti ti-building-store"></i>Sin locales</div>';
+    return;
+  }
+
+  if (totalLabel) totalLabel.textContent = 'Vendedores';
+  if (ptsLabel)   ptsLabel.textContent   = 'Pts del equipo';
+
   const employees = allProfiles.filter(p => p.role === 'employee');
   const ranked = employees.map(e => ({ ...e, pts: getPoints(e.id) })).sort((a,b) => b.pts - a.pts);
   const total  = ranked.reduce((s,e) => s+e.pts, 0);
@@ -1548,11 +1674,12 @@ function renderRanking() {
     const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
     const color = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
     const isMe  = e.id === currentProfile.id;
+    const locName = areaView ? (allLocations.find(l => l.id === e.location_id)?.name || '') : '';
     return `<div class="rank-row">
       <div class="rank-num ${cls}">${medal}</div>
       ${avatarHTML(e,36)}
       <div style="flex:1;">
-        <div class="rank-name">${e.full_name}${isMe?'<span class="me-chip">yo</span>':''}</div>
+        <div class="rank-name">${e.full_name}${isMe?'<span class="me-chip">yo</span>':''}${locName?` <span style="font-size:10px;color:var(--text3);font-weight:400;">· ${locName}</span>`:''}</div>
         <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.pts/max*100)}%;background:${color}"></div></div>
       </div>
       <div class="rank-pts">${fmt(e.pts)}<small>pts</small></div>
@@ -1650,6 +1777,13 @@ function renderWeekChart(elId, logs, color) {
 /* ══════════════════════════════════
    ANÁLISIS
 ══════════════════════════════════ */
+/* Unidad mínima de análisis: vendedor en un local individual, local (con "crew" propio) en la vista Area. */
+function analysisUnits() {
+  return isAreaView()
+    ? allLocations.map(loc => ({ id: loc.id, name: loc.name, logs: allLogs.filter(l => l.location_id === loc.id) }))
+    : allProfiles.filter(p => p.role === 'employee').map(e => ({ id: e.id, name: e.full_name, logs: allLogs.filter(l => l.user_id === e.id) }));
+}
+
 function renderAnalysis() {
   const hoy = today();
   const wb  = weekBounds();
@@ -1658,6 +1792,8 @@ function renderAnalysis() {
   document.getElementById('an-week-pts').textContent   = fmt(weekLogs.reduce((s,l)=>s+l.pts,0));
   document.getElementById('an-month-pts').textContent  = fmt(monthLogs.reduce((s,l)=>s+l.pts,0));
   document.getElementById('an-total-logs').textContent = allLogs.length;
+  const subtitleEl = document.getElementById('an-subtitle');
+  if (subtitleEl) subtitleEl.textContent = isAreaView() ? 'Evolución y participación de todos los locales' : 'Evolución y participación del equipo IVS';
   renderLastWeeksChart();
   renderProductShare();
   renderProductRanking();
@@ -1718,11 +1854,13 @@ function renderProductShare() {
 
 function renderProductRanking() {
   const el = document.getElementById('an-product-ranking');
-  const employees = allProfiles.filter(p=>p.role==='employee');
+  const titleEl = document.getElementById('an-product-ranking-title');
+  if (titleEl) titleEl.textContent = isAreaView() ? 'Mejores locales por producto' : 'Mejores vendedores por producto';
+  const units = analysisUnits();
   el.innerHTML = PRODUCTS.map(pr => {
-    const ranked = employees.map(e => ({
-      name: e.full_name,
-      qty: allLogs.filter(l=>l.user_id===e.id).reduce((s,l)=>s+(l[pr.id]||0),0)
+    const ranked = units.map(u => ({
+      name: u.name,
+      qty: u.logs.reduce((s,l)=>s+(l[pr.id]||0),0)
     })).sort((a,b)=>b.qty-a.qty).slice(0,3);
     return `<div class="card" style="margin-bottom:10px;">
       <div style="font-size:14px;font-weight:600;margin-bottom:10px;">${pr.icon} ${pr.name}</div>
@@ -1738,18 +1876,17 @@ function renderProductRanking() {
 
 function renderGrowth() {
   const el = document.getElementById('an-growth');
-  const employees = allProfiles.filter(p=>p.role==='employee');
+  const units = analysisUnits();
   const thisWeek = getWeekStart(0);
   const lastWeek = getWeekStart(1);
   const tw = new Date(thisWeek+'T00:00:00'); tw.setDate(tw.getDate()+6);
   const lw = new Date(lastWeek+'T00:00:00'); lw.setDate(lw.getDate()+6);
   const twStr = tw.toISOString().slice(0,10);
   const lwStr = lw.toISOString().slice(0,10);
-  const data = employees.map(e => {
-    const myLogs = allLogs.filter(l=>l.user_id===e.id);
-    const curr = myLogs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+l.pts,0);
-    const prev = myLogs.filter(l=>l.fecha>=lastWeek&&l.fecha<=lwStr).reduce((s,l)=>s+l.pts,0);
-    return { name: e.full_name, curr, prev, delta: curr - prev };
+  const data = units.map(u => {
+    const curr = u.logs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+l.pts,0);
+    const prev = u.logs.filter(l=>l.fecha>=lastWeek&&l.fecha<=lwStr).reduce((s,l)=>s+l.pts,0);
+    return { name: u.name, curr, prev, delta: curr - prev };
   }).sort((a,b)=>b.delta-a.delta);
   el.innerHTML = data.map(d => {
     const color = d.delta > 0 ? 'var(--success)' : d.delta < 0 ? 'var(--danger)' : 'var(--text3)';
@@ -2731,7 +2868,7 @@ async function createLocation() {
   if (prodErr) { showToast('Local creado pero hubo un error al configurar productos: ' + prodErr.message); }
   allLocations.push(loc);
   const sel = document.getElementById('super-location-select');
-  if (sel) sel.innerHTML = allLocations.map(l => `<option value="${l.id}"${l.id === currentLocationId ? ' selected' : ''}>${l.name} (${l.code})</option>`).join('');
+  if (sel) sel.innerHTML = buildSuperLocationOptions();
   document.getElementById('loc-name').value = '';
   document.getElementById('loc-code').value = '';
   showToast('Local "' + name + '" creado');
