@@ -908,6 +908,22 @@
     <button class="btn btn-primary" style="margin-top:0;" onclick="closeTipModal()">Entendido</button>
   </div>
 </div>
+
+<div id="edit-log-modal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <div style="font-size:15px;font-weight:700;margin-bottom:14px;">Editar carga</div>
+    <label>Fecha</label>
+    <input type="date" id="edit-log-fecha" style="margin-bottom:14px;" />
+    <label>Punto de venta</label>
+    <select id="edit-log-pos" style="margin-bottom:14px;"></select>
+    <label>Cajero</label>
+    <select id="edit-log-vendedor" style="margin-bottom:0;"></select>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn" style="margin-top:0;" onclick="closeEditLogModal()">Cancelar</button>
+      <button class="btn btn-primary" style="margin-top:0;" onclick="saveEditLog()"><i class="ti ti-check"></i> Guardar cambios</button>
+    </div>
+  </div>
+</div>
 <script>
 /* ══════════════════════════════════
    TEMA CLARO / OSCURO
@@ -2312,6 +2328,65 @@ function fillEmployeeSelect() {
 }
 
 /* ══════════════════════════════════
+   EDITAR / ELIMINAR CARGA (Gerente de Negocio+)
+══════════════════════════════════ */
+let editingLogId = null;
+
+function openEditLogModal(id) {
+  if (!canEditPts()) return;
+  const log = allLogs.find(l => l.id === id);
+  if (!log) return;
+  editingLogId = id;
+
+  const posSel = document.getElementById('edit-log-pos');
+  const activePOS = allPOS.filter(p => p.active !== false || p.id === log.pos_id);
+  posSel.innerHTML = activePOS.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
+
+  const vendSel = document.getElementById('edit-log-vendedor');
+  vendSel.innerHTML = allProfiles.filter(p => p.role === 'employee')
+    .map(e => `<option value="${e.id}">${e.full_name}</option>`).join('');
+
+  document.getElementById('edit-log-fecha').value = log.fecha;
+  posSel.value  = log.pos_id || '';
+  vendSel.value = log.user_id || '';
+  document.getElementById('edit-log-modal').style.display = 'flex';
+}
+
+function closeEditLogModal() {
+  document.getElementById('edit-log-modal').style.display = 'none';
+  editingLogId = null;
+}
+
+async function saveEditLog() {
+  if (!editingLogId) return;
+  const fecha  = document.getElementById('edit-log-fecha').value;
+  const posId  = document.getElementById('edit-log-pos').value;
+  const userId = document.getElementById('edit-log-vendedor').value;
+  if (!fecha || !posId || !userId) { showToast('Completá fecha, punto de venta y cajero'); return; }
+
+  const { data, error } = await sb.from('sales_logs')
+    .update({ fecha, pos_id: posId, user_id: userId })
+    .eq('id', editingLogId).select().single();
+  if (error) { showToast('Error al guardar: ' + error.message); return; }
+
+  const idx = allLogs.findIndex(l => l.id === editingLogId);
+  if (idx >= 0) allLogs[idx] = { ...allLogs[idx], ...data };
+  closeEditLogModal();
+  showToast('Carga actualizada');
+  renderHistorial(); renderRecentLogs(); renderRanking(); renderDashboard(); renderProfile();
+}
+
+async function deleteLog(id) {
+  if (!canEditPts()) return;
+  if (!confirm('¿Eliminar esta carga de puntos? Esta acción no se puede deshacer.')) return;
+  const { error } = await sb.from('sales_logs').delete().eq('id', id);
+  if (error) { showToast('Error al eliminar: ' + error.message); return; }
+  allLogs = allLogs.filter(l => l.id !== id);
+  showToast('Carga eliminada');
+  renderHistorial(); renderRecentLogs(); renderRanking(); renderDashboard(); renderProfile();
+}
+
+/* ══════════════════════════════════
    HISTORIAL
 ══════════════════════════════════ */
 function fillHistorialVendorSelect() {
@@ -2335,6 +2410,7 @@ function renderHistorial() {
   document.getElementById('hist-pts').textContent   = fmt(totalPts);
   const el = document.getElementById('hist-list');
   if (!logs.length) { el.innerHTML = '<div class="empty-state"><i class="ti ti-file-search"></i>Sin registros para este filtro</div>'; return; }
+  const editable = canEditPts();
   el.innerHTML = logs.map(l => {
     const prof   = allProfiles.find(p=>p.id===l.user_id);
     const reg    = allProfiles.find(p=>p.id===l.registered_by);
@@ -2346,6 +2422,10 @@ function renderHistorial() {
       <div class="log-chips" style="margin-top:4px;">${chips}</div>
       ${l.nota ? `<div style="font-size:12px;color:var(--text3);margin-top:4px;">${l.nota}</div>` : ''}
       <div style="font-size:11px;color:var(--text3);margin-top:4px;">Cargado por ${reg?.full_name||'—'}</div>
+      ${editable ? `<div style="display:flex;gap:8px;margin-top:8px;">
+        <button class="btn btn-sm" style="margin-top:0;" onclick="openEditLogModal('${l.id}')"><i class="ti ti-pencil"></i> Editar</button>
+        <button class="btn btn-sm btn-danger" style="margin-top:0;" onclick="deleteLog('${l.id}')"><i class="ti ti-trash"></i> Eliminar</button>
+      </div>` : ''}
       </div>
       <div class="h-pts">+${fmt(l.pts)} pts</div></div>`;
   }).join('');
