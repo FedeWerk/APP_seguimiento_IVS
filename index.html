@@ -331,7 +331,7 @@
     .stat-bar-wrap { flex: 2; height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
     .stat-bar-fill { height: 100%; border-radius: 4px; transition: width .5s; }
     .stat-bar-val { font-size: 13px; font-weight: 600; min-width: 36px; text-align: right; }
-    .week-chart { display: flex; align-items: flex-end; gap: 6px; height: 80px; padding: 0 16px; margin-top: 8px; }
+    .week-chart { display: flex; align-items: stretch; gap: 6px; height: 80px; padding: 0 16px; margin-top: 8px; }
     .week-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
     .week-bar-wrap { flex: 1; width: 100%; display: flex; align-items: flex-end; }
     .week-bar { width: 100%; border-radius: 3px 3px 0 0; transition: height .4s; min-height: 2px; }
@@ -1003,12 +1003,57 @@ function isManager()  { return ['manager','business_manager','supermanager'].inc
 function canEditPts() { return ['business_manager','supermanager'].includes(currentProfile?.role); }
 
 /* ══════════════════════════════════
+   AUTO LOGOUT POR INACTIVIDAD (2 horas)
+══════════════════════════════════ */
+const INACTIVITY_LIMIT_MS = 2 * 60 * 60 * 1000; // 2 horas
+const INACTIVITY_EVENTS   = ['click','keydown','mousemove','touchstart','scroll'];
+let inactivityTimer       = null;
+let inactivityWatchOn     = false;
+
+function getLastActivity() { return parseInt(localStorage.getItem('lastActivity') || '0', 10); }
+function markActivity()    { localStorage.setItem('lastActivity', Date.now().toString()); }
+
+async function logoutByInactivity() {
+  stopInactivityWatch();
+  await sb.auth.signOut();
+}
+
+function checkInactivity() {
+  const last = getLastActivity();
+  if (last && Date.now() - last > INACTIVITY_LIMIT_MS) logoutByInactivity();
+}
+
+function startInactivityWatch() {
+  if (inactivityWatchOn) return;
+  inactivityWatchOn = true;
+  markActivity();
+  INACTIVITY_EVENTS.forEach(ev => document.addEventListener(ev, markActivity, { passive: true }));
+  inactivityTimer = setInterval(checkInactivity, 60 * 1000);
+}
+
+function stopInactivityWatch() {
+  inactivityWatchOn = false;
+  if (inactivityTimer) { clearInterval(inactivityTimer); inactivityTimer = null; }
+  INACTIVITY_EVENTS.forEach(ev => document.removeEventListener(ev, markActivity));
+  localStorage.removeItem('lastActivity');
+}
+
+/* ══════════════════════════════════
    INIT
 ══════════════════════════════════ */
 async function bootSession(session) {
   if (!session || isRecovering) return;
   currentUser = session.user;
   if (appInitialized) return;
+
+  // Si veníamos inactivos por más de 2hs (ej: la pestaña quedó abierta), cerramos sesión sin cargar la app.
+  const last = getLastActivity();
+  if (last && Date.now() - last > INACTIVITY_LIMIT_MS) {
+    localStorage.removeItem('lastActivity');
+    await sb.auth.signOut();
+    return;
+  }
+
   appInitialized = true;
   try {
     await loadAppData();
@@ -1022,6 +1067,7 @@ async function bootSession(session) {
     return showLoadError('Tu cuenta no tiene un perfil asociado. Avisale al administrador para que lo cree.');
   }
   showApp();
+  startInactivityWatch();
 }
 
 (async () => {
@@ -1032,7 +1078,7 @@ async function bootSession(session) {
 
 sb.auth.onAuthStateChange((event, session) => {
   if (event === 'PASSWORD_RECOVERY') { isRecovering = true; showScreen('reset'); return; }
-  if (event === 'SIGNED_OUT') { currentUser = null; appInitialized = false; isRecovering = false; showScreen('login'); return; }
+  if (event === 'SIGNED_OUT') { stopInactivityWatch(); currentUser = null; appInitialized = false; isRecovering = false; showScreen('login'); return; }
   setTimeout(() => { bootSession(session); }, 0);
 });
 
@@ -1650,18 +1696,20 @@ function renderProductShare() {
   const el = document.getElementById('an-product-share');
   const totals = PRODUCTS.map(p => ({
     ...p,
-    qty: allLogs.reduce((s,l)=>s+(l[p.id]||0),0),
-    pts: allLogs.reduce((s,l)=>s+(l[p.id]||0)*p.pts,0)
+    qty: allLogs.reduce((s,l)=>s+(l[p.id]||0),0)
   }));
   const maxQty   = Math.max(...totals.map(p=>p.qty), 1);
-  const totalPts = totals.reduce((s,p)=>s+p.pts,0);
-  el.innerHTML = totals.sort((a,b)=>b.qty-a.qty).map(p => `
+  const totalQty = totals.reduce((s,p)=>s+p.qty,0);
+  el.innerHTML = totals.sort((a,b)=>b.qty-a.qty).map(p => {
+    const share = totalQty>0 ? Math.round(p.qty/totalQty*100) : 0;
+    return `
     <div class="stat-bar-row">
       <div class="stat-bar-label"><span style="font-size:16px;">${p.icon}</span> ${p.name}</div>
       <div class="stat-bar-wrap"><div class="stat-bar-fill" style="width:${Math.round(p.qty/maxQty*100)}%;background:${p.color};"></div></div>
       <div class="stat-bar-val" style="color:${p.color};">${p.qty}</div>
-      <div style="font-size:11px;color:var(--text3);min-width:36px;text-align:right;">${totalPts>0?Math.round(p.pts/totalPts*100):0}%</div>
-    </div>`).join('');
+      <div style="font-size:11px;color:var(--text3);min-width:36px;text-align:right;">${share}%</div>
+    </div>`;
+  }).join('');
 }
 
 function renderProductRanking() {
