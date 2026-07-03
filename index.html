@@ -618,6 +618,21 @@
 
   <!-- ══ CONSEJOS ══ -->
   <div id="tab-tips" class="tab-content">
+    <!-- Enviar consejo al equipo (solo supermanager / business_manager) -->
+    <div id="tips-send-section" style="display:none;padding:16px 16px 0;">
+      <div class="card">
+        <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-bulb" style="margin-right:6px;color:var(--gold);"></i>Enviar consejo al equipo</div>
+        <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Mandá un consejo de venta como notificación a todos los dispositivos suscritos.</div>
+        <div id="admin-tip-preview" style="background:var(--gold-bg);border:1px solid rgba(186,117,23,0.2);border-radius:var(--radius-sm);padding:14px;">
+          <div id="admin-tip-cat" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;"></div>
+          <div id="admin-tip-text" style="font-size:13px;line-height:1.5;color:var(--text);"></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn btn-sm" style="flex:1;" onclick="shuffleAdminTip()"><i class="ti ti-refresh"></i> Otro consejo</button>
+          <button class="btn btn-sm btn-gold" style="flex:1;" onclick="sendTipPush()"><i class="ti ti-send"></i> Enviar al equipo</button>
+        </div>
+      </div>
+    </div>
     <div class="tip-card" id="featured-tip">
       <div class="tip-category"><i class="ti ti-sparkles"></i> <span id="tip-cat">—</span></div>
       <div class="tip-text" id="tip-text">Cargando consejo…</div>
@@ -821,20 +836,6 @@
           <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Estos son los puntos que valen siempre en este local, salvo que haya una Competencia Express activa para ese producto.</div>
           <div id="pts-base-editor"></div>
           <button class="btn btn-primary" style="margin-top:12px;" onclick="saveBasePoints()"><i class="ti ti-device-floppy"></i> Guardar puntos base</button>
-        </div>
-
-        <!-- Consejo push -->
-        <div class="card">
-          <div style="font-size:14px;font-weight:600;margin-bottom:4px;"><i class="ti ti-bulb" style="margin-right:6px;color:var(--gold);"></i>Enviar consejo al equipo</div>
-          <div style="font-size:12px;color:var(--text2);margin-bottom:14px;">Mandá un consejo de venta como notificación a todos los dispositivos suscritos.</div>
-          <div id="admin-tip-preview" style="background:var(--gold-bg);border:1px solid rgba(186,117,23,0.2);border-radius:var(--radius-sm);padding:14px;">
-            <div id="admin-tip-cat" style="font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:6px;"></div>
-            <div id="admin-tip-text" style="font-size:13px;line-height:1.5;color:var(--text);"></div>
-          </div>
-          <div style="display:flex;gap:8px;margin-top:10px;">
-            <button class="btn btn-sm" style="flex:1;" onclick="shuffleAdminTip()"><i class="ti ti-refresh"></i> Otro consejo</button>
-            <button class="btn btn-sm btn-gold" style="flex:1;" onclick="sendTipPush()"><i class="ti ti-send"></i> Enviar al equipo</button>
-          </div>
         </div>
       </div>
 
@@ -1301,6 +1302,9 @@ function showApp() {
 
   const superSection = document.getElementById('admin-pts-section');
   if (superSection) superSection.style.display = canEditPts() ? 'block' : 'none';
+
+  const tipsSendSection = document.getElementById('tips-send-section');
+  if (tipsSendSection) tipsSendSection.style.display = canEditPts() ? 'block' : 'none';
 
   const createMgrSection = document.getElementById('admin-create-manager');
   if (createMgrSection) createMgrSection.style.display = canEditPts() ? 'block' : 'none';
