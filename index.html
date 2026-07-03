@@ -728,7 +728,7 @@
         <option value="">— Seleccioná una caja —</option>
       </select>
       <label>Fecha del turno</label>
-      <input type="date" id="inp-fecha" style="margin-bottom:14px;" onchange="onFechaChange()" />
+      <input type="date" id="inp-fecha" style="margin-bottom:14px;" onchange="onFechaChange()" required />
     </div>
     <div id="cargar-comp-banner" style="display:none;" class="comp-active-banner">
       <i class="ti ti-bolt"></i>
@@ -1247,7 +1247,7 @@ function showApp() {
     fillEmployeeSelect(); fillPOSSelect(); renderPOSList(); renderRecentLogs(); renderUserList();
     fillHistorialVendorSelect();
     document.getElementById('inp-goal').value  = monthlyGoal;
-    document.getElementById('inp-fecha').value = today();
+    document.getElementById('inp-fecha').value = '';
     loadPrevAccumulated();
   }
 
