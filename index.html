@@ -416,6 +416,23 @@
     }
     .location-selector label { font-size: 12px; color: var(--biz); margin: 0; white-space: nowrap; }
 
+    /* ── Selector de vista previa por rol (supermanager) ── */
+    #view-as-bar {
+      background: var(--gold-bg); border-bottom: 1px solid rgba(186,117,23,0.2);
+    }
+    #view-as-bar i { color: var(--gold); }
+    #view-as-bar select { border-color: rgba(186,117,23,0.35); color: var(--gold); }
+    #view-as-bar label { color: var(--gold); }
+    .view-as-banner {
+      background: var(--gold); color: #fff; font-size: 12px; font-weight: 600;
+      padding: 8px 16px; display: flex; align-items: center; gap: 8px;
+    }
+    .view-as-banner button {
+      margin-left: auto; background: rgba(255,255,255,0.2); border: none; color: #fff;
+      font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 20px;
+      cursor: pointer; font-family: var(--font);
+    }
+
     /* ── Comp tabs internos ── */
     .comp-sub-tabs {
       display: flex; border-bottom: 1px solid var(--border);
@@ -521,6 +538,25 @@
     <i class="ti ti-building-store"></i>
     <label>Local:</label>
     <select id="super-location-select" onchange="onSuperLocationChange()" style="flex:1;"></select>
+  </div>
+
+  <!-- Selector de vista previa por rol — solo visible para supermanager -->
+  <div id="view-as-bar" class="location-selector" style="display:none;">
+    <i class="ti ti-eye"></i>
+    <label>Vista:</label>
+    <select id="view-as-select" onchange="onViewAsChange()" style="flex:1;">
+      <option value="">Yo (Super Gerente)</option>
+      <option value="manager">Gerente</option>
+      <option value="business_manager">Gerente de Negocio</option>
+      <option value="employee">Vendedor</option>
+    </select>
+  </div>
+
+  <!-- Banner de vista previa activa -->
+  <div id="view-as-banner" class="view-as-banner" style="display:none;">
+    <i class="ti ti-eye"></i>
+    <span id="view-as-banner-text">Vista previa</span>
+    <button onclick="exitViewAs()">Salir</button>
   </div>
 
   <div class="app-header">
@@ -1012,13 +1048,20 @@ let rankingLocalesMetric = 'pts';        // 'pts' | 'items'
 let appInitialized = false;
 let isRecovering   = window.location.hash.includes('type=recovery');
 
+/* Vista previa por rol: permite al Super Gerente ver la app como la vería otro perfil
+   (Gerente, Gerente de Negocio, Vendedor). Solo tiene efecto si el rol real es supermanager.
+   Es puramente visual: no cambia permisos reales ni qué datos se cargan desde Supabase. */
+let viewAsRole = null; // null | 'manager' | 'business_manager' | 'employee'
+function isRealSuper() { return currentProfile?.role === 'supermanager'; }
+function effRole()      { return (isRealSuper() && viewAsRole) ? viewAsRole : currentProfile?.role; }
+
 /* ══════════════════════════════════
    HELPERS DE ROL
 ══════════════════════════════════ */
-function isSuper()    { return currentProfile?.role === 'supermanager'; }
-function isBiz()      { return currentProfile?.role === 'business_manager'; }
-function isManager()  { return ['manager','business_manager','supermanager'].includes(currentProfile?.role); }
-function canEditPts() { return ['business_manager','supermanager'].includes(currentProfile?.role); }
+function isSuper()    { return effRole() === 'supermanager'; }
+function isBiz()      { return effRole() === 'business_manager'; }
+function isManager()  { return ['manager','business_manager','supermanager'].includes(effRole()); }
+function canEditPts() { return ['business_manager','supermanager'].includes(effRole()); }
 
 /* ══════════════════════════════════
    AUTO LOGOUT POR INACTIVIDAD (2 horas)
@@ -1096,7 +1139,7 @@ async function bootSession(session) {
 
 sb.auth.onAuthStateChange((event, session) => {
   if (event === 'PASSWORD_RECOVERY') { isRecovering = true; showScreen('reset'); return; }
-  if (event === 'SIGNED_OUT') { stopInactivityWatch(); currentUser = null; appInitialized = false; isRecovering = false; showScreen('login'); return; }
+  if (event === 'SIGNED_OUT') { stopInactivityWatch(); currentUser = null; appInitialized = false; isRecovering = false; viewAsRole = null; showScreen('login'); return; }
   setTimeout(() => { bootSession(session); }, 0);
 });
 
@@ -1277,6 +1320,83 @@ async function onSuperLocationChange() {
   if (isManager() && !isAreaView()) loadPrevAccumulated();
 }
 
+/* ══════════════════════════════════
+   VISTA PREVIA POR ROL (solo supermanager)
+══════════════════════════════════ */
+function updateViewAsUI() {
+  const bar = document.getElementById('view-as-bar');
+  if (bar) bar.style.display = isRealSuper() ? 'flex' : 'none';
+  const sel = document.getElementById('view-as-select');
+  if (sel) sel.value = viewAsRole || '';
+
+  const banner = document.getElementById('view-as-banner');
+  if (banner) {
+    if (isRealSuper() && viewAsRole) {
+      const labels = { manager: 'Gerente', business_manager: 'Gerente de Negocio', employee: 'Vendedor' };
+      document.getElementById('view-as-banner-text').textContent = 'Vista previa: viendo como ' + (labels[viewAsRole] || viewAsRole);
+      banner.style.display = 'flex';
+    } else {
+      banner.style.display = 'none';
+    }
+  }
+
+  const badge = document.getElementById('hdr-badge');
+  if (badge) {
+    if (isSuper())        { badge.textContent = 'Super Gerente';   badge.className = 'badge badge-super'; }
+    else if (isBiz())     { badge.textContent = 'Gerente de Neg.'; badge.className = 'badge badge-biz'; }
+    else if (isManager()) { badge.textContent = 'Gerente';         badge.className = 'badge badge-mgr'; }
+    else                  { badge.textContent = 'Vendedor';        badge.className = 'badge badge-emp'; }
+  }
+
+  const locBar = document.getElementById('location-selector-bar');
+  if (locBar) {
+    if (isSuper() && allLocations.length > 0) {
+      locBar.style.display = 'flex';
+      document.getElementById('super-location-select').innerHTML = buildSuperLocationOptions();
+    } else {
+      locBar.style.display = 'none';
+    }
+  }
+}
+
+async function applyViewAsRole() {
+  // Un Gerente / Gerente de Negocio / Vendedor real nunca ve la Area agregada:
+  // si estábamos ahí al activar la vista previa, volvemos al local real.
+  if (viewAsRole && isAreaView()) {
+    currentLocationId = allLocations.find(l => l.code === 'VCP')?.id || allLocations[0]?.id || currentProfile.location_id;
+    await loadLocationData();
+  }
+  renderLocationBadge();
+  updateTabVisibility();
+  updateViewAsUI();
+  renderDashboard(); renderRanking(); renderProfile(); renderAnalysis();
+  if (isManager() && !isAreaView()) {
+    fillEmployeeSelect(); fillPOSSelect(); renderPOSList(); renderRecentLogs();
+    renderUserList(); fillHistorialVendorSelect(); renderHistorial();
+    renderPtsBaseEditor(); loadPrevAccumulated();
+  }
+  renderCompetencias();
+  if (isSuper()) { fillManagerLocationSelect(); renderLocationsList(); }
+  if (canEditPts() && !isAreaView()) {
+    renderCompProductInputs();
+    adminTipIndex = Math.floor(Math.random() * TIPS.length);
+    renderAdminTip();
+  }
+}
+
+async function onViewAsChange() {
+  if (!isRealSuper()) return;
+  const sel = document.getElementById('view-as-select');
+  viewAsRole = sel.value || null;
+  await applyViewAsRole();
+}
+
+async function exitViewAs() {
+  if (!viewAsRole) return;
+  viewAsRole = null;
+  await applyViewAsRole();
+}
+
 function buildSuperLocationOptions() {
   const areaOpt = `<option value="${AREA_ID}"${currentLocationId === AREA_ID ? ' selected' : ''}>🏢 Area (todos los locales)</option>`;
   const locOpts = allLocations.map(l =>
@@ -1357,19 +1477,8 @@ function showApp() {
   document.getElementById('hdr-greeting').textContent = greeting();
   document.getElementById('hdr-name').textContent     = currentProfile.full_name;
 
-  const badge = document.getElementById('hdr-badge');
-  if (isSuper())       { badge.textContent = 'Super Gerente';   badge.className = 'badge badge-super'; }
-  else if (isBiz())    { badge.textContent = 'Gerente de Neg.'; badge.className = 'badge badge-biz'; }
-  else if (isManager()){ badge.textContent = 'Gerente';         badge.className = 'badge badge-mgr'; }
-  else                 { badge.textContent = 'Vendedor';        badge.className = 'badge badge-emp'; }
-
-  const locBar = document.getElementById('location-selector-bar');
-  if (isSuper() && allLocations.length > 0) {
-    locBar.style.display = 'flex';
-    document.getElementById('super-location-select').innerHTML = buildSuperLocationOptions();
-  } else {
-    locBar.style.display = 'none';
-  }
+  viewAsRole = null; // al (re)entrar a la app siempre arrancamos con la vista real
+  updateViewAsUI();
 
   renderLocationBadge();
   updateTabVisibility();
