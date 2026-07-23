@@ -611,8 +611,8 @@
       <div class="rfield"><label>Desde</label><input type="date" id="range-from" onchange="renderRanking()" /></div>
       <div class="rfield"><label>Hasta</label><input type="date" id="range-to" onchange="renderRanking()" /></div>
     </div>
-    <div id="ranking-locales-metric-wrap" style="display:none;padding:0 16px 4px;">
-      <select id="ranking-locales-metric" onchange="rankingLocalesMetric=this.value; renderRanking();">
+    <div id="ranking-metric-wrap" style="padding:0 16px 4px;">
+      <select id="ranking-metric" onchange="rankingMetric=this.value; renderRanking();">
         <option value="pts">Ordenar por puntos</option>
         <option value="items">Ordenar por items vendidos</option>
       </select>
@@ -758,15 +758,19 @@
       <div style="font-size:16px;font-weight:600;margin-bottom:2px;">Panel de análisis</div>
       <div style="font-size:13px;color:var(--text2);margin-bottom:12px;" id="an-subtitle">Evolución y participación del equipo IVS</div>
     </div>
+    <div class="comp-sub-tabs" style="margin:0 16px 8px;">
+      <button class="comp-sub-tab active" id="an-metric-pts"   onclick="setAnalysisMetric('pts',this)"><i class="ti ti-coin" style="font-size:13px;margin-right:4px;"></i>Puntos</button>
+      <button class="comp-sub-tab"        id="an-metric-items" onclick="setAnalysisMetric('items',this)"><i class="ti ti-package" style="font-size:13px;margin-right:4px;"></i>Items IVS</button>
+    </div>
     <div class="metric-grid-3">
-      <div class="metric-card"><div class="metric-label">Pts esta semana</div><div class="metric-value" id="an-week-pts">—</div></div>
-      <div class="metric-card"><div class="metric-label">Pts este mes</div><div class="metric-value" id="an-month-pts">—</div></div>
+      <div class="metric-card"><div class="metric-label" id="an-week-label">Pts esta semana</div><div class="metric-value" id="an-week-pts">—</div></div>
+      <div class="metric-card"><div class="metric-label" id="an-month-label">Pts este mes</div><div class="metric-value" id="an-month-pts">—</div></div>
       <div class="metric-card"><div class="metric-label">Registros totales</div><div class="metric-value" id="an-total-logs">—</div></div>
     </div>
     <div class="section-title">Evolución semanal del equipo</div>
     <div style="padding:0 16px;">
       <div class="week-chart" id="an-week-chart"></div>
-      <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center;">Últimas 6 semanas · puntos totales del equipo</div>
+      <div style="font-size:11px;color:var(--text3);margin-top:6px;text-align:center;" id="an-week-chart-caption">Últimas 6 semanas · puntos totales del equipo</div>
     </div>
     <div class="section-title">Participación por producto</div>
     <div style="background:var(--bg);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:12px 16px;" id="an-product-share"></div>
@@ -1043,7 +1047,8 @@ let currentTipIndex   = 0;
 const AREA_ID = '__area__';
 function isAreaView() { return currentLocationId === AREA_ID; }
 let rankingView          = 'vendedores'; // 'vendedores' | 'locales'
-let rankingLocalesMetric = 'pts';        // 'pts' | 'items'
+let rankingMetric        = 'pts';        // 'pts' | 'items'  (aplica a vendedores y locales)
+let analysisMetric       = 'pts';        // 'pts' | 'items'  (panel de análisis)
 
 let appInitialized = false;
 let isRecovering   = window.location.hash.includes('type=recovery');
@@ -1708,6 +1713,13 @@ function filteredLogs() {
 function getPoints(uid) {
   return filteredLogs().filter(l => l.user_id === uid).reduce((s,l) => s + l.pts, 0);
 }
+/* Cantidad de unidades/items IVS vendidos (suma de todas las cantidades de producto) */
+function logItems(l) {
+  return PRODUCTS.reduce((s,p) => s + (Number(l[p.id]) || 0), 0);
+}
+function getItems(uid) {
+  return filteredLogs().filter(l => l.user_id === uid).reduce((s,l) => s + logItems(l), 0);
+}
 
 /* ══════════════════════════════════
    RANKING
@@ -1736,26 +1748,27 @@ function renderRanking() {
   const toggleWrap = document.getElementById('ranking-area-toggle');
   if (toggleWrap) toggleWrap.style.display = areaView ? 'flex' : 'none';
   if (!areaView) rankingView = 'vendedores';
-  const metricWrap = document.getElementById('ranking-locales-metric-wrap');
-  if (metricWrap) metricWrap.style.display = (areaView && rankingView === 'locales') ? 'flex' : 'none';
+  const metricWrap = document.getElementById('ranking-metric-wrap');
+  if (metricWrap) metricWrap.style.display = 'block';
 
   const totalLabel = document.getElementById('m-total-label');
   const ptsLabel   = document.getElementById('m-pts-label');
+  const metricUnit = rankingMetric === 'pts' ? 'pts' : 'items';
 
   if (areaView && rankingView === 'locales') {
     if (totalLabel) totalLabel.textContent = 'Locales';
-    if (ptsLabel)   ptsLabel.textContent   = rankingLocalesMetric === 'pts' ? 'Pts totales' : 'Items totales';
-    const stats = getLocationStats().sort((a,b) => b[rankingLocalesMetric] - a[rankingLocalesMetric]);
-    const total = stats.reduce((s,l) => s + l[rankingLocalesMetric], 0);
+    if (ptsLabel)   ptsLabel.textContent   = rankingMetric === 'pts' ? 'Pts totales' : 'Items totales';
+    const stats = getLocationStats().sort((a,b) => b[rankingMetric] - a[rankingMetric]);
+    const total = stats.reduce((s,l) => s + l[rankingMetric], 0);
     document.getElementById('m-total').textContent = stats.length;
     document.getElementById('m-pts').textContent   = fmt(total);
-    const max = stats[0]?.[rankingLocalesMetric] || 1;
-    const unit = rankingLocalesMetric === 'pts' ? 'pts' : 'items';
+    const max = stats[0]?.[rankingMetric] || 1;
+    const unit = metricUnit;
     document.getElementById('ranking-list').innerHTML = stats.map((l,i) => {
       const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
       const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
       const color = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
-      const val   = l[rankingLocalesMetric];
+      const val   = l[rankingMetric];
       return `<div class="rank-row">
         <div class="rank-num ${cls}">${medal}</div>
         <div class="rank-store-icon"><i class="ti ti-building-store"></i></div>
@@ -1770,14 +1783,14 @@ function renderRanking() {
   }
 
   if (totalLabel) totalLabel.textContent = 'Vendedores';
-  if (ptsLabel)   ptsLabel.textContent   = 'Pts del equipo';
+  if (ptsLabel)   ptsLabel.textContent   = rankingMetric === 'pts' ? 'Pts del equipo' : 'Items del equipo';
 
   const employees = allProfiles.filter(p => p.role === 'employee');
-  const ranked = employees.map(e => ({ ...e, pts: getPoints(e.id) })).sort((a,b) => b.pts - a.pts);
-  const total  = ranked.reduce((s,e) => s+e.pts, 0);
+  const ranked = employees.map(e => ({ ...e, val: rankingMetric === 'pts' ? getPoints(e.id) : getItems(e.id) })).sort((a,b) => b.val - a.val);
+  const total  = ranked.reduce((s,e) => s+e.val, 0);
   document.getElementById('m-total').textContent = employees.length;
   document.getElementById('m-pts').textContent   = fmt(total);
-  const max = ranked[0]?.pts || 1;
+  const max = ranked[0]?.val || 1;
   document.getElementById('ranking-list').innerHTML = ranked.map((e,i) => {
     const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
     const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
@@ -1789,9 +1802,9 @@ function renderRanking() {
       ${avatarHTML(e,36)}
       <div style="flex:1;">
         <div class="rank-name">${e.full_name}${isMe?'<span class="me-chip">yo</span>':''}${locName?` <span style="font-size:10px;color:var(--text3);font-weight:400;">· ${locName}</span>`:''}</div>
-        <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.pts/max*100)}%;background:${color}"></div></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.val/max*100)}%;background:${color}"></div></div>
       </div>
-      <div class="rank-pts">${fmt(e.pts)}<small>pts</small></div>
+      <div class="rank-pts">${fmt(e.val)}<small>${metricUnit}</small></div>
     </div>`;
   }).join('') || '<div class="empty-state"><i class="ti ti-users"></i>Sin vendedores</div>';
 }
@@ -1893,14 +1906,31 @@ function analysisUnits() {
     : allProfiles.filter(p => p.role === 'employee').map(e => ({ id: e.id, name: e.full_name, logs: allLogs.filter(l => l.user_id === e.id) }));
 }
 
+/* Valor de un log según la métrica de análisis activa (puntos o unidades IVS) */
+function logVal(l) {
+  return analysisMetric === 'pts' ? l.pts : logItems(l);
+}
+
+function setAnalysisMetric(m, el) {
+  analysisMetric = m;
+  document.querySelectorAll('#tab-analisis .comp-sub-tabs .comp-sub-tab').forEach(t => t.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderAnalysis();
+}
+
 function renderAnalysis() {
   const hoy = today();
   const wb  = weekBounds();
   const weekLogs  = allLogs.filter(l => l.fecha >= wb.from && l.fecha <= wb.to);
   const monthLogs = allLogs.filter(l => l.fecha.slice(0,7) === hoy.slice(0,7));
-  document.getElementById('an-week-pts').textContent   = fmt(weekLogs.reduce((s,l)=>s+l.pts,0));
-  document.getElementById('an-month-pts').textContent  = fmt(monthLogs.reduce((s,l)=>s+l.pts,0));
+  const isPts = analysisMetric === 'pts';
+  document.getElementById('an-week-label').textContent  = isPts ? 'Pts esta semana' : 'Items esta semana';
+  document.getElementById('an-month-label').textContent = isPts ? 'Pts este mes'    : 'Items este mes';
+  document.getElementById('an-week-pts').textContent   = fmt(weekLogs.reduce((s,l)=>s+logVal(l),0));
+  document.getElementById('an-month-pts').textContent  = fmt(monthLogs.reduce((s,l)=>s+logVal(l),0));
   document.getElementById('an-total-logs').textContent = allLogs.length;
+  const capEl = document.getElementById('an-week-chart-caption');
+  if (capEl) capEl.textContent = isPts ? 'Últimas 6 semanas · puntos totales del equipo' : 'Últimas 6 semanas · items totales del equipo';
   const subtitleEl = document.getElementById('an-subtitle');
   if (subtitleEl) subtitleEl.textContent = isAreaView() ? 'Evolución y participación de todos los locales' : 'Evolución y participación del equipo IVS';
   renderLastWeeksChart();
@@ -1926,7 +1956,7 @@ function renderLastWeeksChart() {
     const to   = new Date(from+'T00:00:00');
     to.setDate(to.getDate()+6);
     const toStr = to.toISOString().slice(0,10);
-    const pts = allLogs.filter(l=>l.fecha>=from&&l.fecha<=toStr).reduce((s,l)=>s+l.pts,0);
+    const pts = allLogs.filter(l=>l.fecha>=from&&l.fecha<=toStr).reduce((s,l)=>s+logVal(l),0);
     const label = new Date(from+'T00:00:00').toLocaleDateString('es-AR',{day:'2-digit',month:'short'});
     weeks.push({ label, pts });
   }
@@ -1993,8 +2023,8 @@ function renderGrowth() {
   const twStr = tw.toISOString().slice(0,10);
   const lwStr = lw.toISOString().slice(0,10);
   const data = units.map(u => {
-    const curr = u.logs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+l.pts,0);
-    const prev = u.logs.filter(l=>l.fecha>=lastWeek&&l.fecha<=lwStr).reduce((s,l)=>s+l.pts,0);
+    const curr = u.logs.filter(l=>l.fecha>=thisWeek&&l.fecha<=twStr).reduce((s,l)=>s+logVal(l),0);
+    const prev = u.logs.filter(l=>l.fecha>=lastWeek&&l.fecha<=lwStr).reduce((s,l)=>s+logVal(l),0);
     return { name: u.name, curr, prev, delta: curr - prev };
   }).sort((a,b)=>b.delta-a.delta);
   el.innerHTML = data.map(d => {
@@ -2003,7 +2033,7 @@ function renderGrowth() {
     return `<div class="stat-bar-row">
       <div class="stat-bar-label" style="font-size:13px;">${d.name}</div>
       <div style="font-size:12px;color:var(--text3);">sem. ant: ${fmt(d.prev)}</div>
-      <div style="font-size:13px;font-weight:600;color:${color};min-width:60px;text-align:right;">${icon} ${fmt(Math.abs(d.delta))} pts</div>
+      <div style="font-size:13px;font-weight:600;color:${color};min-width:60px;text-align:right;">${icon} ${fmt(Math.abs(d.delta))} ${analysisMetric === 'pts' ? 'pts' : 'items'}</div>
     </div>`;
   }).join('') || '<div class="empty-state" style="padding:1rem;">Sin datos suficientes</div>';
 }
