@@ -160,6 +160,22 @@
     .bar-fill { height: 100%; border-radius: 2px; transition: width .4s; }
     .me-chip { font-size: 10px; padding: 1px 6px; border-radius: 20px; background: var(--success-bg); color: var(--success); margin-left: 6px; }
 
+    /* ── Podio top 3 ── */
+    .podium { display: flex; align-items: flex-end; justify-content: center; gap: 8px; padding: 18px 16px 4px; }
+    .podium-col { flex: 1; max-width: 108px; display: flex; flex-direction: column; align-items: center; }
+    .podium-av-wrap { position: relative; margin-bottom: 8px; }
+    .podium-medal { position: absolute; bottom: -4px; right: -4px; font-size: 16px; line-height: 1; filter: drop-shadow(0 1px 1px rgba(0,0,0,.25)); }
+    .podium-name { font-size: 12px; font-weight: 600; text-align: center; line-height: 1.2; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .podium-sub { font-size: 10px; color: var(--text3); text-align: center; line-height: 1.2; margin-top: 1px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .podium-block { width: 100%; border-radius: 10px 10px 0 0; margin-top: 8px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding-top: 8px; color: #fff; }
+    .podium-block.p1 { height: 96px; }
+    .podium-block.p2 { height: 68px; }
+    .podium-block.p3 { height: 48px; }
+    .podium-rank-badge { font-size: 20px; font-weight: 800; opacity: .95; }
+    .podium-pts { font-size: 13px; font-weight: 700; margin-top: 2px; }
+    .podium-pts small { font-size: 10px; font-weight: 500; opacity: .85; margin-left: 2px; }
+    .podium-me { font-size: 9px; padding: 0 5px; border-radius: 20px; background: rgba(255,255,255,.25); margin-top: 3px; }
+
     /* ── Período ── */
     .period-row { display: flex; gap: 8px; padding: 0 16px; margin-bottom: 6px; flex-wrap: wrap; }
     .period-chip {
@@ -1743,6 +1759,35 @@ function getLocationStats() {
   });
 }
 
+/* Podio olímpico (2-1-3) de alturas fijas para el top 3.
+   `top3` = array ordenado [#1,#2,#3] con {avatar, name, sub, val, isMe}. */
+function renderPodium(top3, unit) {
+  if (!top3.length) return '';
+  const colors   = ['#BA7517', '#888780', '#993C1D'];
+  const medals   = ['🥇', '🥈', '🥉'];
+  const blockCls = ['p1', 'p2', 'p3'];
+  const order    = [1, 0, 2]; // se muestra #2, #1, #3
+  const cols = order.map(idx => {
+    const it = top3[idx];
+    if (!it) return '<div class="podium-col"></div>';
+    return `<div class="podium-col">
+      <div class="podium-av-wrap">${it.avatar}<span class="podium-medal">${medals[idx]}</span></div>
+      <div class="podium-name">${it.name}</div>
+      ${it.sub ? `<div class="podium-sub">${it.sub}</div>` : ''}
+      <div class="podium-block ${blockCls[idx]}" style="background:${colors[idx]}">
+        <div class="podium-rank-badge">${idx + 1}</div>
+        <div class="podium-pts">${fmt(it.val)}<small>${unit}</small></div>
+        ${it.isMe ? '<div class="podium-me">yo</div>' : ''}
+      </div>
+    </div>`;
+  }).join('');
+  return `<div class="podium">${cols}</div>`;
+}
+
+function storeIconHTML(size) {
+  return `<div class="rank-store-icon" style="width:${size}px;height:${size}px;font-size:${Math.round(size*0.44)}px;"><i class="ti ti-building-store"></i></div>`;
+}
+
 function renderRanking() {
   const areaView = isAreaView();
   const toggleWrap = document.getElementById('ranking-area-toggle');
@@ -1764,21 +1809,31 @@ function renderRanking() {
     document.getElementById('m-pts').textContent   = fmt(total);
     const max = stats[0]?.[rankingMetric] || 1;
     const unit = metricUnit;
-    document.getElementById('ranking-list').innerHTML = stats.map((l,i) => {
-      const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-      const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
-      const color = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
-      const val   = l[rankingMetric];
+    if (!stats.length) {
+      document.getElementById('ranking-list').innerHTML = '<div class="empty-state"><i class="ti ti-building-store"></i>Sin locales</div>';
+      return;
+    }
+    const podiumHTML = renderPodium(stats.slice(0,3).map((l,i) => ({
+      avatar: storeIconHTML(i===0?56:46),
+      name:   l.name,
+      sub:    `${l.employeeCount} vend.`,
+      val:    l[rankingMetric],
+      isMe:   false
+    })), unit);
+    const listHTML = stats.slice(3).map((l,i) => {
+      const pos = i + 4;
+      const val = l[rankingMetric];
       return `<div class="rank-row">
-        <div class="rank-num ${cls}">${medal}</div>
+        <div class="rank-num">${pos}</div>
         <div class="rank-store-icon"><i class="ti ti-building-store"></i></div>
         <div style="flex:1;">
           <div class="rank-name">${l.name} <span style="font-size:10px;color:var(--text3);font-weight:400;">· ${l.employeeCount} vend.</span></div>
-          <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(val/max*100)}%;background:${color}"></div></div>
+          <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(val/max*100)}%;background:var(--accent)"></div></div>
         </div>
         <div class="rank-pts">${fmt(val)}<small>${unit}</small></div>
       </div>`;
-    }).join('') || '<div class="empty-state"><i class="ti ti-building-store"></i>Sin locales</div>';
+    }).join('');
+    document.getElementById('ranking-list').innerHTML = podiumHTML + listHTML;
     return;
   }
 
@@ -1791,22 +1846,32 @@ function renderRanking() {
   document.getElementById('m-total').textContent = employees.length;
   document.getElementById('m-pts').textContent   = fmt(total);
   const max = ranked[0]?.val || 1;
-  document.getElementById('ranking-list').innerHTML = ranked.map((e,i) => {
-    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':(i+1);
-    const cls   = i===0?'top1':i===1?'top2':i===2?'top3':'';
-    const color = i===0?'#BA7517':i===1?'#888780':i===2?'#993C1D':'var(--accent)';
+  if (!ranked.length) {
+    document.getElementById('ranking-list').innerHTML = '<div class="empty-state"><i class="ti ti-users"></i>Sin vendedores</div>';
+    return;
+  }
+  const podiumHTML = renderPodium(ranked.slice(0,3).map(e => ({
+    avatar: avatarHTML(e, e === ranked[0] ? 56 : 46),
+    name:   e.full_name,
+    sub:    areaView ? (allLocations.find(l => l.id === e.location_id)?.name || '') : '',
+    val:    e.val,
+    isMe:   e.id === currentProfile.id
+  })), metricUnit);
+  const listHTML = ranked.slice(3).map((e,i) => {
+    const pos = i + 4;
     const isMe  = e.id === currentProfile.id;
     const locName = areaView ? (allLocations.find(l => l.id === e.location_id)?.name || '') : '';
     return `<div class="rank-row">
-      <div class="rank-num ${cls}">${medal}</div>
+      <div class="rank-num">${pos}</div>
       ${avatarHTML(e,36)}
       <div style="flex:1;">
         <div class="rank-name">${e.full_name}${isMe?'<span class="me-chip">yo</span>':''}${locName?` <span style="font-size:10px;color:var(--text3);font-weight:400;">· ${locName}</span>`:''}</div>
-        <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.val/max*100)}%;background:${color}"></div></div>
+        <div class="bar-bg"><div class="bar-fill" style="width:${Math.round(e.val/max*100)}%;background:var(--accent)"></div></div>
       </div>
       <div class="rank-pts">${fmt(e.val)}<small>${metricUnit}</small></div>
     </div>`;
-  }).join('') || '<div class="empty-state"><i class="ti ti-users"></i>Sin vendedores</div>';
+  }).join('');
+  document.getElementById('ranking-list').innerHTML = podiumHTML + listHTML;
 }
 
 /* ══════════════════════════════════
